@@ -1,0 +1,68 @@
+# =============== Unity ===============
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+MemoryCaptures/
+UserSettings/
+
+# Auto-generated VS / Rider / IDE files
+.vscode/
+.vs/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Crash / debug
+*.stacktrace
+*.log
+
+# Packages cache / local gradle / npm (if any)
+.gradle/
+node_modules/
+
+# Build artifacts (don't commit builds)
+*.apk
+*.aab
+*.xcodeproj/
+*.xcworkspace/
+*.xcuserdata/
+*.ipa
+*.app
+
+# Backup and temp files
+*.bak
+*.orig
+*.tmp
+
+# Unity Cache Server
+Cache/
+
+# Unity generated packages (often big; prefer Git LFS if you want to keep them)
+*.unitypackage
+
+# Ignore auto-generated plugin binaries if you rebuild them locally
+*.dll
+
+# Keep meta files (important!)
+!**/*.meta
+
+# Keep Assets, Packages, ProjectSettings by default (do NOT ignore them)
+# (No explicit rules needed — above ignores only folders like Library/Temp/Builds)
