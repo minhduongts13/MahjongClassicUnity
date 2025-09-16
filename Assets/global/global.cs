@@ -9,3 +9,8 @@ public class LevelData
     public int levelNumber;
     public List<int[,]> layerGrid;
 }
+public enum Popup
+{
+    DASHBOARD,
+    
+}

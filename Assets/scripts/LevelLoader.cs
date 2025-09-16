@@ -70,7 +70,7 @@ public class GridData
 public class LevelLoader : MonoBehaviour
 {
     private const int scale = 2;
-
+    
     public static List<LevelGridData> levelGridDataList = new List<LevelGridData>();
 
     public static List<LevelGridData> ConvertToLevelGridData(string jsonData)
