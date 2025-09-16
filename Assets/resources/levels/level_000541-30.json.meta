@@ -1,11 +1,7 @@
-{
-  "ver": "2.0.1",
-  "importer": "json",
-  "imported": true,
-  "uuid": "9b16baa3-6f7f-4d34-aa82-2fd2447e2e75",
-  "files": [
-    ".json"
-  ],
-  "subMetas": {},
-  "userData": {}
-}
+fileFormatVersion: 2
+guid: d293224186b03c346b6e9b9d17e58b31
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
