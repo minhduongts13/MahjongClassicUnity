@@ -16,9 +16,11 @@ public class AssetsLoader : MonoBehaviour
     private readonly Dictionary<string, UnityEngine.Object> cache = new Dictionary<string, UnityEngine.Object>();
     private const string ImagesFolder = "images";
     private const string LevelsFolder = "levels";
-    public void Start()
+    public async void Start()
     {
-        // StartCoroutine(PreloadAllCoroutine());
+        await PreloadImagesInFolderAsync("theme", progress => {
+            Debug.Log($"Images preload: {progress:P0}");
+        });
     }
     #region Sync API
 
@@ -165,6 +167,8 @@ public class AssetsLoader : MonoBehaviour
 
         onProgress?.Invoke(1f);
         Debug.Log($"[AssetsLoader] PreloadImagesInFolderAsync: loaded {total2} sprites from Resources/{folder} (fallback LoadAll).");
+        List<string> keys = new List<string>(cache.Keys);
+        Debug.Log($"[AssetsLoader] Cached keys: {string.Join(", ", keys)}");
     }
 
     /// <summary>
