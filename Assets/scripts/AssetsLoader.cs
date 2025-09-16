@@ -133,7 +133,7 @@ public class AssetsLoader : MonoBehaviour
     {
         if (string.IsNullOrEmpty(folder)) folder = ImagesFolder;
         folder = folder.Trim('/');
-        
+
         Sprite[] sprites = Resources.LoadAll<Sprite>(folder);
         if (sprites == null || sprites.Length == 0)
         {
