@@ -123,82 +123,48 @@ public class AssetsLoader : MonoBehaviour
     #region Preload / Load all utilities
 
     /// <summary>
-    /// Load tất cả sprites trong Resources/images và tất cả TextAsset trong Resources/levels
-    /// (synchronous) và lưu vào cache. Gọi khi bạn chấp nhận block main-thread.
+    /// Preload tất cả ảnh (Sprite) nằm trong folder Resources/<folder>.
+    /// - Nếu có manifest (Resources/AssetsLoaderResourceManifest) và manifest.images chứa các đường dẫn,
+    ///   hàm sẽ load từng file bằng Resources.LoadAsync (không block).
+    /// - Nếu không có manifest, hàm fallback sang Resources.LoadAll (synchronous) rồi cache.
+    /// onProgress: callback nhận value 0..1
     /// </summary>
-    public void PreloadAllSync()
+    public async Task PreloadImagesInFolderAsync(string folder = ImagesFolder, Action<float> onProgress = null, CancellationToken ct = default)
     {
-        // Load all sprites under Resources/images
-        Sprite[] sprites = Resources.LoadAll<Sprite>(ImagesFolder);
-        foreach (var sp in sprites)
+        if (string.IsNullOrEmpty(folder)) folder = ImagesFolder;
+        folder = folder.Trim('/');
+        
+        Sprite[] sprites = Resources.LoadAll<Sprite>(folder);
+        if (sprites == null || sprites.Length == 0)
         {
-            if (sp == null) continue;
-            string key = $"{ImagesFolder}/{sp.name}";
-            cache[key] = sp;
+            onProgress?.Invoke(1f);
+            Debug.Log($"[AssetsLoader] PreloadImagesInFolderAsync: no sprites found in Resources/{folder}");
+            return;
         }
 
-        // Load all text assets under Resources/levels
-        TextAsset[] levels = Resources.LoadAll<TextAsset>(LevelsFolder);
-        foreach (var ta in levels)
-        {
-            if (ta == null) continue;
-            string key = $"{LevelsFolder}/{ta.name}";
-            cache[key] = ta;
-        }
-
-        Debug.Log($"[AssetsLoader] PreloadAllSync: loaded {sprites.Length} sprites, {levels.Length} levels.");
-    }
-
-    /// <summary>
-    /// Coroutine-friendly preload toàn bộ. **Vẫn** dùng Resources.LoadAll (synchronous load) nhưng xử lý
-    /// việc ghi cache thành nhiều batch để giảm hitch do xử lý cache/GC.
-    /// Nếu muốn tránh hoàn toàn block khi tải file lớn, cân nhắc Addressables hoặc manifest-based loads.
-    /// </summary>
-    /// <param name="onProgress">callback progress 0..1</param>
-    /// <param name="batchSize">số item xử lý mỗi frame</param>
-    public System.Collections.IEnumerator PreloadAllCoroutine(Action<float> onProgress = null, int batchSize = 20)
-    {
-        // NOTE: Resources.LoadAll itself is synchronous and may spike when called.
-        // But we still split cache insertion across frames.
-        Sprite[] sprites = Resources.LoadAll<Sprite>(ImagesFolder);
-        TextAsset[] levels = Resources.LoadAll<TextAsset>(LevelsFolder);
-
-        int total = sprites.Length + levels.Length;
-        int done = 0;
-
+        int total2 = sprites.Length;
+        int done2 = 0;
+        const int batchSize = 20; // xử lý batch rồi yield để giảm hitch do xử lý cache
         for (int i = 0; i < sprites.Length; i++)
         {
+            if (ct.IsCancellationRequested) return;
             var sp = sprites[i];
             if (sp != null)
             {
-                cache[$"{ImagesFolder}/{sp.name}"] = sp;
+                string key = $"{folder}/{sp.name}";
+                cache[key] = sp;
             }
-            done++;
-            if (done % batchSize == 0)
+            done2++;
+
+            if (done2 % batchSize == 0)
             {
-                onProgress?.Invoke(total == 0 ? 1f : (float)done / total);
-                yield return null;
+                onProgress?.Invoke((float)done2 / total2);
+                await Task.Yield(); // give control back to main loop for a frame
             }
         }
 
-        for (int i = 0; i < levels.Length; i++)
-        {
-            var ta = levels[i];
-            if (ta != null)
-            {
-                cache[$"{LevelsFolder}/{ta.name}"] = ta;
-            }
-            done++;
-            if (done % batchSize == 0)
-            {
-                onProgress?.Invoke(total == 0 ? 1f : (float)done / total);
-                yield return null;
-            }
-        }
-
-        // final progress
         onProgress?.Invoke(1f);
-        Debug.Log($"[AssetsLoader] PreloadAllCoroutine finished: {sprites.Length} sprites, {levels.Length} levels.");
+        Debug.Log($"[AssetsLoader] PreloadImagesInFolderAsync: loaded {total2} sprites from Resources/{folder} (fallback LoadAll).");
     }
 
     /// <summary>
