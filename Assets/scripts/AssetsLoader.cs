@@ -18,7 +18,7 @@ public class AssetsLoader : MonoBehaviour
     private const string LevelsFolder = "levels";
     public void Start()
     {
-        StartCoroutine(PreloadAllCoroutine());
+        aw
     }
     #region Sync API
 
