@@ -72,7 +72,7 @@ public class LevelLoader : MonoBehaviour
     private const int scale = 2;
     
     public static List<LevelGridData> levelGridDataList = new List<LevelGridData>();
-
+    public static List<TextAsset> jsonMap = new List<TextAsset>();
     public static List<LevelGridData> ConvertToLevelGridData(string jsonData)
     {
         var wrappedJson = "{\"levels\":" + jsonData + "}";
@@ -187,7 +187,10 @@ public class LevelLoader : MonoBehaviour
 
     public LevelGridData GetLevel(int levelNumber)
     {
-        return levelGridDataList.Find(level => level.levelNumber == levelNumber);
+        int realLevel = levelNumber % 30;
+        if (realLevel == 0) realLevel = 30;
+        levelGridDataList = ConvertToLevelGridData(jsonMap[levelNumber/30].text);
+        return levelGridDataList.Find(level => level.levelNumber == realLevel);
     }
 
     public LayerGridData GetLayer(int levelNumber, int layerNumber)
@@ -195,18 +198,25 @@ public class LevelLoader : MonoBehaviour
         var level = GetLevel(levelNumber);
         return level?.layers.Find(layer => layer.layerNumber == layerNumber);
     }
+    public void loadJson()
+    {
+        int x = 1;
+        for (int i = 0; i < 104; i++)
+        {
+            string fileName = $"levels/level_{x.ToString("D6")}-30";
+            TextAsset asset = Resources.Load<TextAsset>(fileName);
+            if (asset != null)
+                jsonMap.Add(asset);
+            x += 30;
+        }
+    }
+
 
     void Start()
     {
-        TextAsset jsonFile = Resources.Load<TextAsset>("levels/level_000001-30");
-        if (jsonFile != null)
-        {
-            levelGridDataList = ConvertToLevelGridData(jsonFile.text);
-
-            for (int i = 0; i < 2; i++)
-            {
-                PrintLevelGridData(levelGridDataList[i]);
-            }
-        }
+        
+        loadJson();
+        var x = GetLevel(3091-30);
+        PrintLevelGridData(x);
     }
 }

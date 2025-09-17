@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 889798027437648026}
   - component: {fileID: 1218973087008849504}
   - component: {fileID: 1725784992662079224}
+  - component: {fileID: 258478649028479557}
   m_Layer: 5
   m_Name: 'button '
   m_TagString: Untagged
@@ -120,6 +121,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &258478649028479557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70063512907824760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
 --- !u!1 &2165846953744684262
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,6 +336,7 @@ GameObject:
   - component: {fileID: 7353807168520425912}
   - component: {fileID: 1117522211795365032}
   - component: {fileID: 1406146099923708391}
+  - component: {fileID: 1861083898224648064}
   m_Layer: 5
   m_Name: 'task '
   m_TagString: Untagged
@@ -431,6 +445,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1861083898224648064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5025407047080543604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
 --- !u!1 &5068905754363261601
 GameObject:
   m_ObjectHideFlags: 0
@@ -771,6 +797,7 @@ GameObject:
   - component: {fileID: 2104621934315976280}
   - component: {fileID: 4649344250463130860}
   - component: {fileID: 3100097868543151268}
+  - component: {fileID: 2430668936934767107}
   m_Layer: 5
   m_Name: 'tour '
   m_TagString: Untagged
@@ -879,6 +906,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2430668936934767107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6335024728093241465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
 --- !u!1 &7391825450372063209
 GameObject:
   m_ObjectHideFlags: 0
@@ -891,6 +930,7 @@ GameObject:
   - component: {fileID: 7744441318717862857}
   - component: {fileID: 882070845632394423}
   - component: {fileID: 7495740721292737924}
+  - component: {fileID: 2330990210175650173}
   m_Layer: 5
   m_Name: 'playWithFriend '
   m_TagString: Untagged
@@ -999,6 +1039,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2330990210175650173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7391825450372063209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
 --- !u!1 &7892530094043583586
 GameObject:
   m_ObjectHideFlags: 0
@@ -1011,6 +1063,7 @@ GameObject:
   - component: {fileID: 2023574714001282783}
   - component: {fileID: 7747824712411676076}
   - component: {fileID: 1722364797648418701}
+  - component: {fileID: 921262318219165431}
   m_Layer: 5
   m_Name: 'daily '
   m_TagString: Untagged
@@ -1119,6 +1172,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &921262318219165431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7892530094043583586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
 --- !u!1 &8148411609171110052
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,6 +1196,7 @@ GameObject:
   - component: {fileID: 6702957980098868936}
   - component: {fileID: 6494769633490949736}
   - component: {fileID: 4452910274335942119}
+  - component: {fileID: 8983679510893469811}
   m_Layer: 5
   m_Name: 'shop '
   m_TagString: Untagged
@@ -1239,6 +1305,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8983679510893469811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148411609171110052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
 --- !u!1 &8837457195372248202
 GameObject:
   m_ObjectHideFlags: 0

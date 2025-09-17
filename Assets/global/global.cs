@@ -11,6 +11,13 @@ public class LevelData
 }
 public enum Popup
 {
+    SETTINGS,
+    THEME
+
+}
+
+public enum Page
+{
     DASHBOARD,
-    
+    PLAY
 }
