@@ -13,14 +13,18 @@ using UnityEngine;
 public class AssetsLoader : MonoBehaviour
 {
     // Simple caches to avoid reloading
-    private readonly Dictionary<string, UnityEngine.Object> cache = new Dictionary<string, UnityEngine.Object>();
+    private readonly Dictionary<string, UnityEngine.Object> cache = new Dictionary<string, UnityEngine.Object>(StringComparer.OrdinalIgnoreCase);
     private const string ImagesFolder = "images";
     private const string LevelsFolder = "levels";
     public async void Start()
     {
-        await PreloadImagesInFolderAsync("theme", progress => {
-            Debug.Log($"Images preload: {progress:P0}");
-        });
+        await PreloadImagesInFolderAsync(global.tilePath + "/Green");
+        await PreloadImagesInFolderAsync(global.tilePath + "/Orange/old");
+        await PreloadImagesInFolderAsync(global.tilePath + "/Orange/new");
+        await PreloadImagesInFolderAsync(global.tilePath + "/Violet");
+        await PreloadImagesInFolderAsync(global.tilePath + "/Wood/old");
+        await PreloadImagesInFolderAsync(global.tilePath + "/Wood/new");
+        await PreloadImagesInFolderAsync(global.backgroundPath);
     }
     #region Sync API
 
@@ -153,8 +157,7 @@ public class AssetsLoader : MonoBehaviour
             var sp = sprites[i];
             if (sp != null)
             {
-                string key = $"{folder}/{sp.name}";
-                cache[key] = sp;
+                CacheSpriteByPath(folder, sp);
             }
             done2++;
 
@@ -233,6 +236,17 @@ public class AssetsLoader : MonoBehaviour
         cache.Clear();
         if (runUnloadUnusedAssets)
             Resources.UnloadUnusedAssets();
+    }
+
+    private string MakeSpriteResourceKey(string folder, Sprite sp)
+    {
+        return $"{folder}/{sp.name}";
+    }
+
+    private void CacheSpriteByPath(string folder, Sprite sp)
+    {
+        string key = MakeSpriteResourceKey(folder, sp);
+        cache[key] = sp;
     }
 
     #endregion
