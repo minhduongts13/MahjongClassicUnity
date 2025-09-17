@@ -1,8 +1,14 @@
+using System.Diagnostics.CodeAnalysis;
+using NUnit.Framework;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    [SerializeField] public TilePool tilePool;
+    [SerializeField] public BoardManager board;
+
+    [SerializeField] public MatchManager matchManager;
 
     private Tile firstChosen;
     private Tile secondChosen;
@@ -16,6 +22,14 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
         }
         else Destroy(this.gameObject);
+        SetUp();
+    }
+
+    private void SetUp()
+    {
+        tilePool.SetUp();
+        board.SetUp();
+        matchManager.SetUp();
     }
 
     public void Chose(Tile tile)
@@ -41,6 +55,8 @@ public class GameManager : MonoBehaviour
 
         secondChosen = tile;
         secondChosen.OnChose();
+        matchManager.Match(firstChosen, secondChosen);
+        UnChose();
     }
 
     public void UnChose()
