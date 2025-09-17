@@ -50,7 +50,7 @@ public class BoardManager : MonoBehaviour
 
                     // Tạo tile từ prefab
                     Tile t = GameManager.instance.tilePool.GetFirstItem();
-                    t.transform.SetSiblingIndex(r * cols + c + i * rows * cols);
+                    t.transform.SetSiblingIndex(c * rows + r + i * rows * cols);
                     tileGrid[r, c] = t;
                     t.layer = i;
                     t.coords = new Vector2Int(c, r);
