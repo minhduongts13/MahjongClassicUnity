@@ -85,4 +85,12 @@ public class GameManager : MonoBehaviour
         board.SetUp();
         Debug.Log("reload");
     }
+    public void showplay()
+    {
+        UIManager.ShowPage(Page.PLAY);
+    }
+    public void showdash()
+    {
+        UIManager.ShowPage(Page.DASHBOARD);
+    }
 }
