@@ -34,8 +34,12 @@ public class BoardManager : MonoBehaviour
     {
         remainTile = 0;
         Debug.Log("aaa");
-        LevelMock();
+        // LevelMock();
         // mockUpLevel = GameManager.instance.currentLevel.layers;
+        Debug.Log("llalaal");
+        LevelLoader.PrintLevelGridData(GameManager.instance.currentLevel);
+        mockUpLevel = LevelLoader.instance.getArray(GameManager.instance.currentLevel);
+        Debug.Log("MOCK" + mockUpLevel);
         board = new List<Tile[,]>();
 
         for (int i = 0; i < mockUpLevel.Count; i++)
@@ -46,15 +50,16 @@ public class BoardManager : MonoBehaviour
 
             Tile[,] tileGrid = new Tile[rows, cols];
 
-            for (int r = 0; r < rows; r++)
+            for (int c = 0; c < cols; c++)
             {
-                for (int c = 0; c < cols; c++)
+                for (int r = 0; r < rows; r++)
                 {
 
                     // Tạo tile từ prefab
                     Tile t = GameManager.instance.tilePool.GetFirstItem();
                     t.Reset();
-                    t.transform.SetSiblingIndex((r - r % 2) * cols + (c - c % 2) * rows + i * rows * cols);
+                    t.transform.SetAsLastSibling();
+                    // t.transform.SetSiblingIndex((c - c % 2) * rows + (r - r % 2) * cols + i * rows * cols);
                     tileGrid[r, c] = t;
                     t.layer = i;
                     t.coords = new Vector2Int(c, r);

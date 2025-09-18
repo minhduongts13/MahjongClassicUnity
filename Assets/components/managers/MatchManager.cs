@@ -79,7 +79,7 @@ public class MatchManager : MonoBehaviour
         RectTransform rt = tile.transform as RectTransform;
         DOTween.Kill(rt);
         Sequence seq = DOTween.Sequence();
-        await seq.Append(rt.DOAnchorPos(mid + new Vector2(left ? -200 : 200, 0), 0.35f))
+        await seq.Append(rt.DOAnchorPos(mid + new Vector2(left ? -300 : 300, 0), 0.35f))
         .Append(rt.DOAnchorPos(mid + new Vector2(left ? -125 / 2 : 125 / 2, 0), 0.3f).SetEase(Ease.OutFlash)).AsyncWaitForCompletion();
         await tile.FadeTile();
         await Task.Delay(500);

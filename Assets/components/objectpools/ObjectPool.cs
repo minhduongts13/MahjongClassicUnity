@@ -42,6 +42,12 @@ public class ObjectPool<T> : MonoBehaviour where T : PooledObject
                 return obj;
             }
         }
-        return null;
+
+        GameObject ins = Instantiate(prefab, this.transform);
+        T item = ins.GetComponent<T>();
+        item.used = true;                     // Mark as used immediately
+        item.gameObject.SetActive(true);      // Ensure it's active
+        objectList.Add(item);
+        return item;
     }
 }

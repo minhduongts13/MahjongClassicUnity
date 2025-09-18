@@ -58,7 +58,7 @@ public class LevelGridData
 public class GridData
 {
     public int LayerIndex { get; set; }
-    public int[,] Grid { get; set; }
+    public int[,] Grid { get; set; }   // [row (Y), col (X)]
     public int MinX { get; set; }
     public int MinY { get; set; }
     public int MaxX { get; set; }
@@ -70,9 +70,11 @@ public class GridData
 public class LevelLoader : MonoBehaviour
 {
     private const int scale = 2;
-    
+    public static LevelLoader instance;
     public static List<LevelGridData> levelGridDataList = new List<LevelGridData>();
     public static List<TextAsset> jsonMap = new List<TextAsset>();
+
+    // Chuyển JSON sang LevelGridData
     public static List<LevelGridData> ConvertToLevelGridData(string jsonData)
     {
         var wrappedJson = "{\"levels\":" + jsonData + "}";
@@ -90,11 +92,13 @@ public class LevelLoader : MonoBehaviour
         return levelGridDataList;
     }
 
+    // Chuyển Level thành grid chuẩn [row, col] = [y, x]
     public static LevelGridData ConvertLevelToUnifiedGrid(Level level, int levelNumber)
     {
         int minX = int.MaxValue, minY = int.MaxValue;
         int maxX = int.MinValue, maxY = int.MinValue;
 
+        // Tìm bounding box chung
         foreach (var layer in level.layers)
         {
             foreach (var tile in layer.tiles)
@@ -115,14 +119,18 @@ public class LevelLoader : MonoBehaviour
 
         foreach (var layer in level.layers)
         {
-            var grid = new int[width, height];
+            // grid[row, col] = grid[y, x]
+            var grid = new int[height, width];
+
             foreach (var tile in layer.tiles)
             {
                 int intX = (int)(tile.x * scale);
                 int intY = (int)(tile.y * scale);
-                int gridX = intX - minX;
-                int gridY = intY - minY;
-                grid[gridX, gridY] = 1;
+
+                int gridX = intX - minX; // col
+                int gridY = intY - minY; // row
+
+                grid[gridY, gridX] = 1;
             }
 
             var gridData = new GridData
@@ -141,6 +149,7 @@ public class LevelLoader : MonoBehaviour
         return levelGridData;
     }
 
+    // Debug: in ra lưới
     public static void PrintLevelGridData(LevelGridData levelGridData)
     {
         Debug.Log($" LEVEL {levelGridData.levelNumber} ");
@@ -157,17 +166,18 @@ public class LevelLoader : MonoBehaviour
     public static void PrintGrid(GridData gridData)
     {
         string gridString = "";
-        for (int y = gridData.Height - 1; y >= 0; y--)
+        for (int y = gridData.Height - 1; y >= 0; y--) // in từ trên xuống dưới
         {
             for (int x = 0; x < gridData.Width; x++)
             {
-                gridString += gridData.Grid[x, y] == 1 ? "1" : "0";
+                gridString += gridData.Grid[y, x] == 1 ? "1" : "0";
             }
             gridString += "\n";
         }
         Debug.Log(gridString);
     }
 
+    // Kiểm tra có tile tại tọa độ thế giới không
     public static bool HasTileAt(GridData gridData, float worldX, float worldY)
     {
         int intX = (int)(worldX * scale);
@@ -182,14 +192,15 @@ public class LevelLoader : MonoBehaviour
         int gridX = intX - gridData.MinX;
         int gridY = intY - gridData.MinY;
 
-        return gridData.Grid[gridX, gridY] == 1;
+        return gridData.Grid[gridY, gridX] == 1;
     }
 
+    // Lấy level theo số thứ tự
     public LevelGridData GetLevel(int levelNumber)
     {
         int realLevel = levelNumber % 30;
         if (realLevel == 0) realLevel = 30;
-        levelGridDataList = ConvertToLevelGridData(jsonMap[levelNumber/30].text);
+        levelGridDataList = ConvertToLevelGridData(jsonMap[levelNumber / 30].text);
         return levelGridDataList.Find(level => level.levelNumber == realLevel);
     }
 
@@ -198,6 +209,8 @@ public class LevelLoader : MonoBehaviour
         var level = GetLevel(levelNumber);
         return level?.layers.Find(layer => layer.layerNumber == layerNumber);
     }
+
+    // Load toàn bộ json
     public void loadJson()
     {
         int x = 1;
@@ -211,12 +224,27 @@ public class LevelLoader : MonoBehaviour
         }
     }
 
+    // Xuất grid của 1 level thành list<int[,]>
+    public List<int[,]> getArray(LevelGridData lv)
+    {
+        List<int[,]> list = new List<int[,]>();
+        foreach (LayerGridData layer in lv.layers)
+        {
+            list.Add(layer.gridData.Grid);
+        }
+        return list;
+    }
 
     void Start()
     {
-        
-        loadJson();
-        var x = GetLevel(3091-30);
-        PrintLevelGridData(x);
+        if (!LevelLoader.instance)
+        {
+            LevelLoader.instance = this;
+            DontDestroyOnLoad(this.gameObject);
+            loadJson();
+            var x = GetLevel(3091 - 30);
+            PrintLevelGridData(x);
+        }
+        else { Destroy(this.gameObject); }
     }
 }

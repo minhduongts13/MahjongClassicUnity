@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     private void SetUp()
     {
-        // currentLevel = LevelLoader.instance.GetLevel(1);
+        currentLevel = LevelLoader.instance.GetLevel(70);
         tilePool.SetUp();
         board.SetUp();
         matchManager.SetUp();
