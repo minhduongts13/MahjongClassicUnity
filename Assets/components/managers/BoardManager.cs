@@ -69,6 +69,24 @@ public class BoardManager : MonoBehaviour
                     // }
                 }
             }
+            for (int c = 0; c < cols; c += 2)
+            {
+                for (int r = 0; r < rows; r++)
+                {
+
+                    // Tạo tile từ prefab
+                    // Tile t = GameManager.instance.tilePool.GetFirstItem();
+
+                    // t.transform.SetSiblingIndex((c - c % 2) * rows + (r - r % 2) * cols + i * rows * cols);
+                    if (c <= cols - 1) tileGrid[r, c].transform.SetAsLastSibling();
+                    if (c + 1 < cols - 1)
+                        tileGrid[r, c + 1].transform.SetAsLastSibling();
+                    // if (levelData[r, c] == 0)
+                    // {
+                    //     t.Kill();
+                    // }
+                }
+            }
 
 
             board.Add(tileGrid);
