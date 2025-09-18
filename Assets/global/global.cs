@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public enum THEME
 {
-
+    Green
 }
 
 
@@ -18,7 +18,7 @@ public class LevelData
 public enum Popup
 {
     DASHBOARD,
-    
+
 }
 
 
@@ -35,4 +35,9 @@ public static class global
 {
     public static string tilePath = "theme/tiles";
     public static string backgroundPath = "theme/background";
+    public static string GetSprite(int type, THEME theme)
+    {
+        return theme.ToString() + "/" + type.ToString();
+    }
 }
+

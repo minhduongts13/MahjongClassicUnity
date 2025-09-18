@@ -5,6 +5,7 @@ public class BoardManager : MonoBehaviour
 {
     private List<int[,]> mockUpLevel;
     public List<Tile[,]> board;
+    public int remainTile;
 
     void LevelMock()
     {
@@ -12,9 +13,9 @@ public class BoardManager : MonoBehaviour
 
         int[,] layer1 =
         {
-            { 1,0,1, 0, 0, 1 },
+            { 1,0,20, 0, 0, 1 },
             {0,0, 0, 0, 0, 0 },
-            {0,1, 0, 0, 1, 0 },
+            {0,1, 0, 0, 20, 0 },
             { 0, 0, 0, 0 ,0,0},
         };
         mockUpLevel.Add(layer1);
@@ -23,16 +24,18 @@ public class BoardManager : MonoBehaviour
         {
             { 0,0,1, 0, 0, 1 },
             {1,0, 0, 0, 0, 0 },
-            {0,0, 0, 1, 0, 0 },
-            { 0, 0, 0, 0 ,0,1},
+            {0,0, 0, 2, 0, 0 },
+            { 0, 0, 0, 0 ,0,2},
         };
         mockUpLevel.Add(layer2);
     }
 
     public void SetUp()
     {
+        remainTile = 0;
         Debug.Log("aaa");
         LevelMock();
+        // mockUpLevel = GameManager.instance.currentLevel.layers;
         board = new List<Tile[,]>();
 
         for (int i = 0; i < mockUpLevel.Count; i++)
@@ -50,7 +53,8 @@ public class BoardManager : MonoBehaviour
 
                     // Tạo tile từ prefab
                     Tile t = GameManager.instance.tilePool.GetFirstItem();
-                    t.transform.SetSiblingIndex(c * rows + r + i * rows * cols);
+                    t.Reset();
+                    t.transform.SetSiblingIndex((r - r % 2) * cols + (c - c % 2) * rows + i * rows * cols);
                     tileGrid[r, c] = t;
                     t.layer = i;
                     t.coords = new Vector2Int(c, r);
@@ -78,7 +82,19 @@ public class BoardManager : MonoBehaviour
                 {
                     if (board[i][r, c] != null)
                         (board[i][r, c].transform as RectTransform).anchoredPosition = GetPosFromCoords(c, r, i);
-                    if (levelData[r, c] == 0) board[i][r, c].Kill();
+                    if (levelData[r, c] == 0)
+                    {
+                        board[i][r, c].Kill();
+                        // board[i][r, c].gameObject.SetActive(false);
+
+                    }
+                    else
+                    {
+
+                        board[i][r, c].setTileType(levelData[r, c]);
+                        board[i][r, c].Zoom(i);
+                        remainTile++;
+                    }
                 }
             }
         }

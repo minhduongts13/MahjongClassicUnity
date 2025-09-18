@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public BoardManager board;
 
     [SerializeField] public MatchManager matchManager;
+    public LevelGridData currentLevel;
 
     private Tile firstChosen;
     private Tile secondChosen;
@@ -16,35 +19,41 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        if (!GameManager.instance)
+        if (!AssetsLoader.instance)
         {
-            GameManager.instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            SceneManager.LoadScene(0);
         }
-        else Destroy(this.gameObject);
+
+        GameManager.instance = this;
+
+
         SetUp();
     }
 
     private void SetUp()
     {
+        // currentLevel = LevelLoader.instance.GetLevel(1);
         tilePool.SetUp();
         board.SetUp();
         matchManager.SetUp();
     }
 
-    public void Chose(Tile tile)
+    public async void Chose(Tile tile)
     {
-        if (!tile.LegalChose()) return;
+        if (!matchManager.isFree(tile)) return;
         if (!firstChosen)
         {
             firstChosen = tile;
             tile.OnChose();
+            tile.MoveOffset(matchManager.BlockRight(tile), matchManager.BlockRight(tile) || matchManager.BlockLeft(tile));
             return;
         }
         if (tile.GetTileType() != firstChosen.GetTileType())
         {
             UnChose();
             firstChosen = tile;
+            firstChosen.OnChose();
+            tile.MoveOffset(matchManager.BlockRight(tile), matchManager.BlockRight(tile) || matchManager.BlockLeft(tile));
             return;
         }
         if (tile == firstChosen)
@@ -55,8 +64,12 @@ public class GameManager : MonoBehaviour
 
         secondChosen = tile;
         secondChosen.OnChose();
-        matchManager.Match(firstChosen, secondChosen);
+
+        Tile t1 = firstChosen;
+        Tile t2 = secondChosen;
         UnChose();
+        await matchManager.Match(t1, t2);
+
     }
 
     public void UnChose()
@@ -65,5 +78,11 @@ public class GameManager : MonoBehaviour
         secondChosen?.OnUnChose();
         firstChosen = null;
         secondChosen = null;
+    }
+
+    public void Reload()
+    {
+        board.SetUp();
+        Debug.Log("reload");
     }
 }
