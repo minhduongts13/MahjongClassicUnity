@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
@@ -29,6 +30,7 @@ public class MatchManager : MonoBehaviour
         {
             // tile1.Kill();
             // tile2.Kill();
+            addMove(tile1, tile2);
             tile1.setTileType(0);
             tile2.setTileType(0);
             board.remainTile -= 2;
@@ -36,10 +38,15 @@ public class MatchManager : MonoBehaviour
 
             UnlockNeighbour(tile1);
             UnlockNeighbour(tile2);
+            tile1.OffHint();
+            tile2.OffHint();
+            tile1.OnUnChose();
+            tile2.OnUnChose();
 
             if (board.remainTile == 0)
             {
                 await MoveMatching(tile1, tile2);
+                GameManager.instance.AdvanceLevel();
                 GameManager.instance.Reload();
             }
             else
@@ -48,6 +55,7 @@ public class MatchManager : MonoBehaviour
             }
         }
     }
+
 
     private void UnlockNeighbour(Tile tile)
     {
@@ -85,8 +93,8 @@ public class MatchManager : MonoBehaviour
             tile1.transform.SetAsLastSibling();
         }
         await Task.WhenAll(TileMoveMatching(tile1, mid, left), TileMoveMatching(tile2, mid, !left));
-        tile1.Kill();
-        tile2.Kill();
+        if (tile1.GetTileType() == 0) tile1.Kill();
+        if (tile2.GetTileType() == 0) tile2.Kill();
 
     }
 
@@ -98,7 +106,6 @@ public class MatchManager : MonoBehaviour
         await seq.Append(rt.DOAnchorPos(mid + new Vector2(left ? -300 : 300, 0), 0.35f))
         .Append(rt.DOAnchorPos(mid + new Vector2(left ? -125 / 2 : 125 / 2, 0), 0.3f).SetEase(Ease.OutFlash)).AsyncWaitForCompletion();
         await tile.FadeTile();
-        await Task.Delay(500);
     }
 
     public bool isFree(Tile tile)
@@ -122,6 +129,22 @@ public class MatchManager : MonoBehaviour
         }
         return false;
     }
+
+    private void addMove(Tile tile1, Tile tile2)
+    {
+        // Lưu: ( (pos1, pos2), (type1, type2) )
+
+        Vector3 pos1 = new Vector3(tile1.coords.x, tile1.coords.y, tile1.layer);
+        Vector3 pos2 = new Vector3(tile2.coords.x, tile2.coords.y, tile2.layer);
+        var move = Tuple.Create(
+            Tuple.Create(pos1, pos2),
+            Tuple.Create(tile1.GetTileType(), tile2.GetTileType())
+        );
+        Debug.Log(move);
+
+        GameManager.instance.moves.Push(move);
+    }
+
     public bool BlockRight(Tile tile)
     {
         int layer = tile.layer;
@@ -151,7 +174,7 @@ public class MatchManager : MonoBehaviour
                 if (tile.coords.x + x < 0 || tile.coords.x + x >= board.board[0].GetLength(1)) continue;
                 if (board.board[tile.layer + 1][tile.coords.y + y, tile.coords.x + x].GetTileType() != 0)
                 {
-                    Debug.Log("x" + (tile.coords.x + x) + "y" + (tile.coords.y + y));
+                    // Debug.Log("x" + (tile.coords.x + x) + "y" + (tile.coords.y + y));
                     // board.board[tile.layer + 1][tile.coords.y + y, tile.coords.x + x].OnChose();
                     return true;
                 }

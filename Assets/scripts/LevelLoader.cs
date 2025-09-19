@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -233,19 +234,20 @@ public class LevelLoader : MonoBehaviour
         {
             // clone mảng gốc để không thay đổi dữ liệu ban đầu
             int[,] grid = (int[,])layer.gridData.Grid.Clone();
-            RandomizeOnes(grid);
+            RandomizePairs(grid);
             list.Add(grid);
         }
         return list;
     }
 
-    private void RandomizeOnes(int[,] grid)
+    private void RandomizePairs(int[,] grid)
     {
         List<(int r, int c)> ones = new List<(int, int)>();
 
-        // gom tất cả ô có value = 1
         int rows = grid.GetLength(0);
         int cols = grid.GetLength(1);
+
+        // gom tất cả ô có value = 1
         for (int r = 0; r < rows; r++)
         {
             for (int c = 0; c < cols; c++)
@@ -259,30 +261,29 @@ public class LevelLoader : MonoBehaviour
 
         if (ones.Count == 0) return;
 
-        // gán random [1..5] trước
-        foreach (var (r, c) in ones)
+        // xáo trộn danh sách
+        ones = ones.OrderBy(_ => rand.Next()).ToList();
+
+        // xử lý theo từng cặp
+        for (int i = 0; i + 1 < ones.Count; i += 2)
         {
-            grid[r, c] = rand.Next(1, 3); // từ 1 đến 5
+            int val = rand.Next(1, 20); // 1..5
+            var (r1, c1) = ones[i];
+            var (r2, c2) = ones[i + 1];
+            grid[r1, c1] = val;
+            grid[r2, c2] = val;
         }
 
-        // đảm bảo có ít nhất 1 cặp
-        if (ones.Count == 1)
+        // nếu dư 1 ô thì xử lý riêng
+        if (ones.Count % 2 == 1)
         {
-            // nếu chỉ có 1 ô thì bắt buộc duplicate ngẫu nhiên giá trị cho nó (game có thể không hợp lệ)
-            grid[ones[0].r, ones[0].c] = 1;
-        }
-        else
-        {
-            // chọn 2 vị trí bất kỳ từ danh sách
-            int idx1 = rand.Next(ones.Count);
-            int idx2 = rand.Next(ones.Count);
-            while (idx2 == idx1) idx2 = rand.Next(ones.Count);
-
-            // ép 2 ô đó cùng giá trị
-            int val = grid[ones[idx1].r, ones[idx1].c];
-            grid[ones[idx2].r, ones[idx2].c] = val;
+            var (r, c) = ones.Last();
+            // Ví dụ: ép nó trùng với 1 ô trong grid (chọn random 1 giá trị đã dùng)
+            int val = rand.Next(1, 6);
+            grid[r, c] = val;
         }
     }
+
 
     void Start()
     {

@@ -14,12 +14,18 @@ public class Tile : PooledObject
     [SerializeField] Image typeImg;
     [SerializeField] Image bgImg;
     [SerializeField] Image overlay;
+    [SerializeField] Image hintEff;
+    [SerializeField] Image hintRot;
+
+    [SerializeField] Image hintHighlight;
 
     [SerializeField] Image shadowImg;
     public Vector2Int coords;
+    private int offset = 0;
     public int layer;
     private THEME theme = THEME.Green;
     private int type = 0;
+    public int idx;
     private List<Action> OnClickCallbacks = new List<Action>();
     void Start()
     {
@@ -46,7 +52,7 @@ public class Tile : PooledObject
     }
     public void ToggleOverlay(bool on)
     {
-
+        DOTween.Kill(overlay);
         if (on)
         {
             if (overlay.gameObject.activeSelf != true) overlay.DOFade(0, 0.01f);
@@ -69,7 +75,7 @@ public class Tile : PooledObject
         DOTween.Kill(rt);
 
         // giữ đúng vị trí gốc
-        Vector2 pos = GameManager.instance.board.GetPosFromCoords(this.coords.x, this.coords.y, this.layer);
+        Vector2 pos = GameManager.instance.board.GetPosFromCoords(this.coords.x, this.coords.y, this.layer) + new Vector2(offset, 0);
         rt.anchoredPosition = pos;
 
         float strength = 20f;
@@ -79,7 +85,7 @@ public class Tile : PooledObject
         seq.Append(rt.DOAnchorPos(pos - new Vector2(strength, 0f), 0.14f).SetEase(Ease.OutSine));
         seq.Append(rt.DOAnchorPos(pos, 0.07f).SetEase(Ease.OutSine));
         await seq.AsyncWaitForCompletion();
-        MoveToRealPos();
+        // MoveToRealPos();
     }
 
 
@@ -94,10 +100,33 @@ public class Tile : PooledObject
 
     public void Reset()
     {
-        bgImg.DOFade(1, 0.01f);
-        typeImg.DOFade(1, 0.01f);
-        shadowImg.DOFade(1, 0.01f);
+        // Kill all tweens on these targets
+        bgImg.DOKill();
+        typeImg.DOKill();
+        shadowImg.DOKill();
+
+        // Set alpha to 1 instantly
+        Color c;
+
+        c = bgImg.color;
+        c.a = 1f;
+        bgImg.color = c;
+
+        c = typeImg.color;
+        c.a = 1f;
+        typeImg.color = c;
+
+        c = shadowImg.color;
+        c.a = 1f;
+        shadowImg.color = c;
+
         TurnOnInput();
+    }
+
+    public void OffHint()
+    {
+        hintEff.gameObject.SetActive(false);
+        hintHighlight.gameObject.SetActive(false);
     }
 
     public async void Zoom(int delay)
@@ -124,6 +153,7 @@ public class Tile : PooledObject
         Vector2 pos = GameManager.instance.board.GetPosFromCoords(this.coords.x, this.coords.y, this.layer);
         RectTransform rt = transform as RectTransform;
         rt.DOAnchorPos(pos, 0.35f).SetEase(Ease.OutSine);
+        offset = 0;
     }
 
 
@@ -158,6 +188,7 @@ public class Tile : PooledObject
     {
         if (!move) return;
         int offset = left ? -25 : 25;
+        this.offset = offset;
         RectTransform rt = transform as RectTransform;
         rt.DOAnchorPos(rt.anchoredPosition + new Vector2(offset, 0), 0.35f).SetEase(Ease.OutSine);
     }
@@ -202,5 +233,21 @@ public class Tile : PooledObject
 
     }
 
+    public void OnHint()
+    {
+        hintEff.gameObject.SetActive(true);
+        hintHighlight.gameObject.SetActive(true);
 
+        // Xóa tween cũ nếu có
+        DOTween.Kill(hintRot.transform);
+
+        // Xoay mãi mãi quanh trục Z
+        hintRot.transform
+            .DORotate(new Vector3(0, 0, 360f), 2f, RotateMode.FastBeyond360)
+            .SetEase(Ease.Linear)
+            .SetLoops(-1, LoopType.Restart);
+        hintHighlight.DOFade(0.5f, 0.5f)
+    .SetLoops(-1, LoopType.Yoyo)
+    .SetEase(Ease.Linear);
+    }
 }
