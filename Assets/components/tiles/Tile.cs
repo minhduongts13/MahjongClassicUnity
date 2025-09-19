@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class Tile : PooledObject
@@ -138,13 +135,13 @@ public class Tile : PooledObject
 
     public void BlockInput()
     {
-        Button button = this.gameObject.GetComponent<Button>();
+        UnityEngine.UI.Button button = this.gameObject.GetComponent<UnityEngine.UI.Button>();
         button.interactable = false;
     }
 
     public void TurnOnInput()
     {
-        Button button = this.gameObject.GetComponent<Button>();
+        UnityEngine.UI.Button button = this.gameObject.GetComponent<UnityEngine.UI.Button>();
         button.interactable = true;
     }
 
