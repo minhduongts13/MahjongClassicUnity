@@ -27,15 +27,24 @@ public class LevelData
 public enum Popup
 {
     SETTINGS,
-    THEME
+    THEME,
+    DAILY,
+    TASK,   
 
 }
+
 
 public enum Page
 {
     DASHBOARD,
     PLAY
 }
+public class Missiondata
+{
+    public string name;
+    public int misionCount;
+}
+
 
 public enum Button
 {
