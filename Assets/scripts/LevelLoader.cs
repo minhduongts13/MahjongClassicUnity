@@ -69,6 +69,7 @@ public class GridData
 
 public class LevelLoader : MonoBehaviour
 {
+    System.Random rand = new System.Random();
     private const int scale = 2;
     public static LevelLoader instance;
     public static List<LevelGridData> levelGridDataList = new List<LevelGridData>();
@@ -230,9 +231,57 @@ public class LevelLoader : MonoBehaviour
         List<int[,]> list = new List<int[,]>();
         foreach (LayerGridData layer in lv.layers)
         {
-            list.Add(layer.gridData.Grid);
+            // clone mảng gốc để không thay đổi dữ liệu ban đầu
+            int[,] grid = (int[,])layer.gridData.Grid.Clone();
+            RandomizeOnes(grid);
+            list.Add(grid);
         }
         return list;
+    }
+
+    private void RandomizeOnes(int[,] grid)
+    {
+        List<(int r, int c)> ones = new List<(int, int)>();
+
+        // gom tất cả ô có value = 1
+        int rows = grid.GetLength(0);
+        int cols = grid.GetLength(1);
+        for (int r = 0; r < rows; r++)
+        {
+            for (int c = 0; c < cols; c++)
+            {
+                if (grid[r, c] == 1)
+                {
+                    ones.Add((r, c));
+                }
+            }
+        }
+
+        if (ones.Count == 0) return;
+
+        // gán random [1..5] trước
+        foreach (var (r, c) in ones)
+        {
+            grid[r, c] = rand.Next(1, 3); // từ 1 đến 5
+        }
+
+        // đảm bảo có ít nhất 1 cặp
+        if (ones.Count == 1)
+        {
+            // nếu chỉ có 1 ô thì bắt buộc duplicate ngẫu nhiên giá trị cho nó (game có thể không hợp lệ)
+            grid[ones[0].r, ones[0].c] = 1;
+        }
+        else
+        {
+            // chọn 2 vị trí bất kỳ từ danh sách
+            int idx1 = rand.Next(ones.Count);
+            int idx2 = rand.Next(ones.Count);
+            while (idx2 == idx1) idx2 = rand.Next(ones.Count);
+
+            // ép 2 ô đó cùng giá trị
+            int val = grid[ones[idx1].r, ones[idx1].c];
+            grid[ones[idx2].r, ones[idx2].c] = val;
+        }
     }
 
     void Start()

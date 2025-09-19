@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class Tile : PooledObject
@@ -12,6 +13,7 @@ public class Tile : PooledObject
     [SerializeField] List<Image> choseEffect;
     [SerializeField] Image typeImg;
     [SerializeField] Image bgImg;
+    [SerializeField] Image overlay;
 
     [SerializeField] Image shadowImg;
     public Vector2Int coords;
@@ -28,6 +30,58 @@ public class Tile : PooledObject
     {
         AddOnClickCallbacks(() => GameManager.instance.Chose(this));
     }
+    public void OnBlocked()
+    {
+        BoardManager board = GameManager.instance.board;
+        if (!GameManager.instance.matchManager.isFree(this))
+        {
+            ToggleOverlay(true);
+            this.Shake();
+            foreach (Tile t in GameManager.instance.board.getNeighbour(this))
+            {
+                t.Shake();
+            }
+        }
+
+    }
+    public void ToggleOverlay(bool on)
+    {
+
+        if (on)
+        {
+            if (overlay.gameObject.activeSelf != true) overlay.DOFade(0, 0.01f);
+            overlay.gameObject.SetActive(true);
+            overlay.DOFade(0.6f, 0.2f);
+        }
+        else
+        {
+            overlay.DOFade(0f, 0.2f).OnComplete(() =>
+            {
+                overlay.gameObject.SetActive(false);
+            });
+        }
+
+    }
+
+    public async void Shake()
+    {
+        RectTransform rt = transform as RectTransform;
+        DOTween.Kill(rt);
+
+        // giữ đúng vị trí gốc
+        Vector2 pos = GameManager.instance.board.GetPosFromCoords(this.coords.x, this.coords.y, this.layer);
+        rt.anchoredPosition = pos;
+
+        float strength = 20f;
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(rt.DOAnchorPos(pos + new Vector2(strength, 0f), 0.07f).SetEase(Ease.OutSine));
+        seq.Append(rt.DOAnchorPos(pos - new Vector2(strength, 0f), 0.14f).SetEase(Ease.OutSine));
+        seq.Append(rt.DOAnchorPos(pos, 0.07f).SetEase(Ease.OutSine));
+        await seq.AsyncWaitForCompletion();
+        MoveToRealPos();
+    }
+
 
     public async Task FadeTile()
     {

@@ -15,6 +15,7 @@ public class MatchManager : MonoBehaviour
     }
     public async Task Match(Tile tile1, Tile tile2)
     {
+
         if (TopBlock(tile1) || TopBlock(tile2))
         {
             Debug.Log("TOP BLOCKED");
@@ -33,6 +34,9 @@ public class MatchManager : MonoBehaviour
             board.remainTile -= 2;
             Debug.Log(board.remainTile);
 
+            UnlockNeighbour(tile1);
+            UnlockNeighbour(tile2);
+
             if (board.remainTile == 0)
             {
                 await MoveMatching(tile1, tile2);
@@ -42,6 +46,18 @@ public class MatchManager : MonoBehaviour
             {
                 await MoveMatching(tile1, tile2);
             }
+        }
+    }
+
+    private void UnlockNeighbour(Tile tile)
+    {
+        foreach (Tile t in board.getNeighbour(tile))
+        {
+            if (isFree(t)) t.ToggleOverlay(false);
+        }
+        foreach (Tile t in board.getUnder(tile))
+        {
+            if (isFree(t)) t.ToggleOverlay(false);
         }
     }
 

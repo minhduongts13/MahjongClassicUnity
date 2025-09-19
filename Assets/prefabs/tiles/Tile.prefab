@@ -427,6 +427,7 @@ MonoBehaviour:
   - {fileID: 7665298095290218994}
   typeImg: {fileID: 6372420595714373007}
   bgImg: {fileID: 1323122728792704881}
+  overlay: {fileID: 3460555393625046622}
   shadowImg: {fileID: 2426582248756803649}
   coords: {x: 0, y: 0}
   layer: 0

@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     private void SetUp()
     {
-        currentLevel = LevelLoader.instance.GetLevel(70);
+        currentLevel = LevelLoader.instance.GetLevel(50);
         tilePool.SetUp();
         board.SetUp();
         matchManager.SetUp();
@@ -40,7 +40,11 @@ public class GameManager : MonoBehaviour
 
     public async void Chose(Tile tile)
     {
-        if (!matchManager.isFree(tile)) return;
+        if (!matchManager.isFree(tile))
+        {
+            tile.OnBlocked();
+            return;
+        }
         if (!firstChosen)
         {
             firstChosen = tile;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
@@ -154,5 +155,59 @@ public class BoardManager : MonoBehaviour
 
         return new Vector2(posX, posY);
     }
+
+    public List<Tile> getNeighbour(Tile tile)
+    {
+        List<Tile> neightbour = new List<Tile>();
+
+        for (int i = -1; i < 2; i++)
+        {
+            if (tile.coords.x - 2 >= 0 && tile.coords.y + i >= 0 && tile.coords.y + i < board[0].GetLength(0))
+            {
+                neightbour.Add(board[tile.layer][tile.coords.y + i, tile.coords.x - 2]);
+            }
+            if (tile.coords.x + 2 < board[0].GetLength(1) && tile.coords.y + i >= 0 && tile.coords.y + i < board[0].GetLength(0))
+            {
+                neightbour.Add(board[tile.layer][tile.coords.y + i, tile.coords.x + 2]);
+            }
+        }
+        if (tile.layer == board.Count - 1)
+        {
+            return neightbour;
+        }
+        for (int y = -1; y < 2; y++)
+        {
+            if (tile.coords.y + y < 0 || tile.coords.y + y >= board[0].GetLength(0)) continue;
+            for (int x = -1; x < 2; x++)
+            {
+                if (tile.coords.x + x < 0 || tile.coords.x + x >= board[0].GetLength(1)) continue;
+                neightbour.Add(board[tile.layer + 1][tile.coords.y + y, tile.coords.x + x]);
+            }
+        }
+        return neightbour;
+
+    }
+    public List<Tile> getUnder(Tile tile)
+    {
+        List<Tile> neightbour = new List<Tile>();
+
+        if (tile.layer == 0)
+        {
+            return neightbour;
+        }
+        for (int y = -1; y < 2; y++)
+        {
+            if (tile.coords.y + y < 0 || tile.coords.y + y >= board[0].GetLength(0)) continue;
+            for (int x = -1; x < 2; x++)
+            {
+                if (tile.coords.x + x < 0 || tile.coords.x + x >= board[0].GetLength(1)) continue;
+                neightbour.Add(board[tile.layer - 1][tile.coords.y + y, tile.coords.x + x]);
+            }
+        }
+        return neightbour;
+
+    }
+
+
 
 }
