@@ -10,4 +10,12 @@ public class GameManager : MonoBehaviour
     {
 
     }
+    public void showplay()
+    {
+        UIManager.ShowPage(Page.PLAY);
+    }
+    public void showdash()
+    {
+        UIManager.ShowPage(Page.DASHBOARD);
+    }
 }
