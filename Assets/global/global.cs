@@ -35,3 +35,9 @@ public enum Page
     DASHBOARD,
     PLAY
 }
+
+public enum Button
+{
+    OFF,
+    ON
+}

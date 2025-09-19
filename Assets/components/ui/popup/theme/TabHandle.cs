@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TabHandle : MonoBehaviour
+public class TabHandle : BasePopup
 {
     public GameObject Tab;
     public GameObject Backgrounds;
