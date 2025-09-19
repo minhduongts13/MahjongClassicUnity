@@ -14,12 +14,15 @@ using UnityEngine.SceneManagement;
 public class AssetsLoader : MonoBehaviour
 {
     // Simple caches to avoid reloading
+
     public static AssetsLoader instance;
+
     private readonly Dictionary<string, UnityEngine.Object> cache = new Dictionary<string, UnityEngine.Object>(StringComparer.OrdinalIgnoreCase);
     private const string ImagesFolder = "images";
     private const string LevelsFolder = "levels";
     public async void Start()
     {
+
         if (AssetsLoader.instance)
         {
             Destroy(this.gameObject);
@@ -27,6 +30,7 @@ public class AssetsLoader : MonoBehaviour
         }
         AssetsLoader.instance = this;
         DontDestroyOnLoad(this.gameObject);
+
         await PreloadImagesInFolderAsync(global.tilePath + "/Green");
         await PreloadImagesInFolderAsync(global.tilePath + "/Orange/old");
         await PreloadImagesInFolderAsync(global.tilePath + "/Orange/new");
@@ -34,7 +38,9 @@ public class AssetsLoader : MonoBehaviour
         await PreloadImagesInFolderAsync(global.tilePath + "/Wood/old");
         await PreloadImagesInFolderAsync(global.tilePath + "/Wood/new");
         await PreloadImagesInFolderAsync(global.backgroundPath);
+
         SceneManager.LoadScene(1);
+
     }
     #region Sync API
 

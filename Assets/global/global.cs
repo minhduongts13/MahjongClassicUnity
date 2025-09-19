@@ -10,6 +10,15 @@ public enum TileType
 {
     None
 }
+
+public enum THEME_STYLE
+{
+    Green,
+    Orange,
+    Violet,
+    Wood
+}
+
 public class LevelData
 {
     public int levelNumber;
@@ -26,18 +35,19 @@ public enum Page
 {
     DASHBOARD,
     PLAY
-
 }
 
-
-
-public enum THEME_STYLE
+public enum Button
 {
-    Green,
-    Orange,
-    Violet,
-    Wood
+    OFF,
+    ON
 }
+
+
+
+
+
+
 
 public static class global
 {
