@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 18f982d2e815f274b8e25b0b9f391daa
+guid: a858b273af07a470098274e449aece38
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5549878067028295447
-    second: Scence_GUI_Language_Board_0
+      213: -8485553319733244277
+    second: film-solid-full-2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Scence_GUI_Language_Board_0
+      name: film-solid-full-2_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1080
-        height: 2337
+        x: 95
+        y: 95
+        width: 450
+        height: 450
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 71ff3fb82b0250d40800000000000000
-      internalID: 5549878067028295447
+      spriteID: b8ec9aec6324d3a80800000000000000
+      internalID: -8485553319733244277
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Scence_GUI_Language_Board_0: 5549878067028295447
+      film-solid-full-2_0: -8485553319733244277
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
