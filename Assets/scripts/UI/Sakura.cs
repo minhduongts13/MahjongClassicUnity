@@ -5,25 +5,24 @@ public class Sakura : MonoBehaviour
 {
     void Start()
     {
-        RotateRight();
+
+        Rotate();
     }
 
-    public void RotateRight()
+    public void Rotate()
     {
-        this.transform.DORotate(
-            new Vector3(0, 0, this.transform.eulerAngles.z + 360),
-            12.0f,
-            RotateMode.FastBeyond360
-        ).SetEase(Ease.InQuad)
-         .OnComplete(() => RotateLeft());
+        Sequence seq = DOTween.Sequence();
+        seq.Append(transform.DORotate(new Vector3(0, 0, 360), 12f, RotateMode.FastBeyond360).SetEase(Ease.InQuad).SetRelative(true));
+        seq.Append(transform.DORotate(new Vector3(0, 0, -360), 12f, RotateMode.FastBeyond360).SetEase(Ease.InQuad).SetRelative(true));
+        seq.SetLoops(-1);
     }
     public void RotateLeft()
     {
         this.transform.DORotate(
             new Vector3(0, 0, this.transform.eulerAngles.z - 360),
-            12.0f, 
+            12.0f,
             RotateMode.FastBeyond360
-        ).SetEase(Ease.InQuad)
-         .OnComplete(() => RotateRight());
+        ).SetEase(Ease.InQuad);
+        // .OnComplete(() => RotateRight());
     }
 }

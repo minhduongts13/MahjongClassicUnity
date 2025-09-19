@@ -20,23 +20,23 @@ public class PageMapping
 
 
 public class UIManager : MonoBehaviour
-{  
-    
-     [SerializeField] private PageMapping[] pageMappings;
-     [SerializeField] private PopupMapping[] popupMappings;
-   
+{
+
+    [SerializeField] private PageMapping[] pageMappings;
+    [SerializeField] private PopupMapping[] popupMappings;
+
     [SerializeField] private GameObject overlay;
     // [SerializeField] private GameObject progressBar;
     // [SerializeField] private GameObject soundButton;
     // [SerializeField] private GameObject musicButton;
     // [SerializeField] private GameObject vibrateButton;
-    
+
     private Dictionary<Popup, GameObject> popupNodes = new Dictionary<Popup, GameObject>();
     private Dictionary<Popup, BasePopup> popupComponents = new Dictionary<Popup, BasePopup>();
     private Dictionary<Page, GameObject> pageNodes = new Dictionary<Page, GameObject>();
     private Dictionary<Page, BasePage> pageComponents = new Dictionary<Page, BasePage>();
     private static UIManager instance;
-    
+
     public static UIManager Instance => instance;
 
     void Start()
@@ -48,19 +48,19 @@ public class UIManager : MonoBehaviour
         ShowPage(Page.DASHBOARD);
     }
 
-  
+
 
     private void HideAllPopupsInternal()
     {
         if (overlay != null) overlay.SetActive(false);
-        
+
         foreach (var kvp in popupNodes)
         {
             var node = kvp.Value;
             var type = kvp.Key;
             kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
-             
-            if (popupComponents.TryGetValue(type, out BasePopup popupComponent) && 
+
+            if (popupComponents.TryGetValue(type, out BasePopup popupComponent) &&
                 popupComponent != null && node.activeSelf)
             {
                 popupComponent.OnPopupHide();
@@ -76,8 +76,8 @@ public class UIManager : MonoBehaviour
             var node = kvp.Value;
             var type = kvp.Key;
             kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
-             
-            if (pageComponents.TryGetValue(type, out BasePage popupComponent) && 
+
+            if (pageComponents.TryGetValue(type, out BasePage popupComponent) &&
                 popupComponent != null && node.activeSelf)
             {
                 popupComponent.OnPageHide();
@@ -103,14 +103,14 @@ public class UIManager : MonoBehaviour
 
         if (instance.pageNodes.TryGetValue(popupType, out GameObject popup) && popup != null)
         {
-           // if (instance.overlay != null) instance.overlay.SetActive(true);
-            
+            // if (instance.overlay != null) instance.overlay.SetActive(true);
+
             popup.SetActive(true);
-            popup.transform.localScale = Vector3.zero;   
+            popup.transform.localScale = Vector3.zero;
             popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
 
 
-            if (instance.pageComponents.TryGetValue(popupType, out BasePage popupComponent) && 
+            if (instance.pageComponents.TryGetValue(popupType, out BasePage popupComponent) &&
                 popupComponent != null)
             {
                 popupComponent.OnPageShow(curr);
@@ -133,7 +133,7 @@ public class UIManager : MonoBehaviour
         {
             HideAllPopups();
         }
-        
+
         Debug.Log($"Showing popup: {popupType}");
 
         if (instance.popupNodes.TryGetValue(popupType, out GameObject popup) && popup != null)
@@ -158,30 +158,31 @@ public class UIManager : MonoBehaviour
     }
     public static void HidePage(Page page)
     {
-         if (instance == null)
+        if (instance == null)
         {
             Debug.LogWarning("hẹhe");
             return;
         }
 
-        if (instance.pageNodes.TryGetValue(page, out GameObject popup) && 
+        if (instance.pageNodes.TryGetValue(page, out GameObject popup) &&
             popup != null && popup.activeSelf)
         {
             if (instance.pageComponents.TryGetValue(page, out BasePage popupComponent))
             {
                 var component = popupComponent;
-                
-                    popup.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack)
-                    .SetDelay(0.15f)
-                    .OnComplete(() => {
-                        popup.SetActive(false);
-                        if (instance.overlay != null) instance.overlay.SetActive(false);
-                        
-                        if (component != null)
-                        {
-                            component.OnPageHide();
-                        }
-                    });
+
+                popup.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack)
+                .SetDelay(0.15f)
+                .OnComplete(() =>
+                {
+                    popup.SetActive(false);
+                    if (instance.overlay != null) instance.overlay.SetActive(false);
+
+                    if (component != null)
+                    {
+                        component.OnPageHide();
+                    }
+                });
             }
         }
     }
@@ -193,24 +194,24 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        if (instance.popupNodes.TryGetValue(popupType, out GameObject popup) && 
+        if (instance.popupNodes.TryGetValue(popupType, out GameObject popup) &&
             popup != null && popup.activeSelf)
         {
             if (instance.popupComponents.TryGetValue(popupType, out BasePopup popupComponent))
             {
                 var component = popupComponent;
-                
-                    popup.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack)
-                    .SetDelay(0.15f)
-                    .OnComplete(() => {
-                        popup.SetActive(false);
-                        if (instance.overlay != null) instance.overlay.SetActive(false);
-                        
-                        if (component != null)
-                        {
-                            component.OnPopupHide();
-                        }
-                    });
+
+                popup.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack)
+                .OnComplete(() =>
+                {
+                    popup.SetActive(false);
+                    if (instance.overlay != null) instance.overlay.SetActive(false);
+
+                    if (component != null)
+                    {
+                        component.OnPopupHide();
+                    }
+                });
             }
         }
     }
@@ -228,48 +229,48 @@ public class UIManager : MonoBehaviour
     }
 
     private void CachePopupNodes()
-{
-    foreach (var mapping in popupMappings)
     {
-        if (mapping.popupObject != null)
+        foreach (var mapping in popupMappings)
         {
-            popupNodes[mapping.popupType] = mapping.popupObject;
-
-            BasePopup popupComponent = mapping.popupObject.GetComponent<BasePopup>();
-            if (popupComponent != null)
+            if (mapping.popupObject != null)
             {
-                popupComponents[mapping.popupType] = popupComponent;
-                Debug.Log($" Cached popup component: {mapping.popupType}");
-            }
+                popupNodes[mapping.popupType] = mapping.popupObject;
 
-            Debug.Log($"Cached popup node: {mapping.popupType}");
-        }
-        else
-        {
-            Debug.LogWarning($"Popup {mapping.popupType}");
+                BasePopup popupComponent = mapping.popupObject.GetComponent<BasePopup>();
+                if (popupComponent != null)
+                {
+                    popupComponents[mapping.popupType] = popupComponent;
+                    Debug.Log($" Cached popup component: {mapping.popupType}");
+                }
+
+                Debug.Log($"Cached popup node: {mapping.popupType}");
+            }
+            else
+            {
+                Debug.LogWarning($"Popup {mapping.popupType}");
+            }
         }
     }
-}
- private void CachePageNodes()
-{
-    foreach (var mapping in pageMappings)
+    private void CachePageNodes()
     {
-        if (mapping.popupObject != null)
+        foreach (var mapping in pageMappings)
         {
-            pageNodes[mapping.popupType] = mapping.popupObject;
-
-            BasePage popupComponent = mapping.popupObject.GetComponent<BasePage>();
-            if (popupComponent != null)
+            if (mapping.popupObject != null)
             {
-                pageComponents[mapping.popupType] = popupComponent;
-                Debug.Log($" Cached page component: {mapping.popupType}");
+                pageNodes[mapping.popupType] = mapping.popupObject;
+
+                BasePage popupComponent = mapping.popupObject.GetComponent<BasePage>();
+                if (popupComponent != null)
+                {
+                    pageComponents[mapping.popupType] = popupComponent;
+                    Debug.Log($" Cached page component: {mapping.popupType}");
+                }
+
+                Debug.Log($" Cached page node: {mapping.popupType}");
             }
 
-            Debug.Log($" Cached page node: {mapping.popupType}");
         }
-       
     }
-}
     void OnDestroy()
     {
         foreach (var component in popupComponents.Values)
@@ -280,46 +281,44 @@ public class UIManager : MonoBehaviour
             }
         }
     }
+    public void showDaily()
+    {
+        UIManager.ShowPopup(Popup.DAILY);
+    }
+    public void hideDaily()
+    {
+        UIManager.HidePopup(Popup.DAILY);
+    }
+    public static void showtask(Popup popupType,string name)
+    {
+         if (instance == null)
+        {
+            Debug.LogWarning("UIManager heùhuie");
+            return;
+        }
 
-    // public void ToggleSound()
-    // {
-    //     SoundManager.Instance.soundOn = !SoundManager.Instance.soundOn;
-        
-    //     string spritePath = SoundManager.Instance.soundOn ? 
-    //         "UI/sound-on" : "UI/sound-off";
-            
-    //     Sprite sprite = Resources.Load<Sprite>(spritePath);
-    //     if (soundButton != null && sprite != null)
-    //     {
-    //         soundButton.GetComponent<Image>().sprite = sprite;
-    //     }
-    // }
+        if (instance.popupNodes.TryGetValue(popupType, out GameObject popup) && popup != null)
+        {
+            if (instance.overlay != null) instance.overlay.SetActive(true);
 
-    //     public void ToggleMusic()
-    // {
-    //     SoundManager.Instance.musicOn = !SoundManager.Instance.musicOn;
-        
-    //     string spritePath = SoundManager.Instance.musicOn ? 
-    //         "UI/music-on" : "UI/music-off";
-            
-    //     Sprite sprite = Resources.Load<Sprite>(spritePath);
-    //     if (musicButton != null && sprite != null)
-    //     {
-    //         musicButton.GetComponent<Image>().sprite = sprite;
-    //     }
-    // }
+            popup.SetActive(true);
+            popup.transform.localScale = Vector3.zero;
+            popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack)
+            .SetDelay(2f).OnComplete(() =>
+            {
+            popup.SetActive(false);
+            });
 
-    // public void ToggleVibration()
-    // {
-    //     SoundManager.Instance.vibrateOn = !SoundManager.Instance.vibrateOn;
-        
-    //     string spritePath = SoundManager.Instance.vibrateOn ? 
-    //         "UI/vibrate-on" : "UI/vibrate-off";
-            
-    //     Sprite sprite = Resources.Load<Sprite>(spritePath);
-    //     if (vibrateButton != null && sprite != null)
-    //     {
-    //         vibrateButton.GetComponent<Image>().sprite = sprite;
-    //     }
-    // }
+
+            if (instance.popupComponents.TryGetValue(popupType, out BasePopup popupComponent) &&
+                popupComponent != null)
+            {
+                popupComponent.OnPopupShow();
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"Popup not found: {popupType}");
+        }
+    }
 }
