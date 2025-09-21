@@ -370,7 +370,25 @@ public class BoardManager : MonoBehaviour
             }
         }
     }
-
+     public void KillBoard()
+    {
+        for (int i = 0; i < board.Count; i++)
+        {
+            Tile[,] tiles = board[i];
+            int rows = tiles.GetLength(0);
+            int cols = tiles.GetLength(1);
+            for (int r = 0; r < rows; r++)
+            {
+                for (int c = 0; c < cols; c++)
+                {
+                    if (tiles[r, c] != null)
+                    {
+                        tiles[r, c].Kill();
+                    }
+                }
+            }
+        }
+    }
 
 
 }

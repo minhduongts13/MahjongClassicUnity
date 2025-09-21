@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-
+//hẹ hẹ
 [System.Serializable]
 public class PopupMapping
 {
@@ -45,8 +45,8 @@ public class UIManager : MonoBehaviour
         CachePopupNodes();
         CachePageNodes();
         this.HideAllPopupsInternal();
-        ShowPage(Page.DASHBOARD);
     }
+    //hẹ hẹ
 
 
 
@@ -58,7 +58,7 @@ public class UIManager : MonoBehaviour
         {
             var node = kvp.Value;
             var type = kvp.Key;
-            kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
+         //   kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
 
             if (popupComponents.TryGetValue(type, out BasePopup popupComponent) &&
                 popupComponent != null && node.activeSelf)
@@ -75,7 +75,7 @@ public class UIManager : MonoBehaviour
         {
             var node = kvp.Value;
             var type = kvp.Key;
-            kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
+            //  kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
 
             if (pageComponents.TryGetValue(type, out BasePage popupComponent) &&
                 popupComponent != null && node.activeSelf)
@@ -106,8 +106,8 @@ public class UIManager : MonoBehaviour
             // if (instance.overlay != null) instance.overlay.SetActive(true);
 
             popup.SetActive(true);
-            popup.transform.localScale = Vector3.zero;
-            popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            // popup.transform.localScale = Vector3.zero;
+            // popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
 
 
             if (instance.pageComponents.TryGetValue(popupType, out BasePage popupComponent) &&
@@ -141,8 +141,8 @@ public class UIManager : MonoBehaviour
             if (instance.overlay != null) instance.overlay.SetActive(true);
 
             popup.SetActive(true);
-            popup.transform.localScale = Vector3.zero;
-            popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            // popup.transform.localScale = Vector3.zero;
+            // popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
 
 
             if (instance.popupComponents.TryGetValue(popupType, out BasePopup popupComponent) &&
@@ -289,9 +289,9 @@ public class UIManager : MonoBehaviour
     {
         UIManager.HidePopup(Popup.DAILY);
     }
-    public static void showtask(Popup popupType,string name)
+    public static void showtask(Popup popupType, string name)
     {
-         if (instance == null)
+        if (instance == null)
         {
             Debug.LogWarning("UIManager heùhuie");
             return;
@@ -306,7 +306,7 @@ public class UIManager : MonoBehaviour
             popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack)
             .SetDelay(2f).OnComplete(() =>
             {
-            popup.SetActive(false);
+                popup.SetActive(false);
             });
 
 
@@ -320,5 +320,11 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogWarning($"Popup not found: {popupType}");
         }
+    }
+    public void showWin()
+    {                  Debug.LogWarning($"Popup not found: igfịì");
+
+                UIManager.ShowPopup(Popup.WIN);
+
     }
 }

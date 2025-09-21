@@ -30,7 +30,7 @@ public enum Popup
     THEME,
     DAILY,
     TASK,   
-
+    WIN, 
 }
 
 

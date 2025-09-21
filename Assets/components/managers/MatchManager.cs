@@ -46,6 +46,7 @@ public class MatchManager : MonoBehaviour
             if (board.remainTile == 0)
             {
                 await MoveMatching(tile1, tile2);
+                
                 GameManager.instance.AdvanceLevel();
                 GameManager.instance.Reload();
             }

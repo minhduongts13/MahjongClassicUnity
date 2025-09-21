@@ -32,15 +32,16 @@ public class GameManager : MonoBehaviour
         }
 
         GameManager.instance = this;
+        UIManager.ShowPage(Page.DASHBOARD);
 
 
-        SetUp();
+       // SetUp();
     }
 
     private void SetUp()
     {
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
-        currentLevel = LevelLoader.instance.GetLevel(50);
+        currentLevel = LevelLoader.instance.GetLevel(1);
         tilePool.SetUp();
         board.SetUp();
         matchManager.SetUp();
@@ -121,9 +122,14 @@ public class GameManager : MonoBehaviour
     {
         UIManager.ShowPage(Page.PLAY);
     }
+    public void playSetUp()
+    {
+        this.SetUp();
+    }
     public void showdash()
     {
         UIManager.ShowPage(Page.DASHBOARD);
+        board.KillBoard();
     }
 
     public void ToggleShowMatch()

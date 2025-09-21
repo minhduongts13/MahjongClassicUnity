@@ -39,7 +39,7 @@ public class AssetsLoader : MonoBehaviour
         await PreloadImagesInFolderAsync(global.tilePath + "/Wood/new");
         await PreloadImagesInFolderAsync(global.backgroundPath);
 
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
 
     }
     #region Sync API
