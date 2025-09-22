@@ -12,6 +12,7 @@ public class BoardManager : MonoBehaviour
     private List<int[,]> mockUpLevel;
     public List<Tile[,]> board;
     public int remainTile;
+    public bool shuffling = false;
 
 
     void LevelMock()
@@ -37,9 +38,10 @@ public class BoardManager : MonoBehaviour
         mockUpLevel.Add(layer2);
     }
 
-    public void SetUp()
+    public async Task SetUp()
     {
         remainTile = 0;
+        List<Task> tasks = new List<Task>();
         Debug.Log("aaa");
         // LevelMock();
         // mockUpLevel = GameManager.instance.currentLevel.layers;
@@ -71,6 +73,7 @@ public class BoardManager : MonoBehaviour
                     // t.transform.SetSiblingIndex((c - c % 2) * rows + (r - r % 2) * cols + i * rows * cols);
                     tileGrid[r, c] = t;
                     t.layer = i;
+                    t.BlockInput();
                     t.coords = new Vector2Int(c, r);
                     t.setTileType(levelData[r, c]);
                     // if (levelData[r, c] == 0)
@@ -83,6 +86,11 @@ public class BoardManager : MonoBehaviour
 
 
             board.Add(tileGrid);
+            foreach (Tile t in tileGrid)
+            {
+                if (t != null)
+                    t.TurnOnInput();
+            }
 
 
         }
@@ -110,12 +118,13 @@ public class BoardManager : MonoBehaviour
                     {
 
                         board[i][r, c].setTileType(levelData[r, c]);
-                        board[i][r, c].Zoom(i);
+                        tasks.Add(board[i][r, c].Zoom(i));
                         remainTile++;
                     }
                 }
             }
         }
+        await Task.WhenAll(tasks);
 
 
 
@@ -293,10 +302,12 @@ public class BoardManager : MonoBehaviour
 
     public async Task Shuffle()
     {
+        shuffling = true;
         List<Tile> tilesList = new List<Tile>();
         List<int> typeList = new List<int>();
         List<Task> task = new List<Task>();
-        List<Tile> freeTile = new List<Tile>();
+        List<Tile>
+        freeTile = new List<Tile>();
 
         foreach (Tile[,] tiles in board)
         {
@@ -314,6 +325,7 @@ public class BoardManager : MonoBehaviour
                     typeList.Add(t.GetTileType());
 
                     RectTransform rt = t.transform as RectTransform;
+                    t.ToggleShadow(false);
                     task.Add(rt.DOAnchorPos(new Vector2(0, 0), 0.5f).AsyncWaitForCompletion());
                 }
             }
@@ -366,9 +378,11 @@ public class BoardManager : MonoBehaviour
                 if (t != null && t.GetTileType() != 0)
                 {
                     t.MoveToRealPos();
+                    t.ToggleShadow(true);
                 }
             }
         }
+        shuffling = false;
     }
 
 

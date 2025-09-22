@@ -16,6 +16,7 @@ public class MatchManager : MonoBehaviour
     }
     public async Task Match(Tile tile1, Tile tile2)
     {
+        if (board.shuffling) return;
 
         if (TopBlock(tile1) || TopBlock(tile2))
         {
@@ -105,7 +106,7 @@ public class MatchManager : MonoBehaviour
         Sequence seq = DOTween.Sequence();
         await seq.Append(rt.DOAnchorPos(mid + new Vector2(left ? -300 : 300, 0), 0.35f))
         .Append(rt.DOAnchorPos(mid + new Vector2(left ? -125 / 2 : 125 / 2, 0), 0.3f).SetEase(Ease.OutFlash)).AsyncWaitForCompletion();
-        await tile.FadeTile();
+        await tile.FadeTile(left);
     }
 
     public bool isFree(Tile tile)

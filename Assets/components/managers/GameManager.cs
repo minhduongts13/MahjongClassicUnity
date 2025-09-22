@@ -37,12 +37,12 @@ public class GameManager : MonoBehaviour
         SetUp();
     }
 
-    private void SetUp()
+    private async void SetUp()
     {
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
-        currentLevel = LevelLoader.instance.GetLevel(50);
+        currentLevel = LevelLoader.instance.GetLevel(10);
         tilePool.SetUp();
-        board.SetUp();
+        await board.SetUp();
         matchManager.SetUp();
         ShowMatchable();
     }
@@ -108,12 +108,13 @@ public class GameManager : MonoBehaviour
         currentLevelNumber++;
     }
 
-    public void Reload()
+    public async Task Reload()
     {
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
         tilePool.ReturnAll();
         currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
-        board.SetUp();
+
+        await board.SetUp();
         Debug.Log("reload");
         ShowMatchable();
     }

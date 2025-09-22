@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DG.Tweening;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,8 @@ public class Tile : PooledObject
     [SerializeField] Image overlay;
     [SerializeField] Image hintEff;
     [SerializeField] Image hintRot;
+    [SerializeField] Image explodeEff;
+    [SerializeField] List<ParticleSystem> explodeParticle;
 
     [SerializeField] Image hintHighlight;
 
@@ -33,6 +36,30 @@ public class Tile : PooledObject
     {
         AddOnClickCallbacks(() => GameManager.instance.Chose(this));
     }
+    public async Task Explode(bool left)
+    {
+        if (explodeEff == null) return;
+        if (!left) return;
+
+        // Random index
+        System.Random rand = new System.Random();
+        int idx = rand.Next(explodeParticle.Count);
+
+        // Bật particle random
+        explodeParticle[idx].gameObject.SetActive(true);
+        explodeParticle[idx].Play();
+
+        explodeEff.transform.localScale = new Vector3(0, 0);
+        explodeEff.gameObject.SetActive(true);
+        explodeEff.transform.DOScale(1, 0.2f);
+
+        await explodeEff.DOFade(0.6f, 0.1f).AsyncWaitForCompletion();
+        await explodeEff.DOFade(0f, 0.1f).AsyncWaitForCompletion();
+
+        explodeParticle[idx].gameObject.SetActive(false);
+        explodeEff.gameObject.SetActive(false);
+    }
+
     public void OnBlocked()
     {
         BoardManager board = GameManager.instance.board;
@@ -69,7 +96,7 @@ public class Tile : PooledObject
     public async void Shake()
     {
         RectTransform rt = transform as RectTransform;
-        DOTween.Kill(rt);
+        // DOTween.Kill(rt);
 
         // giữ đúng vị trí gốc
         Vector2 pos = GameManager.instance.board.GetPosFromCoords(this.coords.x, this.coords.y, this.layer) + new Vector2(offset, 0);
@@ -86,12 +113,13 @@ public class Tile : PooledObject
     }
 
 
-    public async Task FadeTile()
+    public async Task FadeTile(bool left)
     {
         await Task.WhenAll(
             bgImg.DOFade(0, 0.2f).AsyncWaitForCompletion(),
             typeImg.DOFade(0, 0.2f).AsyncWaitForCompletion(),
-            shadowImg.DOFade(0, 0.2f).AsyncWaitForCompletion()
+            shadowImg.DOFade(0, 0.2f).AsyncWaitForCompletion(),
+            Explode(left)
         );
     }
 
@@ -126,13 +154,18 @@ public class Tile : PooledObject
         hintHighlight.gameObject.SetActive(false);
     }
 
-    public async void Zoom(int delay)
+    public async Task Zoom(int delay)
     {
+        BlockInput();
         transform.localScale = new Vector3(0, 0);
         await Task.Delay(delay * 200);
         transform.DOScale(1, 0.2f);
+        TurnOnInput();
     }
-
+    public void ToggleShadow(bool on)
+    {
+        shadowImg.gameObject.SetActive(on);
+    }
     public void BlockInput()
     {
         UnityEngine.UI.Button button = this.gameObject.GetComponent<UnityEngine.UI.Button>();
