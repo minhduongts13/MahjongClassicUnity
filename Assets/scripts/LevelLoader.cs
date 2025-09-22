@@ -237,8 +237,45 @@ public class LevelLoader : MonoBehaviour
             RandomizePairs(grid);
             list.Add(grid);
         }
+        AddSpecial(list);
         return list;
     }
+
+    private void AddSpecial(List<int[,]> list)
+    {
+        rand = new System.Random();
+        int i = rand.Next(0, list.Count);
+
+        int[,] grid = list[i];
+        int rows = grid.GetLength(0);
+        int cols = grid.GetLength(1);
+
+        int x, y, type;
+        do
+        {
+            x = rand.Next(0, cols);
+            y = rand.Next(0, rows);
+            type = grid[y, x];
+        }
+        while (type == 0);
+        list[i][y, x] = rand.Next(0, 2) == 0 ? (int)SpecialTile.FLOWER : (int)SpecialTile.SEASON;
+        foreach (int[,] g in list)
+        {
+            for (int r = 0; r < g.GetLength(0); r++)
+            {
+                for (int c = 0; c < g.GetLength(1); c++)
+                {
+                    if (g[r, c] == type)
+                    {
+                        g[r, c] = list[i][y, x];
+                        return;
+                    }
+                }
+            }
+        }
+
+    }
+
 
     private void RandomizePairs(int[,] grid)
     {

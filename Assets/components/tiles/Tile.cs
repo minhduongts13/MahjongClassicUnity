@@ -239,13 +239,13 @@ public class Tile : PooledObject
         if (ttype == 0) return;
         if (ttype == (int)SpecialTile.FLOWER)
         {
-            int randId = UnityEngine.Random.Range(35, 39); // 39 là exclusive
+            int randId = UnityEngine.Random.Range(35, 39);
             string PATH = global.GetSprite(randId, theme);
             typeImg.sprite = AssetsLoader.instance.LoadSprite(PATH);
         }
         else if (ttype == (int)SpecialTile.SEASON)
         {
-            int randId = UnityEngine.Random.Range(39, 43); // 43 là exclusive
+            int randId = UnityEngine.Random.Range(39, 43);
             string PATH = global.GetSprite(randId, theme);
             typeImg.sprite = AssetsLoader.instance.LoadSprite(PATH);
         }
