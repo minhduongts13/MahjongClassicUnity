@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    private int currentLevelNumber = 1;
+    private int currentLevelNumber = 50;
     [SerializeField] public TilePool tilePool;
     [SerializeField] public BoardManager board;
 
