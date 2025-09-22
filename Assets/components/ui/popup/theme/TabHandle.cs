@@ -10,6 +10,16 @@ public class TabHandle : BasePopup
     public GameObject BackgroundButton;
     public GameObject[] TileList;
 
+    public override void OnPopupShow(int curr = 0)
+    {
+        var themes = Tiles.transform.GetChild(0).GetChild(0);
+        var themeIndex = GameManager.instance.storageManager.getChosenTheme();
+        Debug.Log("Theme index: " + themeIndex);
+        var theme = themes.GetChild((int)themeIndex);
+        Transform selected = theme.GetChild(theme.childCount - 1);
+        selected.gameObject.SetActive(true);
+    }
+
     public void OnShowTiles()
     {
         Tiles.SetActive(true);
@@ -36,6 +46,14 @@ public class TabHandle : BasePopup
         tileButtonbtn.interactable = false;
         var backgroundButtonbtn = BackgroundButton.GetComponent<UnityEngine.UI.Button>();
         backgroundButtonbtn.interactable = true;
+
+        var themes = Tiles.transform.GetChild(0).GetChild(0);
+        var themeIndex = GameManager.instance.storageManager.getChosenTheme();
+        Debug.Log("Theme index: " + themeIndex);
+
+        var theme = themes.GetChild((int)themeIndex);
+        Transform selected = theme.GetChild(theme.childCount - 1);
+        selected.gameObject.SetActive(true);
     }
     public void OnShowBackgrounds()
     {
@@ -62,6 +80,13 @@ public class TabHandle : BasePopup
         tileButtonbtn.interactable = true;
         var backgroundButtonbtn = BackgroundButton.GetComponent<UnityEngine.UI.Button>();
         backgroundButtonbtn.interactable = false;
+
+        var backgrounds = Backgrounds.transform;
+        var backgroundIndex = GameManager.instance.storageManager.getChosenBackground();
+        Debug.Log("Background index: " + backgroundIndex);
+        var background = backgrounds.GetChild((int)backgroundIndex);
+        Transform selected = background.GetChild(background.childCount - 1);
+        selected.gameObject.SetActive(true);
     }
 
     public void OnChooseTheme(GameObject selectedTheme)
@@ -77,6 +102,10 @@ public class TabHandle : BasePopup
         }
 
         selectedTheme.SetActive(true);
+
+        var parentName = selectedTheme.transform.parent.name;
+        var themeIndex = parentName[parentName.Length - 1] - '0' - 1;
+        GameManager.instance.storageManager.setChosenTheme((THEME_STYLE)themeIndex);
     }
 
     public void OnChooseBackground(GameObject selectedTheme)
@@ -91,6 +120,10 @@ public class TabHandle : BasePopup
         }
 
         selectedTheme.SetActive(true);
+
+        var parentName = selectedTheme.transform.parent.name;
+        var themeIndex = parentName[parentName.Length - 1] - '0' - 1;
+        GameManager.instance.storageManager.setChosenBackground((BACKGROUND)themeIndex);
     }
     
     public void Hide()
