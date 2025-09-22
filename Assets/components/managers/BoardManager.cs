@@ -294,6 +294,7 @@ public class BoardManager : MonoBehaviour
 
     public void Undo(Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>> move)
     {
+        remainTile += 2;
         RestoreTile(move.Item1.Item1, move.Item2.Item1);
         RestoreTile(move.Item1.Item2, move.Item2.Item2);
         ApplySiblingOrder(mockUpLevel, board);
