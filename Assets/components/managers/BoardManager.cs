@@ -232,7 +232,7 @@ public class BoardManager : MonoBehaviour
                     if (t == null) continue;
 
                     // công thức index độc nhất
-                    int index = 2 * (rows * (c - c % 2) + r + layer * cols * rows)
+                    int index = 2 * (rows * (c + c % 2) + r + layer * cols * rows)
                                 + c % 2;
 
                     ordered.Add((t, index));

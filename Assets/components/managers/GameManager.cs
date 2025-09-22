@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     private async void SetUp()
     {
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
-        currentLevel = LevelLoader.instance.GetLevel(10);
+        currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
         tilePool.SetUp();
         await board.SetUp();
         matchManager.SetUp();

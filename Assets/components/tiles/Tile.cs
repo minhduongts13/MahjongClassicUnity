@@ -129,6 +129,10 @@ public class Tile : PooledObject
         bgImg.DOKill();
         typeImg.DOKill();
         shadowImg.DOKill();
+        overlay.gameObject.SetActive(false);
+        hintEff.gameObject.SetActive(false);
+
+        DOTween.Kill(transform);
 
         // Set alpha to 1 instantly
         Color c;
@@ -159,7 +163,8 @@ public class Tile : PooledObject
         BlockInput();
         transform.localScale = new Vector3(0, 0);
         await Task.Delay(delay * 200);
-        transform.DOScale(1, 0.2f);
+        await transform.DOScale(1, 0.2f).AsyncWaitForCompletion();
+        await Task.Delay(100);
         TurnOnInput();
     }
     public void ToggleShadow(bool on)
