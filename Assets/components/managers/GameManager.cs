@@ -11,11 +11,12 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    private int currentLevelNumber = 50;
+    private int currentLevelNumber = 1;
     [SerializeField] public TilePool tilePool;
     [SerializeField] public BoardManager board;
 
     [SerializeField] public MatchManager matchManager;
+    [SerializeField] public PointManager pointManager;
     public LevelGridData currentLevel;
 
     private Tile firstChosen;
@@ -41,10 +42,11 @@ public class GameManager : MonoBehaviour
     private void SetUp()
     {
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
-        currentLevel = LevelLoader.instance.GetLevel(1);
+        currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
         tilePool.SetUp();
         board.SetUp();
         matchManager.SetUp();
+        pointManager.Setup();
         ShowMatchable();
     }
 
@@ -114,7 +116,9 @@ public class GameManager : MonoBehaviour
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
         tilePool.ReturnAll();
         currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
+        Debug.Log(currentLevel.levelNumber);
         board.SetUp();
+        pointManager.OnChangeLevel();
         Debug.Log("reload");
         ShowMatchable();
     }

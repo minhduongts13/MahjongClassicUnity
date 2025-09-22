@@ -58,7 +58,7 @@ public class UIManager : MonoBehaviour
         {
             var node = kvp.Value;
             var type = kvp.Key;
-         //   kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
+            //   kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
 
             if (popupComponents.TryGetValue(type, out BasePopup popupComponent) &&
                 popupComponent != null && node.activeSelf)
@@ -141,8 +141,8 @@ public class UIManager : MonoBehaviour
             if (instance.overlay != null) instance.overlay.SetActive(true);
 
             popup.SetActive(true);
-            // popup.transform.localScale = Vector3.zero;
-            // popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            popup.transform.localScale = Vector3.zero;
+            popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
 
 
             if (instance.popupComponents.TryGetValue(popupType, out BasePopup popupComponent) &&
@@ -322,9 +322,15 @@ public class UIManager : MonoBehaviour
         }
     }
     public void showWin()
-    {                  Debug.LogWarning($"Popup not found: igfịì");
+    {
+        Debug.LogWarning($"Popup not found: igfịì");
 
-                UIManager.ShowPopup(Popup.WIN);
+        UIManager.ShowPopup(Popup.WIN);
 
+    }
+    
+    public void showSettings()
+    {
+        UIManager.ShowPopup(Popup.SETTINGS);
     }
 }

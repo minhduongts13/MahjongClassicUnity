@@ -11,6 +11,7 @@ public class PlayPages : BasePage
         DropDownAnimation(() => {
             if (GameManager.instance != null)
             {
+                Debug.Log("Play Page Show");
                 GameManager.instance.playSetUp();
             }
         });

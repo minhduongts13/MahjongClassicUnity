@@ -68,3 +68,15 @@ public static class global
     }
 }
 
+public static class Point
+{
+    static public int basePoint = 200;
+    static public int comboStepPoint = 40;
+    static public int comboPointEnd = 10;
+    static public int bonusPoint = 80;
+    static public int bonusStart = 10;
+    static public int bonusStep = 5;
+    static public int bonusMaxStart = 20;
+    static public int bonusMax = 120;
+}
+
