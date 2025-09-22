@@ -29,7 +29,7 @@ public enum Popup
     SETTINGS,
     THEME,
     DAILY,
-    TASK,   
+    TASK,
 
 }
 
@@ -68,3 +68,10 @@ public static class global
     }
 }
 
+
+
+public enum SpecialTile
+{
+    FLOWER = -1,
+    SEASON = -2
+}

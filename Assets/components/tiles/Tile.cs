@@ -237,8 +237,23 @@ public class Tile : PooledObject
     {
         type = ttype;
         if (ttype == 0) return;
-        string PATH = global.GetSprite(type, theme);
-        typeImg.sprite = AssetsLoader.instance.LoadSprite(PATH);
+        if (ttype == (int)SpecialTile.FLOWER)
+        {
+            int randId = UnityEngine.Random.Range(35, 39); // 39 là exclusive
+            string PATH = global.GetSprite(randId, theme);
+            typeImg.sprite = AssetsLoader.instance.LoadSprite(PATH);
+        }
+        else if (ttype == (int)SpecialTile.SEASON)
+        {
+            int randId = UnityEngine.Random.Range(39, 43); // 43 là exclusive
+            string PATH = global.GetSprite(randId, theme);
+            typeImg.sprite = AssetsLoader.instance.LoadSprite(PATH);
+        }
+        else
+        {
+            string PATH = global.GetSprite(type, theme);
+            typeImg.sprite = AssetsLoader.instance.LoadSprite(PATH);
+        }
     }
 
     public void SetTheme(THEME th)
