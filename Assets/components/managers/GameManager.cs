@@ -147,10 +147,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void nextLevel()
+    public async Task nextLevel()
     {
         AdvanceLevel();
-        Reload();
+        await Reload();
     }
 
     public void ShowHint()
@@ -171,6 +171,11 @@ public class GameManager : MonoBehaviour
     public async void Shuffle()
     {
         await board.Shuffle();
+    }
+
+    public async void Replay()
+    {
+        await Reload();
     }
 
 }
