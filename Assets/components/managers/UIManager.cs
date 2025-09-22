@@ -321,7 +321,7 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning($"Popup not found: {popupType}");
         }
     }
-    public void showWin()
+    public static void showWin()
     {
         Debug.LogWarning($"Popup not found: igfịì");
 

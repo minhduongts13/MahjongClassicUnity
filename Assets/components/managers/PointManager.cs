@@ -55,5 +55,9 @@ public class PointManager : MonoBehaviour
     {
         combo = 0;
     }
+    public int getScore()
+    {
+        return score;
+    }
 
 }

@@ -11,6 +11,14 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    [SerializeField] private GameObject sakurafail;
+
+public void showplay()
+{
+    sakurafail.SetActive(false);
+    UIManager.ShowPage(Page.PLAY);
+}
+
     private int currentLevelNumber = 1;
     [SerializeField] public TilePool tilePool;
     [SerializeField] public BoardManager board;
@@ -36,7 +44,7 @@ public class GameManager : MonoBehaviour
         UIManager.ShowPage(Page.DASHBOARD);
 
 
-       // SetUp();
+        // SetUp();
     }
 
     private void SetUp()
@@ -122,16 +130,14 @@ public class GameManager : MonoBehaviour
         Debug.Log("reload");
         ShowMatchable();
     }
-    public void showplay()
-    {
-        UIManager.ShowPage(Page.PLAY);
-    }
+ 
     public void playSetUp()
     {
         this.SetUp();
     }
     public void showdash()
     {
+           sakurafail.SetActive(true);
         UIManager.ShowPage(Page.DASHBOARD);
         board.KillBoard();
     }
@@ -158,10 +164,11 @@ public class GameManager : MonoBehaviour
 
     public void nextLevel()
     {
+        UIManager.HidePopup(Popup.WIN);
         AdvanceLevel();
         Reload();
     }
-
+    
     public void ShowHint()
     {
         Tuple<Tile, Tile> hint = board.getHint();
@@ -180,6 +187,11 @@ public class GameManager : MonoBehaviour
     public async void Shuffle()
     {
         await board.Shuffle();
+    }
+    public void winDebug()
+    {
+        board.KillBoard();
+        UIManager.ShowPopup(Popup.WIN);
     }
 
 }

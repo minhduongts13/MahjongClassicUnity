@@ -3,22 +3,30 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DG.Tweening;
 using Mono.Cecil.Cil;
+using TMPro;
 using UnityEngine;
 
 public class WinPopup : BasePopup
 {
     [SerializeField] GameObject welldone;
     [SerializeField] GameObject bg;
+    [SerializeField] GameObject par;
+    [SerializeField] GameObject glow;
     [SerializeField] GameObject[] ribbon;
     [SerializeField] GameObject[] rubbon;
     [SerializeField] GameObject[] fan;
     [SerializeField] GameObject[] flower;
-
+     
+    [SerializeField] GameObject scoreText;
+    [SerializeField] GameObject score;
+    [SerializeField] GameObject level;
+    [SerializeField] GameObject leaf;
 
 
 
     public override void OnPopupShow(int curr = 0)
     {
+                    leaf.SetActive(false);
 
         foreach (GameObject hi in ribbon)
         {
@@ -26,11 +34,12 @@ public class WinPopup : BasePopup
         }
 
         PopWell(async () =>
-        {
+        {  this.glow.SetActive(true);
             await DropwellnZoomAsync(async () =>
             {
-             await Task.WhenAll(popAllRibbon(), popFan(),popFlower());
-
+                await Task.WhenAll(popAllRibbon(), popFan(), popFlower());
+                par.SetActive(true);
+            leaf.SetActive(true);
             });
         });
     }
@@ -60,12 +69,17 @@ public class WinPopup : BasePopup
     {
         this.bg.SetActive(true);
         this.welldone.SetActive(true);
-        this.welldone.transform.localScale = new Vector3(1.4f, 1.4f, 0);
+        this.scoreText.SetActive(true);
+        this.level.gameObject.GetComponent<TextMeshProUGUI>().text = "Level "+ GameManager.instance.currentLevel.levelNumber.ToString();
 
+        this.score.gameObject.GetComponent<TextMeshProUGUI>().text = GameManager.instance.pointManager.getScore().ToString();
+        this.welldone.transform.localScale = new Vector3(1.4f, 1.4f, 0);
+        this.score.transform.localScale = Vector3.zero;
         this.bg.transform.localScale = Vector3.zero;
         var task1 = this.welldone.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
         var task2 = this.bg.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
-        await Task.WhenAll(task1, task2);
+        var task3=this.score.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
+        await Task.WhenAll(task1, task2,task3);
         onComplete?.Invoke();
     }
     private async Task popAllRibbon()
@@ -156,6 +170,13 @@ public class WinPopup : BasePopup
             .AsyncWaitForCompletion();
         
         animationTasks.Add(rotateTask);
+    }
+    foreach (GameObject hi in ribbon)
+    {
+        if (!hi.activeSelf)
+        {
+            hi.SetActive(true);
+        }
     }
 
     await Task.WhenAll(animationTasks);
