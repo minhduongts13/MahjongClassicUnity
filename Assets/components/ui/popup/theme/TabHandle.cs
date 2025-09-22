@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class TabHandle : BasePopup
 {
@@ -21,14 +22,14 @@ public class TabHandle : BasePopup
         var backgroundBG = Tab.transform.GetChild(2);
         var bgbg = backgroundBG.GetChild(0);
         bgbg.gameObject.SetActive(true);
-        var backgroundText = backgroundBG.GetChild(1).GetComponent<UnityEngine.UI.Text>();
+        var backgroundText = backgroundBG.GetChild(1).GetComponent<TextMeshProUGUI>();
         backgroundText.fontSize = 50;
 
 
         var tileBG = Tab.transform.GetChild(1);
         var tileBgBg = tileBG.GetChild(0);
         tileBgBg.gameObject.SetActive(false);
-        var tileText = tileBG.GetChild(1).GetComponent<UnityEngine.UI.Text>();
+        var tileText = tileBG.GetChild(1).GetComponent<TextMeshProUGUI>();
         tileText.fontSize = 60;
 
         var tileButtonbtn = TileButton.GetComponent<UnityEngine.UI.Button>();
@@ -48,13 +49,13 @@ public class TabHandle : BasePopup
         var backgroundBG = Tab.transform.GetChild(2);
         var bgbg = backgroundBG.GetChild(0);
         bgbg.gameObject.SetActive(false);
-        var backgroundText = backgroundBG.GetChild(1).GetComponent<UnityEngine.UI.Text>();
-        backgroundText.fontSize = 55;
+        var backgroundText = backgroundBG.GetChild(1).GetComponent<TextMeshProUGUI>();
+        backgroundText.fontSize = 52;
 
         var tileBG = Tab.transform.GetChild(1);
         var tileBgBg = tileBG.GetChild(0);
         tileBgBg.gameObject.SetActive(true);
-        var tileText = tileBG.GetChild(1).GetComponent<UnityEngine.UI.Text>();
+        var tileText = tileBG.GetChild(1).GetComponent<TextMeshProUGUI>();
         tileText.fontSize = 50;
 
         var tileButtonbtn = TileButton.GetComponent<UnityEngine.UI.Button>();
@@ -92,6 +93,9 @@ public class TabHandle : BasePopup
         selectedTheme.SetActive(true);
     }
     
-    
+    public void Hide()
+    {
+        UIManager.HidePopup(Popup.THEME);
+    }
 
 }

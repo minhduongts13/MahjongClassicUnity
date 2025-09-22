@@ -616,7 +616,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8109330754258274343
 RectTransform:
   m_ObjectHideFlags: 0
@@ -660,12 +660,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ad16061e88fba749addafc0719ce325, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  welldone: {fileID: 0}
-  bg: {fileID: 0}
-  ribbon: []
-  rubbon: []
-  fan: []
-  flower: []
+  welldone: {fileID: 6210572136149418002}
+  bg: {fileID: 845521878406690378}
+  ribbon:
+  - {fileID: 2322455017081159431}
+  - {fileID: 7672429812003222087}
+  - {fileID: 3946246202394293299}
+  - {fileID: 2985639339875886341}
+  - {fileID: 614155801630924063}
+  - {fileID: 3684079928513123674}
+  - {fileID: 4174618361069825139}
+  - {fileID: 3800683279210556372}
+  - {fileID: 7446504977405920044}
+  rubbon:
+  - {fileID: 7446504977405920044}
+  - {fileID: 3946246202394293299}
+  - {fileID: 7672429812003222087}
+  - {fileID: 2322455017081159431}
+  fan:
+  - {fileID: 3800683279210556372}
+  - {fileID: 4174618361069825139}
+  flower:
+  - {fileID: 2985639339875886341}
+  - {fileID: 3684079928513123674}
+  - {fileID: 614155801630924063}
 --- !u!1 &6210572136149418002
 GameObject:
   m_ObjectHideFlags: 0
