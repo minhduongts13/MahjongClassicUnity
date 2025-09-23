@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
         tilePool.ReturnAll();
         currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
         Debug.Log(currentLevel.levelNumber);
-        board.SetUp();
+        await board.SetUp();
         pointManager.OnChangeLevel();
         storageManager.setCurrentLevel(currentLevelNumber);
         Debug.Log("reload");

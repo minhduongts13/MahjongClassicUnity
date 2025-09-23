@@ -22,13 +22,12 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
     [SerializeField] Image hintHighlight;
 
     [SerializeField] Image shadowImg;
-    private Transform afterDragParent;
     public Vector2Int coords;
     private int offset = 0;
     public int layer;
     private THEME theme = THEME.Green;
     private int type = 0;
-    private bool isDraggableNow = false;
+    private bool isDraggableNow = true;
     public int idx;
     private List<Action> OnClickCallbacks = new List<Action>();
     void Start()
@@ -131,6 +130,7 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
     public void Reset()
     {
         // Kill all tweens on these targets
+        isDraggableNow = true;
         bgImg.DOKill();
         typeImg.DOKill();
         shadowImg.DOKill();
@@ -269,8 +269,23 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
     public void SetTheme(THEME th)
     {
         theme = th;
-        string PATH = global.GetSprite(type, theme);
-        typeImg.sprite = AssetsLoader.instance.LoadSprite(PATH);
+        if (type == (int)SpecialTile.FLOWER)
+        {
+            int randId = UnityEngine.Random.Range(35, 39);
+            string PATH = global.GetSprite(randId, theme);
+            typeImg.sprite = AssetsLoader.instance.LoadSprite(PATH);
+        }
+        else if (type == (int)SpecialTile.SEASON)
+        {
+            int randId = UnityEngine.Random.Range(39, 43);
+            string PATH = global.GetSprite(randId, theme);
+            typeImg.sprite = AssetsLoader.instance.LoadSprite(PATH);
+        }
+        else
+        {
+            string PATH = global.GetSprite(type, theme);
+            typeImg.sprite = AssetsLoader.instance.LoadSprite(PATH);
+        }
     }
 
     public void OnUnChose(bool move = true)
@@ -317,7 +332,6 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
         transform.SetAsLastSibling();
         DOTween.Kill(transform as RectTransform);
 
-        isDraggableNow = true;
 
 
         BlockInput();
@@ -337,6 +351,7 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
             out Vector2 localPoint
         );
         rt.anchoredPosition = localPoint;
+        transform.SetAsLastSibling();
     }
 
     public async void OnEndDrag(PointerEventData eventData)
@@ -349,12 +364,14 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
         {
             if (this.type == 0) return;
             if (GameManager.instance.matchManager.isFree(t) == false || t == this) continue;
-            AnimationManager.instance.tileMoveAnimation.Add(GameManager.instance.matchManager.Match(this, t, false));
-            await Task.WhenAll(AnimationManager.instance.tileMoveAnimation);
+            Task tt = GameManager.instance.matchManager.Match(this, t);
+            AnimationManager.instance.tileMoveAnimation.Add(tt);
+            await tt;
         }
 
         await MoveToRealPos();
         TurnOnInput();
         GameManager.instance.board.resetSibling();
+        isDraggableNow = true;
     }
 }
