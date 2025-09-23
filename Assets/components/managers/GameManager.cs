@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         ShowMatchable();
     }
 
-    public async Task Undo()
+    public async void Undo()
     {
         if (moves.Count == 0) return;
         var move = moves.Pop();
