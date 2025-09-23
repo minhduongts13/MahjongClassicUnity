@@ -52,7 +52,8 @@ public class MatchManager : MonoBehaviour
             {
                 await MoveMatching(tile1, tile2);
                 UIManager.showWin();
-                
+                // GameManager.instance.AdvanceLevel();
+                // GameManager.instance.Reload();
             }
             else
             {

@@ -13,10 +13,11 @@ public enum TileType
 
 public enum THEME_STYLE
 {
-    Green,
-    Orange,
-    Violet,
-    Wood
+    Classic,
+    Flower,
+    Simple,
+    Antique,
+    Poker,
 }
 
 public class LevelData
@@ -33,6 +34,16 @@ public enum Popup
     WIN,
     LANGUAGES,
     SHOP
+}
+
+public enum BACKGROUND
+{
+    BG1,
+    BG2,
+    BG3,
+    BG4,
+    BG5,
+    BG6
 }
 
 

@@ -25,6 +25,7 @@ public void showplay()
 
     [SerializeField] public MatchManager matchManager;
     [SerializeField] public PointManager pointManager;
+    [SerializeField] public StorageManager storageManager;
     public LevelGridData currentLevel;
 
     private Tile firstChosen;
@@ -50,6 +51,7 @@ public void showplay()
     private void SetUp()
     {
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
+       // currentLevelNumber = storageManager.getCurrentLevel();
         currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
         tilePool.SetUp();
         board.SetUp();
@@ -127,6 +129,7 @@ public void showplay()
         Debug.Log(currentLevel.levelNumber);
         board.SetUp();
         pointManager.OnChangeLevel();
+        storageManager.setCurrentLevel(currentLevelNumber);
         Debug.Log("reload");
         ShowMatchable();
     }
