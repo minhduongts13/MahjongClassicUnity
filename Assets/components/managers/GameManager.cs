@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -187,13 +188,15 @@ public class GameManager : MonoBehaviour
     public void ShowHint()
     {
         if (hinting) return;
+        var numHints = storageManager.getNumberHints();
+        if (numHints <= 0) return;
         Tuple<Tile, Tile> hint = board.getHint();
         if (hint == null) return;
         hint.Item1.OnHint();
         hint.Item2.OnHint();
         hinting = true;
 
-        var numHints = storageManager.getNumberHints();
+
         var bgNum0 = hintButton.transform.GetChild(2);
         var bgNum1 = hintButton.transform.GetChild(0);
         var textGO = hintButton.transform.GetChild(1).gameObject;
@@ -227,9 +230,10 @@ public class GameManager : MonoBehaviour
     public async void Shuffle()
     {
         if (board.shuffling) return;
-        await board.Shuffle();
         var numshuffles = storageManager.getNumberShuffles();
         if (numshuffles <= 0) return;
+        await board.Shuffle();
+
         var bgNum0 = shuffleButton.transform.GetChild(2);
         var bgNum1 = shuffleButton.transform.GetChild(0);
         var textGO = shuffleButton.transform.GetChild(1).gameObject;

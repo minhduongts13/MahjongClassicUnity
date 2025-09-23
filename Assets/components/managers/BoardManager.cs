@@ -417,11 +417,21 @@ public class BoardManager : MonoBehaviour
                 while (tileB == tileA) tileB = freeTile[rand.Next(freeTile.Count)];
 
                 // chọn một tile khác ngoài freeTile để swap type với tileB
-                Tile swapWith = tilesList.First(t => !freeTile.Contains(t) && t.GetTileType() == tileA.GetTileType());
+                Tile swapWith = tilesList.FirstOrDefault(t => !freeTile.Contains(t) && t.GetTileType() == tileA.GetTileType());
 
-                int tmp = tileB.GetTileType();
-                tileB.setTileType(tileA.GetTileType());
-                swapWith.setTileType(tmp);
+                if (swapWith != null)
+                {
+                    int tmp = tileB.GetTileType();
+                    tileB.setTileType(tileA.GetTileType());
+                    swapWith.setTileType(tmp);
+                }
+                else
+                {
+                    // Handle the case when no matching tile is found.
+                    // For example, log a warning, or choose another strategy.
+                    Debug.LogWarning("No suitable tile found to swap with tileB.");
+                }
+
             }
         }
 
