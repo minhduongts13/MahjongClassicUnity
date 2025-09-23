@@ -284,6 +284,41 @@ public class BoardManager : MonoBehaviour
         // không tìm thấy
         return null;
     }
+    
+    public int getAllHints()
+    {
+        List<Tile> list = new List<Tile>();
+        HashSet<int> seen = new HashSet<int>();
+        int count = 0;
+        foreach (Tile[,] tiles in board)
+        {
+            foreach (Tile t in tiles)
+            {
+                if (t != null && GameManager.instance.matchManager.isFree(t))
+                {
+                    list.Add(t);
+                }
+            }
+        }
+
+        // duyệt tìm cặp
+        for (int i = 0; i < list.Count - 1; i++)
+        {
+            for (int j = i + 1; j < list.Count; j++)
+            {
+                if (list[i].GetTileType() == list[j].GetTileType() && list[i].GetTileType() != 0)
+                {
+                    if (seen.Contains(i) || seen.Contains(j)) continue;
+                    seen.Add(i);
+                    seen.Add(j);
+                    count++;
+                }
+            }
+        }
+
+        // không tìm thấy
+        return count;
+    }
 
     private void RestoreTile(Vector3 pos, int type)
     {
@@ -420,7 +455,25 @@ public class BoardManager : MonoBehaviour
 
         return tiles;
     }
-
+     public void KillBoard()
+    {
+        for (int i = 0; i < board.Count; i++)
+        {
+            Tile[,] tiles = board[i];
+            int rows = tiles.GetLength(0);
+            int cols = tiles.GetLength(1);
+            for (int r = 0; r < rows; r++)
+            {
+                for (int c = 0; c < cols; c++)
+                {
+                    if (tiles[r, c] != null)
+                    {
+                        tiles[r, c].Kill();
+                    }
+                }
+            }
+        }
+    }
 
 
 

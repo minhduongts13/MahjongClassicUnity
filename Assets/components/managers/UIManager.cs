@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-
+//hẹ hẹ
 [System.Serializable]
 public class PopupMapping
 {
@@ -36,6 +36,7 @@ public class UIManager : MonoBehaviour
     private Dictionary<Page, GameObject> pageNodes = new Dictionary<Page, GameObject>();
     private Dictionary<Page, BasePage> pageComponents = new Dictionary<Page, BasePage>();
     private static UIManager instance;
+    private static Stack<Popup> popupStack = new Stack<Popup>();
 
     public static UIManager Instance => instance;
 
@@ -45,8 +46,8 @@ public class UIManager : MonoBehaviour
         CachePopupNodes();
         CachePageNodes();
         this.HideAllPopupsInternal();
-        ShowPage(Page.DASHBOARD);
     }
+    //hẹ hẹ
 
 
 
@@ -58,7 +59,7 @@ public class UIManager : MonoBehaviour
         {
             var node = kvp.Value;
             var type = kvp.Key;
-            kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
+            //   kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
 
             if (popupComponents.TryGetValue(type, out BasePopup popupComponent) &&
                 popupComponent != null && node.activeSelf)
@@ -75,7 +76,7 @@ public class UIManager : MonoBehaviour
         {
             var node = kvp.Value;
             var type = kvp.Key;
-            kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
+            //  kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
 
             if (pageComponents.TryGetValue(type, out BasePage popupComponent) &&
                 popupComponent != null && node.activeSelf)
@@ -106,8 +107,8 @@ public class UIManager : MonoBehaviour
             // if (instance.overlay != null) instance.overlay.SetActive(true);
 
             popup.SetActive(true);
-            popup.transform.localScale = Vector3.zero;
-            popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            // popup.transform.localScale = Vector3.zero;
+            // popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
 
 
             if (instance.pageComponents.TryGetValue(popupType, out BasePage popupComponent) &&
@@ -133,6 +134,7 @@ public class UIManager : MonoBehaviour
         {
             HideAllPopups();
         }
+        if (popupStack.Count == 0 || popupStack.Peek() != popupType) popupStack.Push(popupType);
 
         Debug.Log($"Showing popup: {popupType}");
 
@@ -142,7 +144,7 @@ public class UIManager : MonoBehaviour
 
             popup.SetActive(true);
             popup.transform.localScale = Vector3.zero;
-            popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            popup.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
 
 
             if (instance.popupComponents.TryGetValue(popupType, out BasePopup popupComponent) &&
@@ -193,24 +195,33 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning("UIManager ihẹhee");
             return;
         }
-
         if (instance.popupNodes.TryGetValue(popupType, out GameObject popup) &&
             popup != null && popup.activeSelf)
         {
             if (instance.popupComponents.TryGetValue(popupType, out BasePopup popupComponent))
             {
                 var component = popupComponent;
+                if (instance.overlay != null) instance.overlay.SetActive(false);
 
-                popup.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack)
+                popup.transform.DOScale(Vector3.zero, 0.2f)
                 .OnComplete(() =>
                 {
                     popup.SetActive(false);
-                    if (instance.overlay != null) instance.overlay.SetActive(false);
 
                     if (component != null)
                     {
                         component.OnPopupHide();
                     }
+                    if (popupStack.Count > 0)
+                    {
+                        popupStack.Pop(); // Remove the current popup
+                        if (popupStack.Count > 0)
+                        {
+                            var previousPopup = popupStack.Peek();
+                            ShowPopup(previousPopup, false);
+                        }
+                    }
+
                 });
             }
         }
@@ -289,9 +300,9 @@ public class UIManager : MonoBehaviour
     {
         UIManager.HidePopup(Popup.DAILY);
     }
-    public static void showtask(Popup popupType,string name)
+    public static void showtask(Popup popupType, string name)
     {
-         if (instance == null)
+        if (instance == null)
         {
             Debug.LogWarning("UIManager heùhuie");
             return;
@@ -306,7 +317,7 @@ public class UIManager : MonoBehaviour
             popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack)
             .SetDelay(2f).OnComplete(() =>
             {
-            popup.SetActive(false);
+                popup.SetActive(false);
             });
 
 
@@ -321,4 +332,30 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning($"Popup not found: {popupType}");
         }
     }
+    public static void showWin()
+    {
+        Debug.LogWarning($"Popup not found: igfịì");
+
+        UIManager.ShowPopup(Popup.WIN);
+
+    }
+
+    public void showSettings()
+    {
+        UIManager.ShowPopup(Popup.SETTINGS);
+    }
+
+    public void showTheme()
+    {
+        UIManager.ShowPopup(Popup.THEME);
+    }
+    public void showLanguages()
+    {
+        UIManager.ShowPopup(Popup.LANGUAGES);
+    }
+    public void showShop()
+    {
+        UIManager.ShowPopup(Popup.SHOP);
+    }
+    
 }

@@ -1,0 +1,61 @@
+using UnityEngine;
+
+public class StorageManager : MonoBehaviour
+{
+    public int getCurrentLevel()
+    {
+        return PlayerPrefs.GetInt("currentLevel", 1);
+    }
+
+    public THEME_STYLE getChosenTheme()
+    {
+        int theme = PlayerPrefs.GetInt("theme", (int)THEME_STYLE.Classic);
+        return (THEME_STYLE)theme;
+    }
+
+    public BACKGROUND getChosenBackground()
+    {
+        int bg = PlayerPrefs.GetInt("background", (int)BACKGROUND.BG1);
+        return (BACKGROUND)bg;
+    }
+
+    public int getNumberHints()
+    {
+        return PlayerPrefs.GetInt("hints", 0);
+    }
+
+    public int getNumberShuffles()
+    {
+        return PlayerPrefs.GetInt("shuffles", 0);
+    }
+
+    public void setCurrentLevel(int level)
+    {
+        PlayerPrefs.SetInt("currentLevel", level);
+        PlayerPrefs.Save();
+    }
+
+    public void setChosenTheme(THEME_STYLE theme)
+    {
+        PlayerPrefs.SetInt("theme", (int)theme);
+        PlayerPrefs.Save();
+    }
+
+    public void setChosenBackground(BACKGROUND bg)
+    {
+        PlayerPrefs.SetInt("background", (int)bg);
+        PlayerPrefs.Save();
+    }
+
+    public void setNumberHints(int hints)
+    {
+        PlayerPrefs.SetInt("hints", hints);
+        PlayerPrefs.Save();
+    }
+
+    public void setNumberShuffles(int shuffles)
+    {
+        PlayerPrefs.SetInt("shuffles", shuffles);
+        PlayerPrefs.Save();
+    }
+}

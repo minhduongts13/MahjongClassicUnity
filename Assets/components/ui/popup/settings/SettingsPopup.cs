@@ -32,4 +32,9 @@ public class SettingsPopup : BasePopup
         HighlightButton[highlightState].SetActive(true);
         HighlightButton[1 - highlightState].SetActive(false);
     }
+
+    public void Hide()
+    {
+        UIManager.HidePopup(Popup.SETTINGS);
+    }
 }

@@ -10,8 +10,9 @@ public abstract class BasePage : MonoBehaviour
     { 
     }
 
-    public virtual void OnPageDestroy() 
+    public virtual void OnPageDestroy()
     { 
+        
     }
 
     protected virtual void ClosePage() 
@@ -22,6 +23,7 @@ public abstract class BasePage : MonoBehaviour
             if (System.Enum.TryParse<Page>(popupName, out Page popupType))
             {
                 UIManager.HidePage(popupType);
+            
             }
             else
             {

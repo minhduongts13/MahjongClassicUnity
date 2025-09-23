@@ -6,7 +6,6 @@ public class ButtonHoverEffect : MonoBehaviour,
 {
     private Vector3 originalScale;
     private Vector3 hoverScale;
-    private bool isHovering = false;
 
     private void Start()
     {
@@ -16,13 +15,11 @@ public class ButtonHoverEffect : MonoBehaviour,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        isHovering = true;
         transform.localScale = hoverScale;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        isHovering = false;
         transform.localScale = originalScale;
     }
 

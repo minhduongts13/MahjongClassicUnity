@@ -21,10 +21,12 @@ public class MatchManager : MonoBehaviour
         if (TopBlock(tile1) || TopBlock(tile2))
         {
             Debug.Log("TOP BLOCKED");
+            GameManager.instance.pointManager.OnNoMatch();
             return;
         }
         if (SideBlock(tile1) || SideBlock(tile2))
         {
+            GameManager.instance.pointManager.OnNoMatch();
             return;
         }
         if (tile1.GetTileType() == tile2.GetTileType())
@@ -41,12 +43,21 @@ public class MatchManager : MonoBehaviour
             UnlockNeighbour(tile2);
             tile1.OffHint();
             tile2.OffHint();
+            tile1.OnUnChose();
+            tile2.OnUnChose();
+
+            GameManager.instance.pointManager.OnMatchPoint();
+            GameManager.instance.pointManager.OnChangeMatches();
+            
             tile1.OnUnChose(move);
             tile2.OnUnChose(move);
 
             if (board.remainTile == 0)
             {
                 await MoveMatching(tile1, tile2);
+                UIManager.showWin();
+                // GameManager.instance.AdvanceLevel();
+                // GameManager.instance.Reload();
                 GameManager.instance.AdvanceLevel();
                 await GameManager.instance.Reload();
             }
