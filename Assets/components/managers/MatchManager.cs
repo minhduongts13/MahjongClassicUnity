@@ -69,6 +69,7 @@ public class MatchManager : MonoBehaviour
         if (tile1.GetTileType() == tile2.GetTileType())
         {
             // tile1.Kill();
+            GameManager.instance.UnChose();
             // tile2.Kill();
             addMove(tile1, tile2);
             tile1.setTileType(0);
@@ -83,6 +84,7 @@ public class MatchManager : MonoBehaviour
             tile2.isDraggableNow = false;
             tile1.OffHint();
             tile2.OffHint();
+            GameManager.instance.hinting = false;
 
             tile1.OnUnChose(move);
             tile2.OnUnChose(move);

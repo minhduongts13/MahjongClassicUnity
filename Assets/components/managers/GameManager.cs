@@ -32,15 +32,18 @@ public class GameManager : MonoBehaviour
 
     private Tile firstChosen;
     private Tile secondChosen;
-    public bool highLight = true;
+    public bool highLight = false;
     public Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>> moves;
 
     public GameObject hintButton;
     public GameObject shuffleButton;
+    public bool hinting = false;
 
 
     void Start()
     {
+
+        currentLevelNumber = storageManager.getCurrentLevel();
         if (!AssetsLoader.instance)
         {
             SceneManager.LoadScene(0);
@@ -60,10 +63,11 @@ public class GameManager : MonoBehaviour
         // currentLevelNumber = storageManager.getCurrentLevel();
         currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
         tilePool.SetUp();
+        setupTool();
+
         await board.SetUp();
         matchManager.SetUp();
         pointManager.Setup();
-        setupTool();
         ShowMatchable();
     }
 
@@ -182,10 +186,12 @@ public class GameManager : MonoBehaviour
 
     public void ShowHint()
     {
+        if (hinting) return;
         Tuple<Tile, Tile> hint = board.getHint();
         if (hint == null) return;
         hint.Item1.OnHint();
         hint.Item2.OnHint();
+        hinting = true;
 
         var numHints = storageManager.getNumberHints();
         var bgNum0 = hintButton.transform.GetChild(2);
@@ -220,8 +226,10 @@ public class GameManager : MonoBehaviour
 
     public async void Shuffle()
     {
+        if (board.shuffling) return;
         await board.Shuffle();
         var numshuffles = storageManager.getNumberShuffles();
+        if (numshuffles <= 0) return;
         var bgNum0 = shuffleButton.transform.GetChild(2);
         var bgNum1 = shuffleButton.transform.GetChild(0);
         var textGO = shuffleButton.transform.GetChild(1).gameObject;
@@ -250,7 +258,9 @@ public class GameManager : MonoBehaviour
 
     public void setupTool()
     {
-        var numHints = storageManager.getNumberHints();
+        var numHints = storageManager.getNumberHints() <= 0 ? 10 : storageManager.getNumberHints();
+        storageManager.setNumberHints(numHints);
+
         var bgNum0 = hintButton.transform.GetChild(2);
         var bgNum1 = hintButton.transform.GetChild(0);
         var textGO = hintButton.transform.GetChild(1).gameObject;
@@ -270,7 +280,8 @@ public class GameManager : MonoBehaviour
             textGO.SetActive(true);
         }
 
-        var numshuffles = storageManager.getNumberShuffles();
+        var numshuffles = storageManager.getNumberShuffles() <= 0 ? 10 : storageManager.getNumberShuffles();
+        storageManager.setNumberShuffles(numshuffles);
         bgNum0 = shuffleButton.transform.GetChild(2);
         bgNum1 = shuffleButton.transform.GetChild(0);
         textGO = shuffleButton.transform.GetChild(1).gameObject;

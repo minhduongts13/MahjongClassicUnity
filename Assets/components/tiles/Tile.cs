@@ -121,12 +121,12 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
 
         Sequence seq = DOTween.Sequence();
         seq.Append(rt.DOAnchorPos(pos + new Vector2(strength, 0f), 0.04f).SetEase(Ease.OutSine));
-    seq.Append(rt.DOAnchorPos(pos - new Vector2(strength * 0.8f, 0f), 0.08f).SetEase(Ease.OutSine));
-    seq.Append(rt.DOAnchorPos(pos + new Vector2(strength * 0.6f, 0f), 0.06f).SetEase(Ease.OutSine));
-    seq.Append(rt.DOAnchorPos(pos - new Vector2(strength * 0.4f, 0f), 0.05f).SetEase(Ease.OutSine));
-    seq.Append(rt.DOAnchorPos(pos + new Vector2(strength * 0.2f, 0f), 0.04f).SetEase(Ease.OutSine));
-    seq.Append(rt.DOAnchorPos(pos, 0.05f).SetEase(Ease.OutSine));
-    
+        seq.Append(rt.DOAnchorPos(pos - new Vector2(strength * 0.8f, 0f), 0.08f).SetEase(Ease.OutSine));
+        seq.Append(rt.DOAnchorPos(pos + new Vector2(strength * 0.6f, 0f), 0.06f).SetEase(Ease.OutSine));
+        seq.Append(rt.DOAnchorPos(pos - new Vector2(strength * 0.4f, 0f), 0.05f).SetEase(Ease.OutSine));
+        seq.Append(rt.DOAnchorPos(pos + new Vector2(strength * 0.2f, 0f), 0.04f).SetEase(Ease.OutSine));
+        seq.Append(rt.DOAnchorPos(pos, 0.05f).SetEase(Ease.OutSine));
+
         await seq.AsyncWaitForCompletion();
         // MoveToRealPos();
     }

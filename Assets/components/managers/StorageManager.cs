@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class StorageManager : MonoBehaviour
 {
+
+    void Start()
+    {
+        
+    }
     public int getCurrentLevel()
     {
         return PlayerPrefs.GetInt("currentLevel", 1);
