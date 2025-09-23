@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 8960456410003030598}
   - component: {fileID: 1460501316326729709}
   - component: {fileID: 5719858662676628870}
+  - component: {fileID: 3097231117479000350}
   m_Layer: 5
   m_Name: 'hint '
   m_TagString: Untagged
@@ -210,6 +211,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3097231117479000350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079924889159541438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
 --- !u!1 &1625966397412458016
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,6 +723,7 @@ GameObject:
   - component: {fileID: 4148605935881801939}
   - component: {fileID: 2171225362844699158}
   - component: {fileID: 1218374067066637124}
+  - component: {fileID: 7744847355223025373}
   m_Layer: 5
   m_Name: 'shuffle '
   m_TagString: Untagged
@@ -823,7 +837,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: Undo
+        m_MethodName: Shuffle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -833,6 +847,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7744847355223025373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2526872980871396690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
 --- !u!1 &3071061659903954530
 GameObject:
   m_ObjectHideFlags: 0
@@ -981,6 +1007,7 @@ GameObject:
   - component: {fileID: 5801063621915312533}
   - component: {fileID: 6139867141008870040}
   - component: {fileID: 5134371114168792478}
+  - component: {fileID: 1304832808545610198}
   m_Layer: 5
   m_Name: 'undo '
   m_TagString: Untagged
@@ -1092,7 +1119,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: Shuffle
+        m_MethodName: Undo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1102,6 +1129,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1304832808545610198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3194124565407849784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
 --- !u!1 &3822834053278116033
 GameObject:
   m_ObjectHideFlags: 0
@@ -1136,7 +1175,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.78385967, y: 0.8263461}
   m_AnchorMax: {x: 0.78385967, y: 0.8263461}
-  m_AnchoredPosition: {x: 15.7, y: 3}
+  m_AnchoredPosition: {x: 15.699997, y: 3}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8411715875478141939
@@ -1394,7 +1433,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.78385967, y: 0.8263461}
   m_AnchorMax: {x: 0.78385967, y: 0.8263461}
-  m_AnchoredPosition: {x: 15.7, y: 3}
+  m_AnchoredPosition: {x: 15.699997, y: 3}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8869700170266352567
