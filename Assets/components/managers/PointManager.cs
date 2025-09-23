@@ -9,7 +9,7 @@ public class PointManager : MonoBehaviour
 
     private int score = 0;
     private int combo = 0;
-
+    private int currentBonus = 0;
     public void Setup()
     {
         combo = 0;
@@ -29,6 +29,7 @@ public class PointManager : MonoBehaviour
     {
         score = 0;
         combo = 0;
+        currentBonus = 0;
         LevelText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.currentLevel.levelNumber.ToString();
         ScoreText.GetComponent<TMPro.TextMeshProUGUI>().text = "0";
         MatchesText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.board.getAllHints().ToString();
@@ -46,6 +47,7 @@ public class PointManager : MonoBehaviour
             else
                 bonus = Point.bonusMax;
         }
+        currentBonus = Point.basePoint + point + bonus;
         score += Point.basePoint + point + bonus;
         ScoreText.GetComponent<TMPro.TextMeshProUGUI>().text = score.ToString();
         return new Tuple<int, int>(point, bonus);
@@ -58,6 +60,10 @@ public class PointManager : MonoBehaviour
     public int getScore()
     {
         return score;
+    }
+    public int getBonus()
+    {
+        return currentBonus;
     }
 
 }

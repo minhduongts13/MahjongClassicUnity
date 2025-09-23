@@ -151,7 +151,10 @@ public class MatchManager : MonoBehaviour
             tile2.transform.SetAsLastSibling();
             tile1.transform.SetAsLastSibling();
         }
+
         await Task.WhenAll(TileMoveMatching(tile1, mid, left), TileMoveMatching(tile2, mid, !left));
+         GameManager.instance.floatingPoint.Showpoint(tile1, tile2);
+
         if (tile1.GetTileType() == 0) tile1.Kill();
         if (tile2.GetTileType() == 0) tile2.Kill();
 

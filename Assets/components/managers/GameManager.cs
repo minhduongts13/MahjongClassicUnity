@@ -19,12 +19,15 @@ public class GameManager : MonoBehaviour
     {
         sakurafail.SetActive(false);
         UIManager.ShowPage(Page.PLAY);
+        combo.ResetCombo();
+
     }
 
     private int currentLevelNumber = 1;
     public THEME currentTheme = THEME.Green;
     [SerializeField] public TilePool tilePool;
     [SerializeField] public BoardManager board;
+    [SerializeField] public FloatingPoint floatingPoint;
 
     [SerializeField] public MatchManager matchManager;
     [SerializeField] public PointManager pointManager;
@@ -146,6 +149,7 @@ public class GameManager : MonoBehaviour
         await board.SetUp();
         pointManager.OnChangeLevel();
         storageManager.setCurrentLevel(currentLevelNumber);
+        combo.ResetCombo();
         Debug.Log("reload");
         ShowMatchable();
     }
