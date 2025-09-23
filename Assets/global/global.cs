@@ -2,8 +2,15 @@ using System.Collections.Generic;
 
 public enum THEME
 {
-    Green
+    Green,
+    WoodOld,
+    OrangeNew,
+
+    WoodNew,
+
+    Violet,
 }
+
 
 
 public enum TileType
@@ -77,9 +84,21 @@ public static class global
 {
     public static string tilePath = "theme/tiles";
     public static string backgroundPath = "theme/background";
+    public static string ToFolderPath(this THEME theme)
+    {
+        switch (theme)
+        {
+            case THEME.Green: return "Green";
+            case THEME.WoodOld: return "Wood/old";
+            case THEME.WoodNew: return "Wood/new";
+            case THEME.OrangeNew: return "Orange/new";
+            case THEME.Violet: return "Violet";
+            default: return "Green";
+        }
+    }
     public static string GetSprite(int type, THEME theme)
     {
-        return theme.ToString() + "/" + type.ToString();
+        return ToFolderPath(theme) + "/" + type.ToString();
     }
 }
 

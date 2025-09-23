@@ -75,6 +75,7 @@ public class BoardManager : MonoBehaviour
                     t.layer = i;
                     t.BlockInput();
                     t.coords = new Vector2Int(c, r);
+                    t.SetTheme(GameManager.instance.currentTheme);
                     t.setTileType(levelData[r, c]);
                     // if (levelData[r, c] == 0)
                     // {
@@ -194,6 +195,19 @@ public class BoardManager : MonoBehaviour
         return neightbour;
 
     }
+    public void UpdateTheme()
+    {
+        foreach (Tile[,] layer in board)
+        {
+            foreach (Tile t in layer)
+            {
+                if (t != null)
+                {
+                    t.SetTheme(GameManager.instance.currentTheme);
+                }
+            }
+        }
+    }
     public List<Tile> getUnder(Tile tile)
     {
         List<Tile> neightbour = new List<Tile>();
@@ -284,7 +298,7 @@ public class BoardManager : MonoBehaviour
         // không tìm thấy
         return null;
     }
-    
+
     public int getAllHints()
     {
         List<Tile> list = new List<Tile>();
@@ -455,7 +469,7 @@ public class BoardManager : MonoBehaviour
 
         return tiles;
     }
-     public void KillBoard()
+    public void KillBoard()
     {
         for (int i = 0; i < board.Count; i++)
         {

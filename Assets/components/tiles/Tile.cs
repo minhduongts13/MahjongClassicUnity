@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DG.Tweening;
-
+using Unity.Android.Gradle;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
@@ -22,12 +22,13 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
     [SerializeField] Image hintHighlight;
 
     [SerializeField] Image shadowImg;
+    public bool isDragging = false;
     public Vector2Int coords;
     private int offset = 0;
     public int layer;
     private THEME theme = THEME.Green;
     private int type = 0;
-    private bool isDraggableNow = true;
+    public bool isDraggableNow = true;
     public int idx;
     private List<Action> OnClickCallbacks = new List<Action>();
     void Start()
@@ -73,8 +74,17 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
             this.Shake();
             foreach (Tile t in GameManager.instance.board.getNeighbour(this))
             {
-                t.Shake();
+                if (t.type != 0 && !t.isDragging)
+                    t.Shake();
             }
+        }
+        if (GameManager.instance.matchManager.TopBlock(this))
+        {
+            GameManager.instance.matchManager.ShowBlock(this, true);
+        }
+        if (GameManager.instance.matchManager.SideBlock(this))
+        {
+            GameManager.instance.matchManager.ShowBlock(this, false);
         }
 
     }
@@ -131,6 +141,7 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
     {
         // Kill all tweens on these targets
         isDraggableNow = true;
+        isDragging = false;
         bgImg.DOKill();
         typeImg.DOKill();
         shadowImg.DOKill();
@@ -162,6 +173,7 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
         hintEff.gameObject.SetActive(false);
         hintHighlight.gameObject.SetActive(false);
     }
+
 
     public async Task Zoom(int delay)
     {
@@ -323,6 +335,7 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (!isDraggableNow) return;
         if (choseEffect[0].gameObject.activeSelf == false) EmitOnclick();
         if (GameManager.instance.matchManager.isFree(this) == false)
         {
@@ -332,6 +345,7 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
         transform.SetAsLastSibling();
         DOTween.Kill(transform as RectTransform);
 
+        isDragging = true;
 
 
         BlockInput();
@@ -354,10 +368,19 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
         transform.SetAsLastSibling();
     }
 
+    void Update()
+    {
+        if (type == 0)
+        {
+            BlockInput();
+        }
+    }
     public async void OnEndDrag(PointerEventData eventData)
     {
         if (!isDraggableNow) return;
         isDraggableNow = false;
+        isDragging = false;
+
         RectTransform rectTransform = transform as RectTransform;
         List<Tile> list = GameManager.instance.board.getTileNear(rectTransform.anchoredPosition);
         foreach (Tile t in list)

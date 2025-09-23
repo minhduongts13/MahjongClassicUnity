@@ -9,6 +9,6 @@ public class AnimationManager : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
+        AnimationManager.instance = this;
     }
 }

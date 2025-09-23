@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
     }
 
     private int currentLevelNumber = 1;
+    public THEME currentTheme = THEME.Green;
     [SerializeField] public TilePool tilePool;
     [SerializeField] public BoardManager board;
 
@@ -46,6 +48,7 @@ public class GameManager : MonoBehaviour
 
         GameManager.instance = this;
         UIManager.ShowPage(Page.DASHBOARD);
+        currentTheme = (THEME)storageManager.getChosenTheme();
 
 
         // SetUp();
@@ -64,11 +67,11 @@ public class GameManager : MonoBehaviour
         ShowMatchable();
     }
 
-    public void Undo()
+    public async Task Undo()
     {
         if (moves.Count == 0) return;
         var move = moves.Pop();
-        board.Undo(move);
+        await board.Undo(move);
     }
 
     public async void Chose(Tile tile)
@@ -128,6 +131,7 @@ public class GameManager : MonoBehaviour
     public async Task Reload()
     {
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
+        UnChose();
         tilePool.ReturnAll();
         currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
         Debug.Log(currentLevel.levelNumber);
@@ -211,6 +215,7 @@ public class GameManager : MonoBehaviour
         if (hint == null) return;
         Task t = matchManager.Match(hint.Item1, hint.Item2);
         AnimationManager.instance.tileMoveAnimation.Add(t);
+        await t;
     }
 
     public async void Shuffle()

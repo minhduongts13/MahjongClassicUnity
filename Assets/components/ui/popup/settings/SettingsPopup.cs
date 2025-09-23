@@ -13,6 +13,20 @@ public class SettingsPopup : BasePopup
     private int musicState = (int)Button.ON;
     private int highlightState = (int)Button.ON;
 
+    // public void Start()
+    // {
+    //     // Sync highlight state with GameManager
+    //     highlightState = GameManager.instance.highLight ? (int)Button.ON : (int)Button.OFF;
+
+    //     UpdateHighlightUI();
+    // }
+    // void Update()
+    // {
+    //     highlightState = GameManager.instance.highLight ? (int)Button.ON : (int)Button.OFF;
+
+    //     UpdateHighlightUI();
+    // }
+
 
     public void toggleSound()
     {
@@ -31,10 +45,16 @@ public class SettingsPopup : BasePopup
         highlightState = 1 - highlightState;
         HighlightButton[highlightState].SetActive(true);
         HighlightButton[1 - highlightState].SetActive(false);
+        GameManager.instance.ToggleShowMatch();
     }
 
     public void Hide()
     {
         UIManager.HidePopup(Popup.SETTINGS);
+    }
+    private void UpdateHighlightUI()
+    {
+        HighlightButton[highlightState].SetActive(true);
+        HighlightButton[1 - highlightState].SetActive(false);
     }
 }

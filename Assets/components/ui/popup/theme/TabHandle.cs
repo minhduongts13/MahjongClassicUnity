@@ -1,5 +1,5 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class TabHandle : BasePopup
 {
@@ -106,6 +106,8 @@ public class TabHandle : BasePopup
         var parentName = selectedTheme.transform.parent.name;
         var themeIndex = parentName[parentName.Length - 1] - '0' - 1;
         GameManager.instance.storageManager.setChosenTheme((THEME_STYLE)themeIndex);
+        GameManager.instance.currentTheme = (THEME)themeIndex;
+        GameManager.instance.board.UpdateTheme();
     }
 
     public void OnChooseBackground(GameObject selectedTheme)
@@ -125,7 +127,7 @@ public class TabHandle : BasePopup
         var themeIndex = parentName[parentName.Length - 1] - '0' - 1;
         GameManager.instance.storageManager.setChosenBackground((BACKGROUND)themeIndex);
     }
-    
+
     public void Hide()
     {
         UIManager.HidePopup(Popup.THEME);

@@ -5527,7 +5527,6 @@ GameObject:
   - component: {fileID: 3008825502394678011}
   - component: {fileID: 3382364980657732864}
   - component: {fileID: 203140917985999478}
-  - component: {fileID: 4634557402668664736}
   m_Layer: 5
   m_Name: Tile
   m_TagString: Untagged
@@ -5657,22 +5656,11 @@ MonoBehaviour:
   - {fileID: 4784653615790776902}
   hintHighlight: {fileID: 477581760278703703}
   shadowImg: {fileID: 2426582248756803649}
+  isDragging: 0
   coords: {x: 0, y: 0}
   layer: 0
+  isDraggableNow: 1
   idx: 0
---- !u!114 &4634557402668664736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5635167523960320627}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
-  m_ShowMaskGraphic: 1
 --- !u!1 &5999981042295984102
 GameObject:
   m_ObjectHideFlags: 0

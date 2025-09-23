@@ -4,16 +4,53 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using JetBrains.Annotations;
 using NUnit.Framework;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class MatchManager : MonoBehaviour
 {
     BoardManager board;
+    [SerializeField] private Image blockNoti;
     public void SetUp()
     {
         board = GameManager.instance.board;
     }
+
+    private Sequence blockSeq;
+
+    public void ShowBlock(Tile tile, bool top = true)
+    {
+        if (blockSeq != null && blockSeq.IsActive()) blockSeq.Kill();
+        Vector2 startPos = board.GetPosFromCoords(tile.coords.x, tile.coords.y, tile.layer) + new Vector2(0, 50);
+        blockNoti.rectTransform.anchoredPosition = startPos;
+
+        blockNoti.gameObject.SetActive(true);
+        blockNoti.color = new Color(blockNoti.color.r, blockNoti.color.g, blockNoti.color.b, 1);
+
+        // Reset alpha cho Image & TMP con
+        foreach (var g in blockNoti.GetComponentsInChildren<TMP_Text>(true))
+        {
+            Color c = g.color;
+            c.a = 1;
+            g.color = c;
+
+            g.text = top ? "Locked by above tiles" : "Locked by left and right";
+        }
+
+        blockSeq = DOTween.Sequence();
+        blockSeq.Append(blockNoti.rectTransform.DOAnchorPos(startPos + new Vector2(0, 100), 1.5f).SetEase(Ease.OutCubic));
+        blockSeq.Join(blockNoti.DOFade(0, 2f));
+
+        foreach (var g in blockNoti.GetComponentsInChildren<Graphic>(true))
+        {
+            blockSeq.Join(g.DOFade(0, 2f));
+        }
+
+        blockSeq.OnComplete(() => blockNoti.gameObject.SetActive(false));
+    }
+
+
     public async Task Match(Tile tile1, Tile tile2, bool move = true)
     {
         if (board.shuffling) return;
@@ -41,6 +78,9 @@ public class MatchManager : MonoBehaviour
 
             UnlockNeighbour(tile1);
             UnlockNeighbour(tile2);
+
+            tile1.isDraggableNow = false;
+            tile2.isDraggableNow = false;
             tile1.OffHint();
             tile2.OffHint();
 
