@@ -76,6 +76,9 @@ public class GameManager : MonoBehaviour
         if (!matchManager.isFree(tile))
         {
             tile.OnBlocked();
+            if (matchManager.BlockRight(tile) || matchManager.BlockLeft(tile)) UIManager.ShowPopup(Popup.WRONG, true, 0, tile.transform.position, false, false);
+            if(matchManager.TopBlock(tile)) UIManager.ShowPopup(Popup.WRONG, true, 1, tile.transform.position, false, false);
+
             return;
         }
         if (!firstChosen)
@@ -171,7 +174,7 @@ public class GameManager : MonoBehaviour
 
     public async void nextLevel()
     {
-        UIManager.HidePopup(Popup.WIN);
+        UIManager.HidePopup(Popup.WIN,false);
         AdvanceLevel();
         await Reload();
     }

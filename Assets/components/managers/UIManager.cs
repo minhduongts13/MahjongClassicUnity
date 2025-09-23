@@ -60,7 +60,6 @@ public class UIManager : MonoBehaviour
             var node = kvp.Value;
             var type = kvp.Key;
             //   kvp.Value.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
-
             if (popupComponents.TryGetValue(type, out BasePopup popupComponent) &&
                 popupComponent != null && node.activeSelf)
             {
@@ -122,7 +121,7 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning($"not found: {popupType}");
         }
     }
-    public static void ShowPopup(Popup popupType, bool hideOthers = true, int curr = 0)
+    public static void ShowPopup(Popup popupType, bool hideOthers = true, int curr = 0, Vector3 hi = default, bool showOverlay = true, bool tween = true)
     {
         if (instance == null)
         {
@@ -136,21 +135,25 @@ public class UIManager : MonoBehaviour
         }
         if (popupStack.Count == 0 || popupStack.Peek() != popupType) popupStack.Push(popupType);
 
-        Debug.Log($"Showing popup: {popupType}");
 
         if (instance.popupNodes.TryGetValue(popupType, out GameObject popup) && popup != null)
         {
-            if (instance.overlay != null) instance.overlay.SetActive(true);
+            if (instance.overlay != null && showOverlay) instance.overlay.SetActive(true);
 
             popup.SetActive(true);
-            popup.transform.localScale = Vector3.zero;
-            popup.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+            if (tween)
+            {
+                popup.transform.localScale = Vector3.zero;
+                popup.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+
+            }
 
 
             if (instance.popupComponents.TryGetValue(popupType, out BasePopup popupComponent) &&
                 popupComponent != null)
-            {
-                popupComponent.OnPopupShow(curr);
+            {           
+
+                popupComponent.OnPopupShow(curr, hi);
             }
         }
         else
@@ -188,7 +191,7 @@ public class UIManager : MonoBehaviour
             }
         }
     }
-    public static void HidePopup(Popup popupType)
+    public static void HidePopup(Popup popupType, bool tween = true)
     {
         if (instance == null)
         {
@@ -203,7 +206,11 @@ public class UIManager : MonoBehaviour
                 var component = popupComponent;
                 if (instance.overlay != null) instance.overlay.SetActive(false);
 
-                popup.transform.DOScale(Vector3.zero, 0.2f)
+                if (!tween) popup.SetActive(false);
+
+                else
+                {
+                    popup.transform.DOScale(Vector3.zero, 0.2f)
                 .OnComplete(() =>
                 {
                     popup.SetActive(false);
@@ -223,6 +230,7 @@ public class UIManager : MonoBehaviour
                     }
 
                 });
+                }
             }
         }
     }
@@ -236,7 +244,7 @@ public class UIManager : MonoBehaviour
         }
 
         instance.HideAllPopupsInternal();
-        Debug.Log("Hidden all popups");
+       
     }
 
     private void CachePopupNodes()
@@ -251,10 +259,10 @@ public class UIManager : MonoBehaviour
                 if (popupComponent != null)
                 {
                     popupComponents[mapping.popupType] = popupComponent;
-                    Debug.Log($" Cached popup component: {mapping.popupType}");
+                   // Debug.Log($" Cached popup component: {mapping.popupType}");
                 }
 
-                Debug.Log($"Cached popup node: {mapping.popupType}");
+              //  Debug.Log($"Cached popup node: {mapping.popupType}");
             }
             else
             {
@@ -336,7 +344,7 @@ public class UIManager : MonoBehaviour
     {
         Debug.LogWarning($"Popup not found: igfịì");
 
-        UIManager.ShowPopup(Popup.WIN);
+        UIManager.ShowPopup(Popup.WIN, true, 0, default, true, false);
 
     }
 
@@ -357,5 +365,6 @@ public class UIManager : MonoBehaviour
     {
         UIManager.ShowPopup(Popup.SHOP);
     }
+    
     
 }

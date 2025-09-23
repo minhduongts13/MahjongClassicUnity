@@ -33,7 +33,8 @@ public enum Popup
     TASK,
     WIN,
     LANGUAGES,
-    SHOP
+    SHOP,
+    WRONG
 }
 
 public enum BACKGROUND

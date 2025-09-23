@@ -2,7 +2,7 @@ using UnityEngine;
 
 public  class DailyPopUp : BasePopup
 {
-     public override void OnPopupShow(int curr = 0) 
+     public override void OnPopupShow(int curr = 0, Vector3 pos = default) 
     { 
     }
 

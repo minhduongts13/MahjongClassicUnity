@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class BasePopup : MonoBehaviour
 {
-    public virtual void OnPopupShow(int curr = 0) 
+     public virtual void OnPopupShow(int curr = 0, Vector3 pos = default) 
     { 
     }
 

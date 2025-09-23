@@ -10,7 +10,7 @@ public class TabHandle : BasePopup
     public GameObject BackgroundButton;
     public GameObject[] TileList;
 
-    public override void OnPopupShow(int curr = 0)
+     public override void OnPopupShow(int curr = 0, Vector3 pos = default) 
     {
         var themes = Tiles.transform.GetChild(0).GetChild(0);
         var themeIndex = GameManager.instance.storageManager.getChosenTheme();
