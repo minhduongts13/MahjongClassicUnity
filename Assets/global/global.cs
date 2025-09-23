@@ -43,7 +43,7 @@ public enum BACKGROUND
     BG3,
     BG4,
     BG5,
-    BG6
+    BG6,
     TASK,
 
 }

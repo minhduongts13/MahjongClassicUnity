@@ -43,14 +43,13 @@ public class MatchManager : MonoBehaviour
             UnlockNeighbour(tile2);
             tile1.OffHint();
             tile2.OffHint();
-            tile1.OnUnChose();
-            tile2.OnUnChose();
+
+            tile1.OnUnChose(move);
+            tile2.OnUnChose(move);
 
             GameManager.instance.pointManager.OnMatchPoint();
             GameManager.instance.pointManager.OnChangeMatches();
-            
-            tile1.OnUnChose(move);
-            tile2.OnUnChose(move);
+
 
             if (board.remainTile == 0)
             {
@@ -58,8 +57,8 @@ public class MatchManager : MonoBehaviour
                 UIManager.showWin();
                 // GameManager.instance.AdvanceLevel();
                 // GameManager.instance.Reload();
-                GameManager.instance.AdvanceLevel();
-                await GameManager.instance.Reload();
+                // GameManager.instance.AdvanceLevel();
+                // await GameManager.instance.Reload();
             }
             else
             {
