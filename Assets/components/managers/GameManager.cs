@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public MatchManager matchManager;
     [SerializeField] public PointManager pointManager;
     [SerializeField] public StorageManager storageManager;
+        [SerializeField] public Combo combo;
+
     public LevelGridData currentLevel;
 
     private Tile firstChosen;
@@ -64,6 +66,7 @@ public class GameManager : MonoBehaviour
         matchManager.SetUp();
         pointManager.Setup();
         setupTool();
+        combo.ResetCombo();
         ShowMatchable();
     }
 

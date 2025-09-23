@@ -59,11 +59,15 @@ public class MatchManager : MonoBehaviour
         {
             Debug.Log("TOP BLOCKED");
             GameManager.instance.pointManager.OnNoMatch();
+            //GameManager.instance.combo.ResetCombo();
+
             return;
         }
         if (SideBlock(tile1) || SideBlock(tile2))
         {
             GameManager.instance.pointManager.OnNoMatch();
+            //GameManager.instance.combo.ResetCombo();
+
             return;
         }
         if (tile1.GetTileType() == tile2.GetTileType())
@@ -86,7 +90,6 @@ public class MatchManager : MonoBehaviour
 
             tile1.OnUnChose(move);
             tile2.OnUnChose(move);
-
             GameManager.instance.pointManager.OnMatchPoint();
             GameManager.instance.pointManager.OnChangeMatches();
 
@@ -95,6 +98,8 @@ public class MatchManager : MonoBehaviour
             {
                 await MoveMatching(tile1, tile2);
                 UIManager.showWin();
+                GameManager.instance.combo.ResetCombo();
+
                 // GameManager.instance.AdvanceLevel();
                 // GameManager.instance.Reload();
                 // GameManager.instance.AdvanceLevel();
