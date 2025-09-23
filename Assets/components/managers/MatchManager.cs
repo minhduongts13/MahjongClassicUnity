@@ -94,7 +94,7 @@ public class MatchManager : MonoBehaviour
             tile2.OnUnChose(move);
             GameManager.instance.pointManager.OnMatchPoint();
             GameManager.instance.pointManager.OnChangeMatches();
-
+            GameManager.instance.combo.addCombo();
 
             if (board.remainTile == 0)
             {
