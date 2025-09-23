@@ -86,6 +86,7 @@ public class GameManager : MonoBehaviour
         if (!matchManager.isFree(tile))
         {
             tile.OnBlocked();
+            combo.ResetCombo();
             return;
         }
         if (!firstChosen)

@@ -110,7 +110,7 @@ public class MatchManager : MonoBehaviour
             else
             {
                 await MoveMatching(tile1, tile2);
-            }
+        }
             GameManager.instance.combo.addCombo();
         }
     }
