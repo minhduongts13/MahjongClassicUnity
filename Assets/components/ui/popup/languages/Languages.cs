@@ -25,5 +25,9 @@ public class Languages : BasePopup
         return checkbox.transform.GetChild(0).gameObject;
     }
 
-    
+    public void Hide()
+    {
+        UIManager.HidePopup(Popup.LANGUAGES);
+    }
+
 }

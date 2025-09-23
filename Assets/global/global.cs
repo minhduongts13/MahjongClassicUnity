@@ -29,8 +29,10 @@ public enum Popup
     SETTINGS,
     THEME,
     DAILY,
-    TASK,   
-    WIN, 
+    TASK,
+    WIN,
+    LANGUAGES,
+    SHOP
 }
 
 
