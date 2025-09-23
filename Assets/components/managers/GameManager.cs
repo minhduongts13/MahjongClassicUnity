@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public async Task nextLevel()
+    public async void nextLevel()
     {
         AdvanceLevel();
         await Reload();
@@ -165,7 +165,8 @@ public class GameManager : MonoBehaviour
         if (board.remainTile <= 0) return;
         Tuple<Tile, Tile> hint = board.getHint();
         if (hint == null) return;
-        await matchManager.Match(hint.Item1, hint.Item2);
+        Task t = matchManager.Match(hint.Item1, hint.Item2);
+        AnimationManager.instance.tileMoveAnimation.Add(t);
     }
 
     public async void Shuffle()

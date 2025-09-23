@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using DG.Tweening;
 
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class Tile : PooledObject
+public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] List<Image> choseEffect;
     [SerializeField] Image typeImg;
@@ -20,11 +22,13 @@ public class Tile : PooledObject
     [SerializeField] Image hintHighlight;
 
     [SerializeField] Image shadowImg;
+    private Transform afterDragParent;
     public Vector2Int coords;
     private int offset = 0;
     public int layer;
     private THEME theme = THEME.Green;
     private int type = 0;
+    private bool isDraggableNow = false;
     public int idx;
     private List<Action> OnClickCallbacks = new List<Action>();
     void Start()
@@ -53,8 +57,9 @@ public class Tile : PooledObject
         explodeEff.gameObject.SetActive(true);
         explodeEff.transform.DOScale(1, 0.2f);
 
-        await explodeEff.DOFade(0.6f, 0.1f).AsyncWaitForCompletion();
+        await explodeEff.DOFade(1, 0.1f).AsyncWaitForCompletion();
         await explodeEff.DOFade(0f, 0.1f).AsyncWaitForCompletion();
+        await Task.Delay(200);
 
         explodeParticle[idx].gameObject.SetActive(false);
         explodeEff.gameObject.SetActive(false);
@@ -183,11 +188,11 @@ public class Tile : PooledObject
         button.interactable = true;
     }
 
-    public void MoveToRealPos()
+    public async Task MoveToRealPos()
     {
         Vector2 pos = GameManager.instance.board.GetPosFromCoords(this.coords.x, this.coords.y, this.layer);
         RectTransform rt = transform as RectTransform;
-        rt.DOAnchorPos(pos, 0.35f).SetEase(Ease.OutSine);
+        await rt.DOAnchorPos(pos, 0.35f).SetEase(Ease.OutSine).AsyncWaitForCompletion();
         offset = 0;
     }
 
@@ -268,7 +273,7 @@ public class Tile : PooledObject
         typeImg.sprite = AssetsLoader.instance.LoadSprite(PATH);
     }
 
-    public void OnUnChose()
+    public void OnUnChose(bool move = true)
     {
         foreach (Image c in choseEffect)
         {
@@ -279,7 +284,7 @@ public class Tile : PooledObject
             });
         }
 
-        MoveToRealPos();
+        if (move) MoveToRealPos();
 
     }
 
@@ -299,5 +304,57 @@ public class Tile : PooledObject
         hintHighlight.DOFade(0.5f, 0.5f)
     .SetLoops(-1, LoopType.Yoyo)
     .SetEase(Ease.Linear);
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (choseEffect[0].gameObject.activeSelf == false) EmitOnclick();
+        if (GameManager.instance.matchManager.isFree(this) == false)
+        {
+            isDraggableNow = false;
+            return;
+        }
+        transform.SetAsLastSibling();
+        DOTween.Kill(transform as RectTransform);
+
+        isDraggableNow = true;
+
+
+        BlockInput();
+
+
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (!isDraggableNow) return;
+
+        RectTransform rt = transform as RectTransform;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            (RectTransform)rt.parent,
+            eventData.position,
+            eventData.pressEventCamera,
+            out Vector2 localPoint
+        );
+        rt.anchoredPosition = localPoint;
+    }
+
+    public async void OnEndDrag(PointerEventData eventData)
+    {
+        if (!isDraggableNow) return;
+        isDraggableNow = false;
+        RectTransform rectTransform = transform as RectTransform;
+        List<Tile> list = GameManager.instance.board.getTileNear(rectTransform.anchoredPosition);
+        foreach (Tile t in list)
+        {
+            if (this.type == 0) return;
+            if (GameManager.instance.matchManager.isFree(t) == false || t == this) continue;
+            AnimationManager.instance.tileMoveAnimation.Add(GameManager.instance.matchManager.Match(this, t, false));
+            await Task.WhenAll(AnimationManager.instance.tileMoveAnimation);
+        }
+
+        await MoveToRealPos();
+        TurnOnInput();
+        GameManager.instance.board.resetSibling();
     }
 }

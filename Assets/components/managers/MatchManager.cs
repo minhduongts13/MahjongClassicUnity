@@ -14,7 +14,7 @@ public class MatchManager : MonoBehaviour
     {
         board = GameManager.instance.board;
     }
-    public async Task Match(Tile tile1, Tile tile2)
+    public async Task Match(Tile tile1, Tile tile2, bool move = true)
     {
         if (board.shuffling) return;
 
@@ -41,14 +41,14 @@ public class MatchManager : MonoBehaviour
             UnlockNeighbour(tile2);
             tile1.OffHint();
             tile2.OffHint();
-            tile1.OnUnChose();
-            tile2.OnUnChose();
+            tile1.OnUnChose(move);
+            tile2.OnUnChose(move);
 
             if (board.remainTile == 0)
             {
                 await MoveMatching(tile1, tile2);
                 GameManager.instance.AdvanceLevel();
-                GameManager.instance.Reload();
+                await GameManager.instance.Reload();
             }
             else
             {
@@ -102,7 +102,7 @@ public class MatchManager : MonoBehaviour
     public async Task TileMoveMatching(Tile tile, Vector2 mid, bool left)
     {
         RectTransform rt = tile.transform as RectTransform;
-        DOTween.Kill(rt);
+        // DOTween.Kill(rt);
         Sequence seq = DOTween.Sequence();
         await seq.Append(rt.DOAnchorPos(mid + new Vector2(left ? -300 : 300, 0), 0.35f))
         .Append(rt.DOAnchorPos(mid + new Vector2(left ? -125 / 2 : 125 / 2, 0), 0.3f).SetEase(Ease.OutFlash)).AsyncWaitForCompletion();

@@ -129,6 +129,10 @@ public class BoardManager : MonoBehaviour
 
 
     }
+    public void resetSibling()
+    {
+        ApplySiblingOrder(mockUpLevel, board);
+    }
 
     public Vector2 GetPosFromCoords(int x, int y, int layerIndex)
     {
@@ -285,16 +289,18 @@ public class BoardManager : MonoBehaviour
     {
         Tile tile = board[(int)pos.z][(int)pos.y, (int)pos.x];
         tile.setTileType(type);
-        tile.gameObject.SetActive(true);
         tile.Reset();
+        tile.gameObject.SetActive(true);
+
         Vector2 p = GetPosFromCoords(tile.coords.x, tile.coords.y, tile.layer);
         (tile.transform as RectTransform).anchoredPosition = p;
         tile.used = true;
     }
 
-    public void Undo(Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>> move)
+    public async Task Undo(Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>> move)
     {
         remainTile += 2;
+        await Task.WhenAll(AnimationManager.instance.tileMoveAnimation);
         RestoreTile(move.Item1.Item1, move.Item2.Item1);
         RestoreTile(move.Item1.Item2, move.Item2.Item2);
         ApplySiblingOrder(mockUpLevel, board);
@@ -304,6 +310,7 @@ public class BoardManager : MonoBehaviour
     public async Task Shuffle()
     {
         shuffling = true;
+        GameManager.instance.UnChose();
         List<Tile> tilesList = new List<Tile>();
         List<int> typeList = new List<int>();
         List<Task> task = new List<Task>();
@@ -385,6 +392,35 @@ public class BoardManager : MonoBehaviour
         }
         shuffling = false;
     }
+
+
+    public List<Tile> getTileNear(Vector2 pos, bool onlyFree = true, float width = 133f, float height = 166f)
+    {
+        List<Tile> tiles = new List<Tile>();
+
+        foreach (Tile[,] layer in board)
+        {
+            foreach (Tile t in layer)
+            {
+                if (t == null || t.GetTileType() == 0)
+                    continue;
+
+
+                Vector2 p = GetPosFromCoords(t.coords.x, t.coords.y, t.layer);
+
+                bool inX = Mathf.Abs(p.x - pos.x) <= width;
+                bool inY = Mathf.Abs(p.y - pos.y) <= height;
+
+                if (inX && inY)
+                {
+                    tiles.Add(t);
+                }
+            }
+        }
+
+        return tiles;
+    }
+
 
 
 
