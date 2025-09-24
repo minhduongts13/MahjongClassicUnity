@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Tile : PooledObject//, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] List<Image> choseEffect;
     [SerializeField] Image typeImg;

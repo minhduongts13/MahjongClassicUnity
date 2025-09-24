@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using NUnit.Framework;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class MatchManager : MonoBehaviour
@@ -110,7 +111,7 @@ public class MatchManager : MonoBehaviour
             else
             {
                 await MoveMatching(tile1, tile2);
-        }
+            }
             GameManager.instance.combo.addCombo();
         }
     }
@@ -152,21 +153,22 @@ public class MatchManager : MonoBehaviour
             tile1.transform.SetAsLastSibling();
         }
 
-        await Task.WhenAll(TileMoveMatching(tile1, mid, left), TileMoveMatching(tile2, mid, !left));
-         GameManager.instance.floatingPoint.Showpoint(tile1, tile2);
+        await Task.WhenAll(TileMoveMatching(tile1, mid, left, tile2), TileMoveMatching(tile2, mid, !left));
+
 
         if (tile1.GetTileType() == 0) tile1.Kill();
         if (tile2.GetTileType() == 0) tile2.Kill();
 
     }
 
-    public async Task TileMoveMatching(Tile tile, Vector2 mid, bool left)
+    public async Task TileMoveMatching(Tile tile, Vector2 mid, bool left, Tile tile2 = null)
     {
         RectTransform rt = tile.transform as RectTransform;
         // DOTween.Kill(rt);
         Sequence seq = DOTween.Sequence();
         await seq.Append(rt.DOAnchorPos(mid + new Vector2(left ? -300 : 300, 0), 0.35f))
         .Append(rt.DOAnchorPos(mid + new Vector2(left ? -125 / 2 : 125 / 2, 0), 0.3f).SetEase(Ease.OutFlash)).AsyncWaitForCompletion();
+        if (tile2) GameManager.instance.floatingPoint.Showpoint(tile, tile2);
         await tile.FadeTile(left);
     }
 

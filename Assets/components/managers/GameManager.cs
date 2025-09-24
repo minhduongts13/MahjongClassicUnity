@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public PointManager pointManager;
     [SerializeField] public StorageManager storageManager;
     [SerializeField] public Combo combo;
+    [SerializeField] TMP_Text levelText;
 
     public LevelGridData currentLevel;
 
@@ -61,6 +63,10 @@ public class GameManager : MonoBehaviour
 
 
         // SetUp();
+    }
+    void Update()
+    {
+        levelText.text = "Level " + currentLevelNumber;
     }
 
     private async void SetUp()
