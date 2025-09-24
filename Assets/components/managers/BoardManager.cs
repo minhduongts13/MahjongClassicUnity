@@ -40,6 +40,7 @@ public class BoardManager : MonoBehaviour
 
     public async Task SetUp()
     {
+        shuffling = true;
         remainTile = 0;
         List<Task> tasks = new List<Task>();
         Debug.Log("aaa");
@@ -126,7 +127,7 @@ public class BoardManager : MonoBehaviour
             }
         }
         await Task.WhenAll(tasks);
-
+        shuffling = false;
 
 
     }

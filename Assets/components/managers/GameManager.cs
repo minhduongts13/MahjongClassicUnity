@@ -200,6 +200,7 @@ public class GameManager : MonoBehaviour
 
     public void ShowHint()
     {
+        if (board.shuffling) return;
         if (hinting) return;
         var numHints = storageManager.getNumberHints();
         if (numHints <= 0) return;
@@ -232,6 +233,7 @@ public class GameManager : MonoBehaviour
     }
     public async void Match()
     {
+        if (board.shuffling) return;
         if (board.remainTile <= 0) return;
         Tuple<Tile, Tile> hint = board.getHint();
         if (hint == null) return;

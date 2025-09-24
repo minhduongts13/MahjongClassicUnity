@@ -184,8 +184,8 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
     {
         BlockInput();
         transform.localScale = new Vector3(0, 0);
-        await Task.Delay(delay * 200);
-        await transform.DOScale(1, 0.2f).AsyncWaitForCompletion();
+        await Task.Delay((delay+1) * 200);
+        await transform.DOScale(1, 0.25f).AsyncWaitForCompletion();
         await Task.Delay(100);
         TurnOnInput();
     }

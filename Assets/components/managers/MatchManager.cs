@@ -112,7 +112,7 @@ public class MatchManager : MonoBehaviour
             {
                 await MoveMatching(tile1, tile2);
             }
-            GameManager.instance.combo.addCombo();
+
         }
     }
 
@@ -168,7 +168,12 @@ public class MatchManager : MonoBehaviour
         Sequence seq = DOTween.Sequence();
         await seq.Append(rt.DOAnchorPos(mid + new Vector2(left ? -300 : 300, 0), 0.35f))
         .Append(rt.DOAnchorPos(mid + new Vector2(left ? -125 / 2 : 125 / 2, 0), 0.3f).SetEase(Ease.OutFlash)).AsyncWaitForCompletion();
-        if (tile2) GameManager.instance.floatingPoint.Showpoint(tile, tile2);
+        if (tile2)
+        {
+            GameManager.instance.floatingPoint.Showpoint(tile, tile2);
+            GameManager.instance.combo.addCombo();
+        }
+
         await tile.FadeTile(left);
     }
 

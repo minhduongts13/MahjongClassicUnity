@@ -2124,6 +2124,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 279542598}
     m_Modifications:
+    - target: {fileID: 1476702517834977722, guid: d7b9133f232d0714285c1f9117ddd841, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1476702517834977722, guid: d7b9133f232d0714285c1f9117ddd841, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
     - target: {fileID: 2381758714194960137, guid: d7b9133f232d0714285c1f9117ddd841, type: 3}
       propertyPath: m_Name
       value: FloatingPoint
