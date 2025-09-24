@@ -64,10 +64,7 @@ public class GameManager : MonoBehaviour
 
         // SetUp();
     }
-    void Update()
-    {
-        levelText.text = "Level " + currentLevelNumber;
-    }
+    
 
     private async void SetUp()
     {

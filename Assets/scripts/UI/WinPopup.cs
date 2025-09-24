@@ -35,10 +35,9 @@ public class WinPopup : BasePopup
 
         PopWell(async () =>
         {
-            this.glow.SetActive(true);
             await DropwellnZoomAsync(async () =>
             {
-                await Task.WhenAll(popAllRibbon(), popFan(), popFlower());
+                await Task.WhenAll( popFlower());
                 par.SetActive(true);
                 leaf.SetActive(true);
             });
@@ -67,47 +66,74 @@ public class WinPopup : BasePopup
         onComplete?.Invoke();
     }
     private async Task DropwellnZoomAsync(System.Action onComplete = null)
-    {
-        this.bg.SetActive(true);
-        this.welldone.SetActive(true);
-        this.scoreText.SetActive(true);
-        this.level.gameObject.GetComponent<TextMeshProUGUI>().text = "Level " + (GameManager.instance.currentLevel.levelNumber + 1).ToString();
+{
+    this.bg.SetActive(true);
+    this.welldone.SetActive(true);
+    this.scoreText.SetActive(true);
+    this.glow.SetActive(true);
 
-        this.score.gameObject.GetComponent<TextMeshProUGUI>().text = GameManager.instance.pointManager.getScore().ToString();
-        this.welldone.transform.localScale = new Vector3(1.4f, 1.4f, 0);
-        this.score.transform.localScale = Vector3.zero;
-        this.bg.transform.localScale = Vector3.zero;
-        var task1 = this.welldone.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
-        var task2 = this.bg.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
-        var task3 = this.score.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
-        await Task.WhenAll(task1, task2, task3);
-        onComplete?.Invoke();
-    }
+    this.level.gameObject.GetComponent<TextMeshProUGUI>().text =
+        "Level " + (GameManager.instance.currentLevel.levelNumber + 1).ToString();
+
+    this.score.gameObject.GetComponent<TextMeshProUGUI>().text =
+        GameManager.instance.pointManager.getScore().ToString();
+
+    this.welldone.transform.localScale = new Vector3(1.4f, 1.4f, 0);
+    this.score.transform.localScale = Vector3.zero;
+    this.glow.transform.localScale = Vector3.zero;
+    this.bg.transform.localScale = Vector3.zero;
+    Sequence seq = DOTween.Sequence();
+
+    seq.Append(this.welldone.transform
+        .DOScale(new Vector3(0.8f, 0.8f, 0), 0.4f));
+    seq.Join(this.bg.transform
+        .DOScale(new Vector3(1.1f, 1.1f, 0), 0.4f));
+
+    seq.AppendCallback(async () =>
+    {
+        await popFan(); 
+    });
+
+    seq.Append(this.welldone.transform
+        .DOScale(new Vector3(1, 1, 0), 0.4f));
+    seq.Join(this.bg.transform
+        .DOScale(new Vector3(1, 1, 0), 0.4f));
+
+    await seq.AsyncWaitForCompletion();
+    onComplete?.Invoke();
+}
+
     private async Task popAllRibbon()
-    {
-        List<Task> animationTasks = new List<Task>();
+{
+    Sequence seq = DOTween.Sequence();
 
-        for (int i = 0; i < rubbon.Length; i++)
+        for (int i = 0; i < 2; i++)
         {
             GameObject hi = rubbon[i];
             hi.SetActive(true);
             hi.transform.localScale = Vector3.zero;
-            float delay = 0f;
-            if (i >= 2)
-            {
-                delay = 0.15f;
-            }
 
-            animationTasks.Add(
-                hi.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.6f)
-                    .SetEase(Ease.OutBack)
-                    .SetDelay(delay)
-                    .AsyncWaitForCompletion()
+            seq.Join(
+                hi.transform.DOScale(Vector3.one, 1.03f)
+                .SetEase(Ease.OutBack,5f)
             );
-        }
-
-        await Task.WhenAll(animationTasks);
+        
     }
+            for (int i = 2; i < 4; i++)
+            {
+                GameObject hi = rubbon[i];
+                hi.SetActive(true);
+                hi.transform.localScale = Vector3.zero;
+                seq.Insert(0.13f,
+                        hi.transform.DOScale(Vector3.one, 1.03f)
+                            .SetEase(Ease.OutBack,3f)
+                       );
+
+            }
+            
+    await seq.AsyncWaitForCompletion();
+}
+
     private async Task popFan()
     {
         List<Task> animationTasks = new List<Task>();
@@ -121,29 +147,33 @@ public class WinPopup : BasePopup
             Vector3 startPos = originalPos;
             if (i == 0)
             {
-                startPos.x += 200f;
+                startPos.x += 20f;
             }
             else if (i == 1)
             {
-                startPos.x -= 200f;
+                startPos.x -= 20f;
             }
 
             fanObj.transform.localPosition = startPos;
             fanObj.transform.localScale = Vector3.zero;
 
-            var scaleTask = fanObj.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.6f)
+            var scaleTask = fanObj.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.3f)
                 .SetEase(Ease.OutBack)
+
+                .OnComplete(() =>
+                {
+
+                    var moveTask = fanObj.transform.DOLocalMove(originalPos, 0.3f)
+                    .SetEase(Ease.OutBack);
+                })
                 .AsyncWaitForCompletion();
 
-            var moveTask = fanObj.transform.DOLocalMove(originalPos, 0.6f)
-                .SetEase(Ease.OutBack)
-                .AsyncWaitForCompletion();
 
             animationTasks.Add(scaleTask);
-            animationTasks.Add(moveTask);
         }
 
         await Task.WhenAll(animationTasks);
+        await popAllRibbon();
     }
     private async Task popFlower()
     {
