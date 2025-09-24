@@ -16,7 +16,7 @@ public class WinPopup : BasePopup
     [SerializeField] GameObject[] rubbon;
     [SerializeField] GameObject[] fan;
     [SerializeField] GameObject[] flower;
-     
+
     [SerializeField] GameObject scoreText;
     [SerializeField] GameObject score;
     [SerializeField] GameObject level;
@@ -26,7 +26,7 @@ public class WinPopup : BasePopup
 
     public override void OnPopupShow(int curr = 0)
     {
-                    leaf.SetActive(false);
+        leaf.SetActive(false);
 
         foreach (GameObject hi in ribbon)
         {
@@ -34,12 +34,13 @@ public class WinPopup : BasePopup
         }
 
         PopWell(async () =>
-        {  this.glow.SetActive(true);
+        {
+            this.glow.SetActive(true);
             await DropwellnZoomAsync(async () =>
             {
                 await Task.WhenAll(popAllRibbon(), popFan(), popFlower());
                 par.SetActive(true);
-            leaf.SetActive(true);
+                leaf.SetActive(true);
             });
         });
     }
@@ -70,7 +71,7 @@ public class WinPopup : BasePopup
         this.bg.SetActive(true);
         this.welldone.SetActive(true);
         this.scoreText.SetActive(true);
-        this.level.gameObject.GetComponent<TextMeshProUGUI>().text = "Level "+ GameManager.instance.currentLevel.levelNumber.ToString();
+        this.level.gameObject.GetComponent<TextMeshProUGUI>().text = "Level " + (GameManager.instance.currentLevel.levelNumber + 1).ToString();
 
         this.score.gameObject.GetComponent<TextMeshProUGUI>().text = GameManager.instance.pointManager.getScore().ToString();
         this.welldone.transform.localScale = new Vector3(1.4f, 1.4f, 0);
@@ -78,8 +79,8 @@ public class WinPopup : BasePopup
         this.bg.transform.localScale = Vector3.zero;
         var task1 = this.welldone.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
         var task2 = this.bg.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
-        var task3=this.score.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
-        await Task.WhenAll(task1, task2,task3);
+        var task3 = this.score.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
+        await Task.WhenAll(task1, task2, task3);
         onComplete?.Invoke();
     }
     private async Task popAllRibbon()
@@ -144,41 +145,41 @@ public class WinPopup : BasePopup
 
         await Task.WhenAll(animationTasks);
     }
- private async Task popFlower()
-{
-    List<Task> animationTasks = new List<Task>();
-
-    for (int i = 0; i < flower.Length; i++)
+    private async Task popFlower()
     {
-        GameObject flowerObj = flower[i];
-        flowerObj.SetActive(true);
-                flowerObj.transform.localRotation = Quaternion.identity;
+        List<Task> animationTasks = new List<Task>();
 
-        float rotationAngle = 0f;
-        if (i == 0 || i == 1) 
+        for (int i = 0; i < flower.Length; i++)
         {
-            rotationAngle = -25f; 
-        }
-        else if (i == 2) 
-        {
-            rotationAngle = 25f; 
-        }
-        
-        var rotateTask = flowerObj.transform.DORotate(
-            new Vector3(0, 0, rotationAngle), 1.0f) 
-            .SetEase(Ease.OutSine) 
-            .AsyncWaitForCompletion();
-        
-        animationTasks.Add(rotateTask);
-    }
-    foreach (GameObject hi in ribbon)
-    {
-        if (!hi.activeSelf)
-        {
-            hi.SetActive(true);
-        }
-    }
+            GameObject flowerObj = flower[i];
+            flowerObj.SetActive(true);
+            flowerObj.transform.localRotation = Quaternion.identity;
 
-    await Task.WhenAll(animationTasks);
-}
+            float rotationAngle = 0f;
+            if (i == 0 || i == 1)
+            {
+                rotationAngle = -25f;
+            }
+            else if (i == 2)
+            {
+                rotationAngle = 25f;
+            }
+
+            var rotateTask = flowerObj.transform.DORotate(
+                new Vector3(0, 0, rotationAngle), 1.0f)
+                .SetEase(Ease.OutSine)
+                .AsyncWaitForCompletion();
+
+            animationTasks.Add(rotateTask);
+        }
+        foreach (GameObject hi in ribbon)
+        {
+            if (!hi.activeSelf)
+            {
+                hi.SetActive(true);
+            }
+        }
+
+        await Task.WhenAll(animationTasks);
+    }
 }

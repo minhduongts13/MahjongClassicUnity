@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DG.Tweening;
-using Unity.Android.Gradle;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
@@ -184,7 +183,7 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
     {
         BlockInput();
         transform.localScale = new Vector3(0, 0);
-        await Task.Delay((delay+1) * 200);
+        await Task.Delay((delay + 1) * 200);
         await transform.DOScale(1, 0.25f).AsyncWaitForCompletion();
         await Task.Delay(100);
         TurnOnInput();
