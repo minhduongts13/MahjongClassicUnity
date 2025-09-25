@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandler, IComparable<Tile>
 {
     [SerializeField] List<Image> choseEffect;
     [SerializeField] Image typeImg;
@@ -262,14 +262,16 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
     public void setTileType(int ttype)
     {
         type = ttype;
+        if (ttype >= 35 && ttype <= 38) type = (int)SpecialTile.FLOWER;
+        else if (ttype >= 39 && ttype <= 42) type = (int)SpecialTile.SEASON;
         if (ttype == 0) return;
-        if (ttype == (int)SpecialTile.FLOWER)
+        if (type == (int)SpecialTile.FLOWER)
         {
             int randId = UnityEngine.Random.Range(35, 39);
             string PATH = global.GetSprite(randId, theme);
             typeImg.sprite = AssetsLoader.instance.LoadSprite(PATH);
         }
-        else if (ttype == (int)SpecialTile.SEASON)
+        else if (type == (int)SpecialTile.SEASON)
         {
             int randId = UnityEngine.Random.Range(39, 43);
             string PATH = global.GetSprite(randId, theme);
@@ -401,4 +403,33 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
         GameManager.instance.board.resetSibling();
         isDraggableNow = true;
     }
+
+    public int CompareTo(Tile other)
+    {
+        if (other == null) return 1;
+
+        // 1. Compare by layer
+        if (this.layer != other.layer)
+            return this.layer.CompareTo(other.layer);
+
+
+        // 2. Compare by Y difference
+        int dy = other.coords.y - this.coords.y;
+        int dx = other.coords.x - this.coords.x;
+        if (Math.Abs(dy) == 1)
+            return dx > 0 ? -1 : 1;
+
+        if (Math.Abs(dx) == 1)
+            return dy > 0 ? -1 : 1;
+        if (Math.Abs(dy) >= 2)
+            return dy > 0 ? -1 : 1; // larger y goes behind
+
+        if (Math.Abs(dx) >= 2)
+            return dx > 0 ? -1 : 1; // larger x goes behind
+
+        return 1;
+    }
+
+
+
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 [System.Serializable]
@@ -8,12 +10,14 @@ public class Cor
 {
     public float x;
     public float y;
+    public int tile; // 1: có, 0: không
 }
 
 [System.Serializable]
 public class Layer
 {
     public int index;
+
     public List<Cor> tiles = new List<Cor>();
 }
 
@@ -40,6 +44,7 @@ public class LayerGridData
     {
         layerNumber = layerNum;
         gridData = grid;
+
     }
 }
 
@@ -48,11 +53,14 @@ public class LevelGridData
 {
     public int levelNumber;
     public List<LayerGridData> layers;
+    public string seeds;
 
-    public LevelGridData(int levelNum)
+    public LevelGridData(int levelNum, string seeds)
     {
+
         levelNumber = levelNum;
         layers = new List<LayerGridData>();
+        this.seeds = seeds;
     }
 }
 
@@ -99,7 +107,7 @@ public class LevelLoader : MonoBehaviour
     {
         int minX = int.MaxValue, minY = int.MaxValue;
         int maxX = int.MinValue, maxY = int.MinValue;
-
+        int count = 0;
         // Tìm bounding box chung
         foreach (var layer in level.layers)
         {
@@ -111,18 +119,23 @@ public class LevelLoader : MonoBehaviour
                 minY = Math.Min(minY, intY);
                 maxX = Math.Max(maxX, intX);
                 maxY = Math.Max(maxY, intY);
+                count++;
+
             }
         }
 
         int width = maxX - minX + 1;
         int height = maxY - minY + 1;
 
-        var levelGridData = new LevelGridData(levelNumber);
-
+        var levelGridData = new LevelGridData(levelNumber, level.seeds[0]);
+        List<int> decode = DecodePacked(level.seeds[0], count, 50);
+        decode.Reverse();
+        int seedIndex = 0;
         foreach (var layer in level.layers)
         {
             // grid[row, col] = grid[y, x]
             var grid = new int[height, width];
+
 
             foreach (var tile in layer.tiles)
             {
@@ -132,7 +145,9 @@ public class LevelLoader : MonoBehaviour
                 int gridX = intX - minX; // col
                 int gridY = intY - minY; // row
 
-                grid[gridY, gridX] = 1;
+                // grid[gridY, gridX] = decode[seedIndex];
+                grid[gridY, gridX] = seedIndex % 2 == 0 ? 20 : 10;
+                seedIndex++;
             }
 
             var gridData = new GridData
@@ -147,7 +162,7 @@ public class LevelLoader : MonoBehaviour
             var layerGridData = new LayerGridData(layer.index, gridData);
             levelGridData.layers.Add(layerGridData);
         }
-
+        ExportLevelToFile(levelGridData);
         return levelGridData;
     }
 
@@ -234,91 +249,133 @@ public class LevelLoader : MonoBehaviour
         {
             // clone mảng gốc để không thay đổi dữ liệu ban đầu
             int[,] grid = (int[,])layer.gridData.Grid.Clone();
-            RandomizePairs(grid);
             list.Add(grid);
         }
-        AddSpecial(list);
+        // int count = 0;
+
+        // foreach (int[,] lst in list)
+        // {
+        //     foreach (int item in lst)
+        //     {
+        //         if (item != 0)
+        //         {
+        //             count++;
+        //         }
+        //     }
+        // }
+        // List<int> decode = DecodePacked(lv.seeds, count, 50);
+        // int inx = 0;
+        // foreach (int[,] lst in list)
+        // {
+        //     for (int y = 0; y < lst.GetLength(0); y++)
+        //     {
+        //         for (int x = 0; x < lst.GetLength(1); x++)
+        //         {
+        //             if (lst[y, x] != 0)
+        //             {
+        //                 lst[y, x] = decode[inx];
+        //                 inx++;
+        //             }
+        //         }
+        //     }
+
+        // }
         return list;
     }
 
-    private void AddSpecial(List<int[,]> list)
+
+
+    private static int GetBitLength(int maxValue)
     {
-        rand = new System.Random();
-        int i = rand.Next(0, list.Count);
-
-        int[,] grid = list[i];
-        int rows = grid.GetLength(0);
-        int cols = grid.GetLength(1);
-
-        int x, y, type;
-        do
-        {
-            x = rand.Next(0, cols);
-            y = rand.Next(0, rows);
-            type = grid[y, x];
-        }
-        while (type == 0);
-        list[i][y, x] = rand.Next(0, 2) == 0 ? (int)SpecialTile.FLOWER : (int)SpecialTile.SEASON;
-        foreach (int[,] g in list)
-        {
-            for (int r = 0; r < g.GetLength(0); r++)
-            {
-                for (int c = 0; c < g.GetLength(1); c++)
-                {
-                    if (g[r, c] == type)
-                    {
-                        g[r, c] = list[i][y, x];
-                        return;
-                    }
-                }
-            }
-        }
-
+        return (int)Math.Ceiling(Math.Log(maxValue, 2));
     }
 
-
-    private void RandomizePairs(int[,] grid)
+    private static List<byte> Base64ToArray(string base64)
     {
-        List<(int r, int c)> ones = new List<(int, int)>();
+        const string base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        var bytes = new List<byte>();
 
-        int rows = grid.GetLength(0);
-        int cols = grid.GetLength(1);
-
-        // gom tất cả ô có value = 1
-        for (int r = 0; r < rows; r++)
+        for (int i = 0; i < base64.Length; i += 4)
         {
-            for (int c = 0; c < cols; c++)
+            int enc1 = base64Chars.IndexOf(base64[i]);
+            int enc2 = base64Chars.IndexOf(base64[i + 1]);
+            int enc3 = base64[i + 2] == '=' ? 0 : base64Chars.IndexOf(base64[i + 2]);
+            int enc4 = base64[i + 3] == '=' ? 0 : base64Chars.IndexOf(base64[i + 3]);
+
+            byte byte1 = (byte)((enc1 << 2) | (enc2 >> 4));
+            byte byte2 = (byte)(((enc2 & 0b1111) << 4) | (enc3 >> 2));
+            byte byte3 = (byte)(((enc3 & 0b11) << 6) | enc4);
+
+            bytes.Add(byte1);
+            if (base64[i + 2] != '=') bytes.Add(byte2);
+            if (base64[i + 3] != '=') bytes.Add(byte3);
+        }
+
+        return bytes;
+    }
+    public static void ExportLevelToFile(LevelGridData levelGridData)
+    {
+        string path = Application.persistentDataPath + $"/level_{levelGridData.levelNumber}.txt";
+
+        using (StreamWriter writer = new StreamWriter(path, false))
+        {
+            writer.WriteLine($"LEVEL {levelGridData.levelNumber}");
+            writer.WriteLine($"Seeds: {levelGridData.seeds}");
+            writer.WriteLine($"Layers: {levelGridData.layers.Count}");
+            writer.WriteLine("=====================================");
+            int totalTiles = 0;
+            foreach (var layer in levelGridData.layers)
+                totalTiles += layer.gridData.Grid.Cast<int>().Count(v => v != 0);
+            List<int> decodeList = LevelLoader.DecodePacked(levelGridData.seeds, totalTiles, 50);
+            writer.WriteLine("DECODED LIST:");
+            writer.WriteLine(string.Join(", ", decodeList));
+            writer.WriteLine("=====================================");
+
+            foreach (var layerData in levelGridData.layers)
             {
-                if (grid[r, c] == 1)
+                writer.WriteLine($"Layer {layerData.layerNumber} (Size: {layerData.gridData.Width}x{layerData.gridData.Height}):");
+
+                // in grid
+                for (int y = layerData.gridData.Height - 1; y >= 0; y--)
                 {
-                    ones.Add((r, c));
+                    string line = "";
+                    for (int x = 0; x < layerData.gridData.Width; x++)
+                    {
+                        line += layerData.gridData.Grid[y, x].ToString("D2") + " ";
+                    }
+                    writer.WriteLine(line);
                 }
+
+                writer.WriteLine("-------------------------------------");
             }
         }
 
-        if (ones.Count == 0) return;
+        Debug.Log($"Exported level {levelGridData.levelNumber} to: {path}");
+    }
 
-        // xáo trộn danh sách
-        ones = ones.OrderBy(_ => rand.Next()).ToList();
+    public static List<int> DecodePacked(string base64, int itemCount, int maxValue = 50)
+    {
+        int bitsPerNumber = GetBitLength(maxValue);
+        List<byte> buffer = Base64ToArray(base64);
 
-        // xử lý theo từng cặp
-        for (int i = 0; i + 1 < ones.Count; i += 2)
+        var result = new List<int>();
+        int bitPos = 0;
+
+        for (int n = 0; n < itemCount; n++)
         {
-            int val = rand.Next(1, 20); // 1..5
-            var (r1, c1) = ones[i];
-            var (r2, c2) = ones[i + 1];
-            grid[r1, c1] = val;
-            grid[r2, c2] = val;
-        }
+            int value = 0;
+            for (int i = 0; i < bitsPerNumber; i++)
+            {
+                int byteIndex = bitPos / 8;
+                int bitOffset = bitPos % 8;
+                int bit = (buffer[byteIndex] >> bitOffset) & 1;
 
-        // nếu dư 1 ô thì xử lý riêng
-        if (ones.Count % 2 == 1)
-        {
-            var (r, c) = ones.Last();
-            // Ví dụ: ép nó trùng với 1 ô trong grid (chọn random 1 giá trị đã dùng)
-            int val = rand.Next(1, 6);
-            grid[r, c] = val;
+                value |= bit << i;
+                bitPos++;
+            }
+            result.Add(value);
         }
+        return result;
     }
 
 

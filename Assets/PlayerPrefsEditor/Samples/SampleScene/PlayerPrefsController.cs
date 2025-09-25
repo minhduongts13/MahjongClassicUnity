@@ -1,6 +1,4 @@
-﻿// Copyright 2025 Cyber Chaos Games. All Rights Reserved.
-
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerPrefsController : MonoBehaviour
 {

@@ -100,6 +100,7 @@ public static class global
     {
         return ToFolderPath(theme) + "/" + type.ToString();
     }
+
 }
 
 public static class Point
@@ -121,3 +122,4 @@ public enum SpecialTile
     FLOWER = -1,
     SEASON = -2
 }
+

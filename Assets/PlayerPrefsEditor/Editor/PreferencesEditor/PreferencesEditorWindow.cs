@@ -1,6 +1,4 @@
-﻿// Copyright 2025 Cyber Chaos Games. All Rights Reserved.
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEditorInternal;
@@ -8,21 +6,21 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using CCG.Utils;
-using CCG.Dialogs;
+using BgTools.Utils;
+using BgTools.Dialogs;
 
 #if (UNITY_EDITOR_LINUX || UNITY_EDITOR_OSX)
 using System.Text;
 using System.Globalization;
 #endif
 
-namespace CCG.PlayerPrefsEditor
+namespace BgTools.PlayerPrefsEditor
 {
     public class PreferencesEditorWindow : EditorWindow
     {
 #region ErrorValues
         private readonly int ERROR_VALUE_INT = int.MinValue;
-        private readonly string ERROR_VALUE_STR = "<ccgTools_error_24072017>";
+        private readonly string ERROR_VALUE_STR = "<bgTool_error_24072017>";
         #endregion //ErrorValues
 
         private enum PreferencesEntrySortOrder
@@ -74,7 +72,7 @@ namespace CCG.PlayerPrefsEditor
 #elif UNITY_EDITOR_OSX
         private readonly char[] invalidFilenameChars = { '$', '%', '&', '\\', '/', ':', '<', '>', '|', '~' };
 #endif
-        [MenuItem("Tools/CCG-Tools/PlayerPrefs Editor", false, 1)]
+        [MenuItem("Tools/BG Tools/PlayerPrefs Editor", false, 1)]
         static void ShowWindow()
         {
             PreferencesEditorWindow window = EditorWindow.GetWindow<PreferencesEditorWindow>(false, "Prefs Editor");
@@ -103,11 +101,11 @@ namespace CCG.PlayerPrefsEditor
 #endif
             entryAccessor.PrefEntryChangedDelegate = () => { updateView = true; };
 
-            monitoring = EditorPrefs.GetBool("CCG.PlayerPrefsEditor.WatchingForChanges", true);
+            monitoring = EditorPrefs.GetBool("BGTools.PlayerPrefsEditor.WatchingForChanges", true);
             if(monitoring)
                 entryAccessor.StartMonitoring();
 
-            sortOrder = (PreferencesEntrySortOrder) EditorPrefs.GetInt("CCG.PlayerPrefsEditor.SortOrder", 0);
+            sortOrder = (PreferencesEntrySortOrder) EditorPrefs.GetInt("BGTools.PlayerPrefsEditor.SortOrder", 0);
             searchfield = new MySearchField();
             searchfield.DropdownSelectionDelegate = () => { PrepareData(); };
 
@@ -166,7 +164,7 @@ namespace CCG.PlayerPrefsEditor
             userDefList = new ReorderableList(serializedObject, serializedObject.FindProperty("userDefList"), false, true, true, true);
             unityDefList = new ReorderableList(serializedObject, serializedObject.FindProperty("unityDefList"), false, true, false, false);
 
-            relSpliterPos = EditorPrefs.GetFloat("CCG.PlayerPrefsEditor.RelativeSpliterPosition", 100 / position.width);
+            relSpliterPos = EditorPrefs.GetFloat("BGTools.PlayerPrefsEditor.RelativeSpliterPosition", 100 / position.width);
 
             userDefList.drawHeaderCallback = (Rect rect) =>
             {
@@ -374,7 +372,7 @@ namespace CCG.PlayerPrefsEditor
             if (Event.current.type == EventType.MouseUp)
             {
                 moveSplitterPos = false;
-                EditorPrefs.SetFloat("CCG.PlayerPrefsEditor.RelativeSpliterPosition", relSpliterPos);
+                EditorPrefs.SetFloat("BGTools.PlayerPrefsEditor.RelativeSpliterPosition", relSpliterPos);
             }
         }
 
@@ -432,7 +430,7 @@ namespace CCG.PlayerPrefsEditor
                     {
                         sortOrder = 0;
                     }
-                    EditorPrefs.SetInt("CCG.PlayerPrefsEditor.SortOrder", (int) sortOrder);
+                    EditorPrefs.SetInt("BGTools.PlayerPrefsEditor.SortOrder", (int) sortOrder);
                     PrepareData(false);
                 }
 
@@ -441,7 +439,7 @@ namespace CCG.PlayerPrefsEditor
                 {
                     monitoring = !monitoring;
 
-                    EditorPrefs.SetBool("CCG.PlayerPrefsEditor.WatchingForChanges", monitoring);
+                    EditorPrefs.SetBool("BGTools.PlayerPrefsEditor.WatchingForChanges", monitoring);
 
                     if (monitoring)
                         entryAccessor.StartMonitoring();

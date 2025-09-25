@@ -69,7 +69,7 @@ public class BoardManager : MonoBehaviour
                     Tile t = GameManager.instance.tilePool.GetFirstItem();
                     t.Reset();
                     t.OffHint();
-                    t.transform.SetSiblingIndex(2 * (rows * (c + c % 2) + r + i * cols * rows) + (c % 2 == 0 ? 0 : 1));
+                    // t.transform.SetSiblingIndex(2 * (rows * (c + c % 2) + r + i * cols * rows) + (c % 2 == 0 ? 0 : 1));
                     t.idx = 2 * (rows * (c + c % 2) + r + i * cols * rows) + (c % 2 == 0 ? 0 : 1);
                     // t.transform.SetSiblingIndex((c - c % 2) * rows + (r - r % 2) * cols + i * rows * cols);
                     tileGrid[r, c] = t;
@@ -141,8 +141,8 @@ public class BoardManager : MonoBehaviour
         int rows = board[layerIndex].GetLength(0);
         int cols = board[layerIndex].GetLength(1);
 
-        float tileWidth = 125f / 2;
-        float tileHeight = 155f / 2;
+        float tileWidth = 120f / 2;
+        float tileHeight = 150f / 2;
 
         // Calculate total grid size
         float totalWidth = cols * tileWidth;
@@ -232,7 +232,7 @@ public class BoardManager : MonoBehaviour
 
     public void ApplySiblingOrder(List<int[,]> levelData, List<Tile[,]> board)
     {
-        List<(Tile tile, int index)> ordered = new List<(Tile, int)>();
+        List<Tile> ordered = new List<Tile>();
 
         for (int layer = 0; layer < levelData.Count; layer++)
         {
@@ -246,28 +246,29 @@ public class BoardManager : MonoBehaviour
             {
                 for (int c = 0; c < cols; c++)
                 {
-                    if (data[r, c] == 0) continue; // ô trống
+                    if (data[r, c] == 0) continue;
                     Tile t = grid[r, c];
                     if (t == null) continue;
 
-                    // công thức index độc nhất
-                    int index = 2 * (rows * (c + c % 2) + r + layer * cols * rows)
-                                + c % 2;
-
-                    ordered.Add((t, index));
+                    ordered.Add(t);
                 }
             }
         }
 
-        // sort toàn bộ tile theo index
-        ordered.Sort((a, b) => a.index.CompareTo(b.index));
+        // Sort theo CompareTo trong Tile
+        ordered.Sort();
 
-        // gán sibling index tuần tự
+        // Gán sibling index tuần tự
         for (int i = 0; i < ordered.Count; i++)
         {
-            ordered[i].tile.transform.SetSiblingIndex(i);
+            ordered[i].transform.SetSiblingIndex(i);
         }
     }
+
+
+
+
+
 
 
     public Tuple<Tile, Tile> getHint()

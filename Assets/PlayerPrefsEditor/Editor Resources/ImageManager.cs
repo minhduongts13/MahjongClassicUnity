@@ -1,13 +1,11 @@
-﻿// Copyright 2025 Cyber Chaos Games. All Rights Reserved.
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace CCG.Utils
+namespace BgTools.Utils
 {
     public class ImageManager
     {
