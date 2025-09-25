@@ -357,5 +357,9 @@ public class UIManager : MonoBehaviour
     {
         UIManager.ShowPopup(Popup.SHOP);
     }
-    
+
+    public void showChallenge()
+    {
+        UIManager.ShowPage(Page.LANTERN_CHALLENGE);
+    }
 }
