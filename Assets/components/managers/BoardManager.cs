@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
+using NUnit.Framework.Constraints;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -40,6 +41,7 @@ public class BoardManager : MonoBehaviour
 
     public async Task SetUp()
     {
+
         shuffling = true;
         remainTile = 0;
         List<Task> tasks = new List<Task>();
@@ -50,6 +52,7 @@ public class BoardManager : MonoBehaviour
         LevelLoader.PrintLevelGridData(GameManager.instance.currentLevel);
         mockUpLevel = LevelLoader.instance.getArray(GameManager.instance.currentLevel);
         Debug.Log("MOCK" + mockUpLevel);
+        Rescale(GameManager.instance.currentLevel);
         board = new List<Tile[,]>();
 
         for (int i = 0; i < mockUpLevel.Count; i++)
@@ -227,6 +230,15 @@ public class BoardManager : MonoBehaviour
             }
         }
         return neightbour;
+    }
+    public void Rescale(LevelGridData level)
+    {
+        int SizeX = level.layers.Max(layer => layer.gridData.Grid.GetLength(1));
+        int SizeY = level.layers.Max(layer => layer.gridData.Grid.GetLength(0));
+        float scaleX = 1080 / ((SizeX + 3) * (133 / 2f));
+        float scaleY = 1400 / ((SizeY + 3) * (166 / 2f));
+        float scale = Math.Min(scaleX, scaleY);
+        GameManager.instance.tilePool.transform.localScale = new Vector3(scale, scale, 1);
 
     }
 
