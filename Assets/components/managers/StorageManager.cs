@@ -5,7 +5,11 @@ public class StorageManager : MonoBehaviour
 
     void Start()
     {
-        
+
+    }
+    public int getJoinedLantern()
+    {
+        return PlayerPrefs.GetInt("joinedLantern", 0);
     }
     public int getCurrentLevel()
     {
@@ -61,6 +65,12 @@ public class StorageManager : MonoBehaviour
     public void setNumberShuffles(int shuffles)
     {
         PlayerPrefs.SetInt("shuffles", shuffles);
+        PlayerPrefs.Save();
+    }
+    
+    public void setJoinedLantern(int lantern)
+    {
+        PlayerPrefs.SetInt("joinedLantern", lantern);
         PlayerPrefs.Save();
     }
 }

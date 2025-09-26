@@ -40,7 +40,8 @@ public enum Popup
     TASK,
     WIN,
     LANGUAGES,
-    SHOP
+    SHOP,
+    LANTERN_INTRO,
 }
 
 public enum BACKGROUND
@@ -59,7 +60,8 @@ public enum BACKGROUND
 public enum Page
 {
     DASHBOARD,
-    PLAY
+    PLAY,
+    LANTERN_CHALLENGE,
 }
 public class Missiondata
 {

@@ -98,8 +98,8 @@ public class UIManager : MonoBehaviour
         if (hideOthers)
         {
             HideAllPopups();
+            instance.HideAllPages();
         }
-        instance.HideAllPages();
         Debug.Log($"shopw {popupType}");
 
         if (instance.pageNodes.TryGetValue(popupType, out GameObject popup) && popup != null)
@@ -357,5 +357,20 @@ public class UIManager : MonoBehaviour
     {
         UIManager.ShowPopup(Popup.SHOP);
     }
-    
+
+    public void showChallenge()
+    {
+        if (GameManager.instance.storageManager.getJoinedLantern() == 1)
+            UIManager.ShowPageLantern();
+        else UIManager.ShowPopup(Popup.LANTERN_INTRO);
+    }
+    public static void ShowPageLantern()
+    {
+        var lanternChallenge = instance.pageNodes[Page.LANTERN_CHALLENGE].GetComponent<LanternChallenge>();
+        if (lanternChallenge != null)
+        {
+            lanternChallenge.Show();
+        }
+        else Debug.LogError("LanternChallenge component not found on the LanternChallenge GameObject.");
+    }
 }
