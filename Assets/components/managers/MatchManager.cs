@@ -23,7 +23,9 @@ public class MatchManager : MonoBehaviour
     public void ShowBlock(Tile tile, bool top = true)
     {
         if (blockSeq != null && blockSeq.IsActive()) blockSeq.Kill();
-        Vector2 startPos = board.GetPosFromCoords(tile.coords.x, tile.coords.y, tile.layer) + new Vector2(0, 50);
+        Vector2 startPos = tile.transform.transform as RectTransform != null ?
+            (tile.transform as RectTransform).anchoredPosition :
+            Vector2.zero;
         blockNoti.rectTransform.anchoredPosition = startPos;
 
         blockNoti.gameObject.SetActive(true);
@@ -41,7 +43,7 @@ public class MatchManager : MonoBehaviour
 
         blockSeq = DOTween.Sequence();
         blockSeq.Append(blockNoti.rectTransform.DOAnchorPos(startPos + new Vector2(0, 100), 1.5f).SetEase(Ease.OutCubic));
-        blockSeq.Join(blockNoti.DOFade(0, 2f));
+        blockSeq.Join(blockNoti.DOFade(0, 2f).SetDelay(0.5f));
 
         foreach (var g in blockNoti.GetComponentsInChildren<Graphic>(true))
         {
@@ -87,8 +89,14 @@ public class MatchManager : MonoBehaviour
 
             tile1.isDraggableNow = false;
             tile2.isDraggableNow = false;
-            tile1.OffHint();
-            tile2.OffHint();
+            foreach (Tile[,] t in board.board)
+            {
+                foreach (Tile ti in t)
+                {
+                    if (ti.GetTileType() != 0)
+                        ti.OffHint();
+                }
+            }
             GameManager.instance.hinting = false;
 
             tile1.OnUnChose(move);

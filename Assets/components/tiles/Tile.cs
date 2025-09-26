@@ -413,7 +413,7 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
             return this.layer.CompareTo(other.layer);
 
 
-        // 2. Compare by Y difference
+        // 2.Compare by Y difference
         int dy = other.coords.y - this.coords.y;
         int dx = other.coords.x - this.coords.x;
         if (Math.Abs(dy) == 1)
@@ -422,10 +422,10 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
         if (Math.Abs(dx) == 1)
             return dy > 0 ? -1 : 1;
         if (Math.Abs(dy) >= 2)
-            return dy > 0 ? -1 : 1; // larger y goes behind
-
+            return dy > 0 ? -1 : 1;
         if (Math.Abs(dx) >= 2)
-            return dx > 0 ? -1 : 1; // larger x goes behind
+            return dx > 0 ? -1 : 1;
+
 
         return 1;
     }

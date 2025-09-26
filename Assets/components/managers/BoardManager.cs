@@ -14,6 +14,7 @@ public class BoardManager : MonoBehaviour
     public List<Tile[,]> board;
     public int remainTile;
     public bool shuffling = false;
+    public int t1 = 0, t2 = 0;
 
 
     void LevelMock()
@@ -76,6 +77,14 @@ public class BoardManager : MonoBehaviour
                     t.idx = 2 * (rows * (c + c % 2) + r + i * cols * rows) + (c % 2 == 0 ? 0 : 1);
                     // t.transform.SetSiblingIndex((c - c % 2) * rows + (r - r % 2) * cols + i * rows * cols);
                     tileGrid[r, c] = t;
+                    if (levelData[r, c] == 10)
+                    {
+                        t1++;
+                    }
+                    if (levelData[r, c] == 20)
+                    {
+                        t2++;
+                    }
                     t.layer = i;
                     t.BlockInput();
                     t.coords = new Vector2Int(c, r);
@@ -144,8 +153,8 @@ public class BoardManager : MonoBehaviour
         int rows = board[layerIndex].GetLength(0);
         int cols = board[layerIndex].GetLength(1);
 
-        float tileWidth = 120f / 2;
-        float tileHeight = 150f / 2;
+        float tileWidth = 125f / 2;
+        float tileHeight = 155f / 2;
 
         // Calculate total grid size
         float totalWidth = cols * tileWidth;
@@ -355,7 +364,9 @@ public class BoardManager : MonoBehaviour
         tile.Reset();
         tile.gameObject.SetActive(true);
 
+
         Vector2 p = GetPosFromCoords(tile.coords.x, tile.coords.y, tile.layer);
+        tile.Zoom(0);
         (tile.transform as RectTransform).anchoredPosition = p;
         tile.used = true;
     }

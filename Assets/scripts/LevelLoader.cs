@@ -251,6 +251,29 @@ public class LevelLoader : MonoBehaviour
             int[,] grid = (int[,])layer.gridData.Grid.Clone();
             list.Add(grid);
         }
+        int c = 0;
+        int OddCount = 0;
+        Vector3 xy = new Vector3();
+        foreach (int[,] arr in list)
+        {
+            for (int y = 0; y < arr.GetLength(0); y++)
+            {
+                for (int x = 0; x < arr.GetLength(1); x++)
+                {
+                    if (arr[y, x] != 0)
+                    {
+                        arr[y, x] = c % 2 == 0 ? 20 : 10;
+                        xy = new Vector3(x, y, list.IndexOf(arr));
+                        c++;
+                        if (arr[y, x] == 10) OddCount++;
+                    }
+                }
+            }
+        }
+        if (OddCount % 2 != 0)
+        {
+            list[(int)xy.z][(int)xy.y, (int)xy.x] = 20;
+        }
         // int count = 0;
 
         // foreach (int[,] lst in list)
