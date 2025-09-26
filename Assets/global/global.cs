@@ -40,7 +40,8 @@ public enum Popup
     TASK,
     WIN,
     LANGUAGES,
-    SHOP
+    SHOP,
+    LANTERN_INTRO,
 }
 
 public enum BACKGROUND
