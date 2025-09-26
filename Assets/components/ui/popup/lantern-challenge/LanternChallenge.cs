@@ -24,6 +24,10 @@ public class LanternChallenge : BasePage
         {
             UIManager.ShowPage(Page.LANTERN_CHALLENGE);
         });
+        if (firstTime == 1)
+        {
+            OnQuestion();
+        }
     }
     public void Hide()
     {
