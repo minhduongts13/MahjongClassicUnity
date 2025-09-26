@@ -364,12 +364,12 @@ public class UIManager : MonoBehaviour
             UIManager.ShowPageLantern();
         else UIManager.ShowPopup(Popup.LANTERN_INTRO);
     }
-    public static void ShowPageLantern()
+    public static void ShowPageLantern(int firstTime = 0)
     {
         var lanternChallenge = instance.pageNodes[Page.LANTERN_CHALLENGE].GetComponent<LanternChallenge>();
         if (lanternChallenge != null)
         {
-            lanternChallenge.Show();
+            lanternChallenge.Show(firstTime);
         }
         else Debug.LogError("LanternChallenge component not found on the LanternChallenge GameObject.");
     }

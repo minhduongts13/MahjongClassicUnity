@@ -7,7 +7,7 @@ public class LanternPopup : BasePopup
     {
         GameManager.instance.storageManager.setJoinedLantern(1);
         Hide();
-        UIManager.ShowPageLantern();
+        UIManager.ShowPageLantern(1);
     }
     public void Hide()
     {
