@@ -29,6 +29,7 @@ public class Combo : MonoBehaviour
         
         if (comboCount <= 9)
         {
+            GameManager.instance.missionManager.UpdateMissionProgress(2, 1);
             DOTween.Kill(number1.transform);
             DOTween.Kill(number2.transform);
             DOTween.Kill(combo.transform);

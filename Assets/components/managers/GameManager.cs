@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public TilePool tilePool;
     [SerializeField] public BoardManager board;
     [SerializeField] public FloatingPoint floatingPoint;
+    [SerializeField] public MissionManager missionManager;
 
     [SerializeField] public MatchManager matchManager;
     [SerializeField] public PointManager pointManager;
