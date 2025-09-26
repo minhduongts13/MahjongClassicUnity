@@ -204,10 +204,11 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
         button.interactable = true;
     }
 
-    public async Task MoveToRealPos()
+    public async Task MoveToRealPos(int delay = 0)
     {
         Vector2 pos = GameManager.instance.board.GetPosFromCoords(this.coords.x, this.coords.y, this.layer);
         RectTransform rt = transform as RectTransform;
+        await Task.Delay(delay);
         await rt.DOAnchorPos(pos, 0.35f).SetEase(Ease.OutSine).AsyncWaitForCompletion();
         offset = 0;
     }

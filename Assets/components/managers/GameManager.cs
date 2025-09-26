@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private int currentLevelNumber = 1;
+    public int currentLevelNumber = 1;
     public THEME currentTheme = THEME.Green;
     [SerializeField] public TilePool tilePool;
     [SerializeField] public BoardManager board;
@@ -77,10 +77,12 @@ public class GameManager : MonoBehaviour
         tilePool.SetUp();
         setupTool();
 
-        await board.SetUp();
+        Task t = board.SetUp();
         matchManager.SetUp();
         pointManager.Setup();
+
         ShowMatchable();
+        await t;
     }
 
     public async void Undo()
@@ -154,6 +156,7 @@ public class GameManager : MonoBehaviour
         Debug.Log(currentLevel.levelNumber);
         await board.SetUp();
         pointManager.OnChangeLevel();
+
         storageManager.setCurrentLevel(currentLevelNumber);
         combo.ResetCombo();
         Debug.Log("reload");

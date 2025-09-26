@@ -121,7 +121,10 @@ public class BoardManager : MonoBehaviour
                 for (int c = 0; c < cols; c++)
                 {
                     if (board[i][r, c] != null)
-                        (board[i][r, c].transform as RectTransform).anchoredPosition = GetPosFromCoords(c, r, i);
+                    {
+                        int offset = c < cols / 2 ? -1000 : 1000;
+                        (board[i][r, c].transform as RectTransform).anchoredPosition = GetPosFromCoords(c, r, i) + new Vector2(offset, 0);
+                    }
                     if (levelData[r, c] == 0)
                     {
                         board[i][r, c].Kill();
@@ -132,13 +135,16 @@ public class BoardManager : MonoBehaviour
                     {
 
                         board[i][r, c].setTileType(levelData[r, c]);
-                        tasks.Add(board[i][r, c].Zoom(i));
+                        // tasks.Add(board[i][r, c].Zoom(i));
+                        tasks.Add(board[i][r, c].MoveToRealPos((i + 1) * 100 + r * 20));
                         remainTile++;
                     }
                 }
             }
         }
+
         await Task.WhenAll(tasks);
+
         shuffling = false;
 
 

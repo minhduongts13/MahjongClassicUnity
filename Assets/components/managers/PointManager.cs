@@ -14,7 +14,7 @@ public class PointManager : MonoBehaviour
     {
         combo = 0;
         score = 0;
-        LevelText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.currentLevel.levelNumber.ToString();
+        LevelText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.currentLevelNumber.ToString();
         ScoreText.GetComponent<TMPro.TextMeshProUGUI>().text = "0";
         MatchesText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.board.getAllHints().ToString();
     }
@@ -30,7 +30,7 @@ public class PointManager : MonoBehaviour
         score = 0;
         combo = 0;
         currentBonus = 0;
-        LevelText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.currentLevel.levelNumber.ToString();
+        LevelText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.currentLevelNumber.ToString();
         ScoreText.GetComponent<TMPro.TextMeshProUGUI>().text = "0";
         MatchesText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.board.getAllHints().ToString();
     }
