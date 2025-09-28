@@ -95,14 +95,16 @@ public class MissionManager : MonoBehaviour
     }
     public void ShowPopup()
     
-    {                  
+    {
+        DOTween.Kill(this.notif.transform);        
          Vector3 origin = this.notif.transform.localPosition;
         this.notif.transform.localPosition = origin + new Vector3(0, 400, 0);
         this.notif.SetActive(true);
         this.notif.transform.DOLocalMove(origin, 0.5f).SetEase(Ease.OutBack).OnComplete(() =>
         {   
-            this.notif.SetActive(false);
-
+            DOVirtual.DelayedCall(0.8f, () => {
+                    this.notif.SetActive(false);
+                });
         });
     }
 }

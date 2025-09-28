@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
 
         // SetUp();
     }
-    
+
 
     private async void SetUp()
     {
@@ -322,6 +322,10 @@ public class GameManager : MonoBehaviour
     public async void Replay()
     {
         await Reload();
+    }
+    public void showReward()
+    {
+        UIManager.ShowPopup(Popup.Reward);
     }
 
 }

@@ -105,40 +105,32 @@ public class WinPopup : BasePopup
     }
  
     private async Task popAllRibbon()
+{
+    Sequence seq = DOTween.Sequence();
+
+    for (int i = 0; i < rubbon.Length; i++)
     {
-        Sequence seq = DOTween.Sequence();
- 
-        for (int i = 0; i < 2; i++)
+        GameObject hi = rubbon[i];
+        hi.SetActive(true);
+        hi.transform.localScale = Vector3.zero;
+
+        var scaleTween = hi.transform
+            .DOScale(Vector3.one, 1.03f)
+            .SetEase(Ease.OutBack, i < 2 ? 5f : 2f);
+
+        if (i < 2)
         {
-            GameObject hi = rubbon[i];
-            hi.SetActive(true);
-            hi.transform.localScale = Vector3.zero;
- 
-            seq.Join(
-                hi.transform.DOScale(Vector3.one, 1.03f)
-                .SetEase(Ease.OutBack, 5f)
-            );
+            seq.Join(scaleTween);
         }
-       
-        for (int i = 2; i < 4; i++)
-        {  
-            GameObject hi = rubbon[i];
-            Vector3 origin = hi.transform.position;
-            if(i==2) hi.transform.position = origin + new Vector3(1f, 0, 0);
-              else hi.transform.position = origin - new Vector3(1f, 0, 0);
-            hi.SetActive(true);
-            hi.transform.localScale = Vector3.zero;
-            Sequence ribbonSeq = DOTween.Sequence();
-            ribbonSeq.Join(hi.transform.DOScale(Vector3.one, 1.03f)
-                .SetEase(Ease.OutBack, 2.0f));
-            ribbonSeq.Join(hi.transform.DOMove(origin, 0.5f));
-           
-            seq.Insert(0.13f, ribbonSeq);
+        else
+        {
+            seq.Insert(0.13f, scaleTween);
         }
- 
-        await seq.AsyncWaitForCompletion();
     }
- 
+
+    await seq.AsyncWaitForCompletion();
+}
+
     private async Task popFan()
     {
         List<Task> animationTasks = new List<Task>();
