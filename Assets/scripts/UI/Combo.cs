@@ -14,7 +14,7 @@ public class Combo : MonoBehaviour
     private Sequence currentFadeSequence;
 
     public Sequence sequence;
-        public Sequence fadeSequence;
+    public Sequence fadeSequence;
 
 
     public void addCombo()
@@ -128,8 +128,8 @@ public class Combo : MonoBehaviour
                 });
             });
         }
-        
-        
+
+
     }
 
     public void ResetCombo()
