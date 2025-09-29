@@ -442,6 +442,10 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+        await Task.WhenAll(task);
+        AnimationManager.instance.ShuffleEffect();
+        await Task.Delay(400);
+        List<Task> ta = new();
 
         // Fisher–Yates shuffle
         System.Random rand = new System.Random();
@@ -490,10 +494,7 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        await Task.WhenAll(task);
-        AnimationManager.instance.ShuffleEffect();
-        await Task.Delay(400);
-        List<Task> ta = new();
+
 
         foreach (Tile[,] tiles in board)
         {
