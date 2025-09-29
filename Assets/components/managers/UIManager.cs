@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 //hẹ hẹ
 [System.Serializable]
 public class PopupMapping
@@ -122,7 +122,7 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning($"not found: {popupType}");
         }
     }
-    public static void ShowPopup(Popup popupType, bool hideOthers = true, int curr = 0)
+    public static async void ShowPopup(Popup popupType, bool hideOthers = true, int curr = 0)
     {
         if (instance == null)
         {
@@ -144,7 +144,9 @@ public class UIManager : MonoBehaviour
 
             popup.SetActive(true);
             popup.transform.localScale = Vector3.zero;
-            popup.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+            float screenX = GameManager.instance.board.anchor.rect.width;
+            float scaleFactor = screenX / 1080;
+            await popup.transform.DOScale(Vector3.one * scaleFactor, 0.2f).SetEase(Ease.OutBack).AsyncWaitForCompletion();
 
 
             if (instance.popupComponents.TryGetValue(popupType, out BasePopup popupComponent) &&

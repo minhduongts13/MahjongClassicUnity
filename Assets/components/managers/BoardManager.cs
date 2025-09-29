@@ -262,8 +262,8 @@ public class BoardManager : MonoBehaviour
         int sizeX = level.layers.Max(layer => layer.gridData.Grid.GetLength(1));
         int sizeY = level.layers.Max(layer => layer.gridData.Grid.GetLength(0));
 
-        float scaleX = sceneX / ((sizeX + 3) * (tileWidth / 2f));
-        float scaleY = sceneY / ((sizeY + 3) * (tileHeight / 2f));
+        float scaleX = (sceneX - 100) / ((sizeX + 3) * (tileWidth / 2f));
+        float scaleY = (sceneY - 100) / ((sizeY + 3) * (tileHeight / 2f));
 
         float scale = Mathf.Min(scaleX, scaleY);
         GameManager.instance.tilePool.transform.localScale = new Vector3(scale, scale, 1);

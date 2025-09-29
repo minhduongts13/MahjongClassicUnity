@@ -18,6 +18,9 @@ public class TabHandle : BasePopup
         var theme = themes.GetChild((int)themeIndex);
         Transform selected = theme.GetChild(theme.childCount - 1);
         selected.gameObject.SetActive(true);
+
+
+
     }
 
     public void OnShowTiles()

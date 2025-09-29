@@ -2,20 +2,20 @@ using UnityEngine;
 
 public abstract class BasePopup : MonoBehaviour
 {
-    public virtual void OnPopupShow(int curr = 0) 
-    { 
+    public virtual void OnPopupShow(int curr = 0)
+    {
     }
 
-    public virtual void OnPopupHide() 
-    { 
+    public virtual void OnPopupHide()
+    {
     }
 
-    public virtual void OnPopupDestroy() 
-    { 
+    public virtual void OnPopupDestroy()
+    {
     }
 
-    protected virtual void ClosePopup() 
-    { 
+    protected virtual void ClosePopup()
+    {
         if (UIManager.Instance != null)
         {
             var popupName = this.gameObject.name;
