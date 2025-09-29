@@ -79,6 +79,14 @@ public class MatchManager : MonoBehaviour
             GameManager.instance.UnChose();
             // tile2.Kill();
             addMove(tile1, tile2);
+            foreach (Tile[,] t in board.board)
+            {
+                foreach (Tile ti in t)
+                {
+                    if (ti.GetTileType() != 0)
+                        ti.OffHint();
+                }
+            }
             tile1.setTileType(0);
             tile2.setTileType(0);
             board.remainTile -= 2;
@@ -89,14 +97,7 @@ public class MatchManager : MonoBehaviour
 
             tile1.isDraggableNow = false;
             tile2.isDraggableNow = false;
-            foreach (Tile[,] t in board.board)
-            {
-                foreach (Tile ti in t)
-                {
-                    if (ti.GetTileType() != 0)
-                        ti.OffHint();
-                }
-            }
+
             GameManager.instance.hinting = false;
 
             tile1.OnUnChose(move);

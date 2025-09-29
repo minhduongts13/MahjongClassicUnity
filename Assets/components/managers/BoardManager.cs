@@ -6,6 +6,7 @@ using DG.Tweening;
 using NUnit.Framework.Constraints;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.UIElements;
 
 public class BoardManager : MonoBehaviour
@@ -15,6 +16,8 @@ public class BoardManager : MonoBehaviour
     public int remainTile;
     public bool shuffling = false;
     public int t1 = 0, t2 = 0;
+    [SerializeField] private RectTransform topBar;
+    [SerializeField] private RectTransform bottomBar;
 
 
     void LevelMock()
@@ -46,6 +49,8 @@ public class BoardManager : MonoBehaviour
         shuffling = true;
         remainTile = 0;
         List<Task> tasks = new List<Task>();
+        var middlePoint = (topBar.anchoredPosition.y + bottomBar.anchoredPosition.y) / 2;
+        (GameManager.instance.tilePool.transform as RectTransform).anchoredPosition = new Vector2(0, middlePoint);
         Debug.Log("aaa");
         // LevelMock();
         // mockUpLevel = GameManager.instance.currentLevel.layers;
@@ -136,7 +141,7 @@ public class BoardManager : MonoBehaviour
 
                         board[i][r, c].setTileType(levelData[r, c]);
                         // tasks.Add(board[i][r, c].Zoom(i));
-                        tasks.Add(board[i][r, c].MoveToRealPos((i + 1) * 100 + r * 20));
+                        tasks.Add(board[i][r, c].MoveToRealPos((i + 1) * 80 + (Math.Abs(r - rows / 2)) * 50, Ease.OutCirc));
                         remainTile++;
                     }
                 }
@@ -414,7 +419,7 @@ public class BoardManager : MonoBehaviour
 
                     RectTransform rt = t.transform as RectTransform;
                     t.ToggleShadow(false);
-                    task.Add(rt.DOAnchorPos(new Vector2(0, 0), 0.5f).AsyncWaitForCompletion());
+                    task.Add(rt.DOAnchorPos(new Vector2(0, 0), 0.35f).SetEase(Ease.InCirc).AsyncWaitForCompletion());
                 }
             }
         }
@@ -468,6 +473,7 @@ public class BoardManager : MonoBehaviour
 
         await Task.WhenAll(task);
         await Task.Delay(500);
+        AnimationManager.instance.ShuffleEffect();
 
         foreach (Tile[,] tiles in board)
         {
@@ -475,7 +481,7 @@ public class BoardManager : MonoBehaviour
             {
                 if (t != null && t.GetTileType() != 0)
                 {
-                    t.MoveToRealPos();
+                    t.MoveToRealPos(0, Ease.OutBack);
                     t.ToggleShadow(true);
                 }
             }

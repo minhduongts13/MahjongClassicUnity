@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 1460501316326729709}
   - component: {fileID: 5719858662676628870}
   - component: {fileID: 3097231117479000350}
+  - component: {fileID: 3503514152244670005}
   m_Layer: 5
   m_Name: 'hint '
   m_TagString: Untagged
@@ -212,6 +213,18 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &3097231117479000350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079924889159541438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
+--- !u!114 &3503514152244670005
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -668,9 +681,9 @@ RectTransform:
   - {fileID: 3579074097346771752}
   m_Father: {fileID: 1386279898792394314}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.90200007}
-  m_AnchorMax: {x: 0.5, y: 0.90200007}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -209}
   m_SizeDelta: {x: 1040, y: 135}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2122725146652910043
@@ -724,6 +737,7 @@ GameObject:
   - component: {fileID: 2171225362844699158}
   - component: {fileID: 1218374067066637124}
   - component: {fileID: 7744847355223025373}
+  - component: {fileID: 6380173081878199895}
   m_Layer: 5
   m_Name: 'shuffle '
   m_TagString: Untagged
@@ -848,6 +862,18 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &7744847355223025373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2526872980871396690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
+--- !u!114 &6380173081878199895
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1008,6 +1034,7 @@ GameObject:
   - component: {fileID: 6139867141008870040}
   - component: {fileID: 5134371114168792478}
   - component: {fileID: 1304832808545610198}
+  - component: {fileID: 1292830435927221057}
   m_Layer: 5
   m_Name: 'undo '
   m_TagString: Untagged
@@ -1130,6 +1157,18 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1304832808545610198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3194124565407849784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
+--- !u!114 &1292830435927221057
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1386,9 +1425,9 @@ RectTransform:
   - {fileID: 3279153024720346770}
   m_Father: {fileID: 1386279898792394314}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.90200007}
-  m_AnchorMax: {x: 0.5, y: 0.90200007}
-  m_AnchoredPosition: {x: 0, y: -1473}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 204}
   m_SizeDelta: {x: 1040, y: 135}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7411745927907083442
