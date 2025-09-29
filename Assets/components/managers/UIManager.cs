@@ -373,4 +373,24 @@ public class UIManager : MonoBehaviour
         }
         else Debug.LogError("LanternChallenge component not found on the LanternChallenge GameObject.");
     }
+
+    public static void ShowPageBadges()
+    {
+        var badges = instance.pageNodes[Page.BADGES].GetComponent<Badges>();
+        if (badges != null)
+        {
+            badges.Show();
+        }
+        else Debug.LogError("Badges component not found on the Badges GameObject.");
+    }
+
+    public static void ShowPageDaily()
+    {
+        var dailyChallenge = instance.pageNodes[Page.DAILY_CHALLENGE].GetComponent<DailyChallenge>();
+        if (dailyChallenge != null)
+        {
+            dailyChallenge.Show();
+        }
+        else Debug.LogError("DailyChallenge component not found on the DailyChallenge GameObject.");
+    }
 }

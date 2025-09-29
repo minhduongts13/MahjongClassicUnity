@@ -9,56 +9,49 @@ using System;
 using System.Collections.Generic;
 
 using UnityEngine.EventSystems;
- 
-public class CalendarController : MonoBehaviour {
+
+public class CalendarController : MonoBehaviour
+{
 
     [Header("UI References")]
 
     public GridLayoutGroup grid;                // Grid container (7 columns)
     public GameObject dayCellPrefab;            // prefab DayCell
     public TextMeshProUGUI monthText;
-    public Button prevButton;
-    public Button nextButton;
+    public GameObject prevButton;
+    public GameObject nextButton;
     public Transform weekHeaderParent;          // optional: for "Sun Mon ..."
 
+    public GameObject playButton;
+    public GameObject restartButton;
+    public GameObject playBackButton;
+    public CellDay selectedDayCell;
     [Header("Event Data (example)")]
-    public List<string> eventDatesISO;         // list of "yyyy-MM-dd" with events (or populate via code)
-
-    // OR better: HashSet<DateTime> eventDates
- 
-    HashSet<string> eventDateSet = new HashSet<string>();
     DateTime currentMonth;
     List<GameObject> cells = new List<GameObject>();
-    DayCell selectedCell;
- 
-    void Start() {
+    CellDay selectedCell;
 
-        // parse eventDatesISO into set
 
-        foreach (var s in eventDatesISO) {
-
-            eventDateSet.Add(s);
-
-        }
-
- 
+    public void Setup()
+    {
         currentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-
         BuildCalendar(currentMonth);
-
     }
- 
-    void ChangeMonth(int delta) {
 
+    public void ChangeMonth(int delta)
+    {
+        if (delta == 0) return;
         currentMonth = currentMonth.AddMonths(delta);
 
         BuildCalendar(currentMonth);
 
     }
- 
-    void ClearCells() {
 
-        foreach (var go in cells) {
+    void ClearCells()
+    {
+
+        foreach (var go in cells)
+        {
 
             Destroy(go);
 
@@ -67,27 +60,23 @@ public class CalendarController : MonoBehaviour {
         cells.Clear();
 
     }
- 
-    void BuildCalendar(DateTime month) {
+
+    void BuildCalendar(DateTime month)
+    {
 
         ClearCells();
- 
-        // Header text: "September 2025"
-
-        monthText.text = month.ToString("MMMM yyyy");
- 
-        // compute first day offset
-
+        if (month.Month == DateTime.Today.Month && month.Year == DateTime.Today.Year)
+        {
+            nextButton.SetActive(false);
+        }
+        else
+        {
+            nextButton.SetActive(true);
+        }
+        monthText.text = month.ToString("MM/yyyy");
         DateTime firstOfMonth = new DateTime(month.Year, month.Month, 1);
-
-        // if you want Monday as first day, adjust:
-
-        // int startOffset = ((int)firstOfMonth.DayOfWeek + 6) % 7;
-
-        int startOffset = (int)firstOfMonth.DayOfWeek; // Sunday=0
- 
+        int startOffset = (int)firstOfMonth.DayOfWeek; // Sunday=0  
         int daysInMonth = DateTime.DaysInMonth(month.Year, month.Month);
- 
         // (Optional) show previous month's trailing days:
 
         DateTime prevMonth = month.AddMonths(-1);
@@ -96,100 +85,81 @@ public class CalendarController : MonoBehaviour {
 
         // Create leading blanks (or prev-month days)
 
-        for (int i = 0; i < startOffset; i++) {
+        for (int i = 0; i < startOffset; i++)
+        {
 
             int dayNum = daysInPrev - (startOffset - 1) + i;
 
             DateTime dt = new DateTime(prevMonth.Year, prevMonth.Month, dayNum);
 
-            CreateCell(dt, isCurrentMonth:false);
+            CreateCell(dt, isCurrentMonth: false);
 
         }
- 
+
         // main days
-
-        for (int d = 1; d <= daysInMonth; d++) {
-
+        for (int d = 1; d <= daysInMonth; d++)
+        {
             DateTime dt = new DateTime(month.Year, month.Month, d);
-
-            CreateCell(dt, isCurrentMonth:true);
-
+            CreateCell(dt);
         }
- 
-        // fill trailing to complete 6 rows (optional)
-
-        int totalCells = startOffset + daysInMonth;
-
-        int trailing = (7 - (totalCells % 7)) % 7;
-
-        DateTime nextMonth = month.AddMonths(1);
-
-        for (int i = 1; i <= trailing; i++) {
-
-            DateTime dt = new DateTime(nextMonth.Year, nextMonth.Month, i);
-
-            CreateCell(dt, isCurrentMonth:false);
-
+        if (month.Month != DateTime.Today.Month || month.Year != DateTime.Today.Year)
+        {
+            selectedCell = cells[cells.Count - 1].GetComponent<CellDay>();
+            cells[cells.Count - 1].GetComponent<CellDay>().SetSelected();
         }
-
     }
- 
-    void CreateCell(DateTime date, bool isCurrentMonth) {
 
+    void CreateCell(DateTime date, bool isCurrentMonth = true)
+    {
         GameObject go = Instantiate(dayCellPrefab, grid.transform);
-
-        var dc = go.GetComponent<DayCell>();
-
+        var dc = go.GetComponent<CellDay>();
         bool isToday = date.Date == DateTime.Today;
-
-        bool hasEvent = eventDateSet.Contains(date.ToString("yyyy-MM-dd"));
- 
-        dc.Initialize(date, isCurrentMonth, isToday, hasEvent, OnDayClicked);
-
+        dc.Initialize(date, isToday, OnDayClicked);
+        if (!isCurrentMonth)
+        {
+            dc.Blank();
+        }
         cells.Add(go);
-
     }
- 
-    void OnDayClicked(DateTime date) {
 
+    void OnDayClicked(GameObject CellDay)
+    {
+        selectedCell = CellDay.GetComponent<CellDay>();
         // deselect previous
+        foreach (var go in cells)
+        {
 
-        foreach (var go in cells) {
-
-            var dc = go.GetComponent<DayCell>();
+            var dc = go.GetComponent<CellDay>();
 
             if (dc != null) dc.SetSelected(false);
 
         }
- 
-        // find this cell and set selected (simple approach)
-
-        foreach (var go in cells) {
-
-            var dc = go.GetComponent<DayCell>();
-
-            if (dc != null && dc != null && dc.gameObject.activeSelf) {
-
-                // match by date text
-
-                if (dc.dayText.text == date.Day.ToString()) {
-
-                    dc.SetSelected(true);
-
-                    break;
-
-                }
-
-            }
-
-        }
- 
-        Debug.Log("Clicked date: " + date.ToString("yyyy-MM-dd"));
-
-        // show popup or events...
-
+        var cd = CellDay.GetComponent<CellDay>();
+        if (cd != null) cd.SetSelected();
+        changeButton();
     }
 
+    void changeButton()
+    {
+        if (GameManager.instance.storageManager.hasPlayedDay(selectedCell.date))
+        {
+            playButton.SetActive(false);
+            restartButton.SetActive(true);
+            playBackButton.SetActive(false);
+        }
+        else if (selectedCell.date == DateTime.Today)
+        {
+            playButton.SetActive(true);
+            restartButton.SetActive(false);
+            playBackButton.SetActive(false);
+        }
+        else if (selectedCell.date < DateTime.Today)
+        {
+            playButton.SetActive(false);
+            restartButton.SetActive(false);
+            playBackButton.SetActive(true);
+        }
+    }
 }
 
  

@@ -62,6 +62,8 @@ public enum Page
     DASHBOARD,
     PLAY,
     LANTERN_CHALLENGE,
+    DAILY_CHALLENGE,
+    BADGES,
 }
 public class Missiondata
 {
