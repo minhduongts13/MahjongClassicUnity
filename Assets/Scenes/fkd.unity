@@ -542,7 +542,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7460353256772967336, guid: 0d8a620b503d44c75afcdb519d1acfd4, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 20
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 7460353256772967336, guid: 0d8a620b503d44c75afcdb519d1acfd4, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2460,7 +2460,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 36
+        scalar: 20
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -7018,7 +7018,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5232622111158114327, guid: 749b901f8ec1741509cad0b5d76b391e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5232622111158114327, guid: 749b901f8ec1741509cad0b5d76b391e, type: 3}
       propertyPath: m_AnchorMin.x
@@ -7026,7 +7026,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5232622111158114327, guid: 749b901f8ec1741509cad0b5d76b391e, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5232622111158114327, guid: 749b901f8ec1741509cad0b5d76b391e, type: 3}
       propertyPath: m_SizeDelta.x
@@ -7070,7 +7070,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5232622111158114327, guid: 749b901f8ec1741509cad0b5d76b391e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 208
+      value: -377
       objectReference: {fileID: 0}
     - target: {fileID: 5232622111158114327, guid: 749b901f8ec1741509cad0b5d76b391e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -7927,6 +7927,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PLAY
       objectReference: {fileID: 0}
+    - target: {fileID: 2165846953744684262, guid: 7fb658914826d47d3ba26ee016e8ea49, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3203652579916055696, guid: 7fb658914826d47d3ba26ee016e8ea49, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -8539,7 +8543,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1243576593
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10176,10 +10180,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1157187459}
-    - target: {fileID: 621164267165455246, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 950
-      objectReference: {fileID: 0}
     - target: {fileID: 1386279898792394314, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -10260,10 +10260,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1674713616192815178, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_text
-      value: Level 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1722364797648418701, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -10276,66 +10272,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'DASHBOARD '
       objectReference: {fileID: 0}
-    - target: {fileID: 2165846953744684262, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3086391180269644446, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3100097868543151268, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3100097868543151268, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3100097868543151268, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1157187459}
-    - target: {fileID: 3100097868543151268, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3100097868543151268, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: showChallenge
-      objectReference: {fileID: 0}
-    - target: {fileID: 3100097868543151268, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UIManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 3100097868543151268, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 4452910274335942119, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1157187459}
-    - target: {fileID: 5088515473478536771, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1157187459}
-    - target: {fileID: 5088515473478536771, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: showTheme
-      objectReference: {fileID: 0}
-    - target: {fileID: 5498803458525416248, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 950
-      objectReference: {fileID: 0}
-    - target: {fileID: 6335024728093241465, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-      propertyPath: m_Name
-      value: 'LanternChallange '
-      objectReference: {fileID: 0}
     - target: {fileID: 7240066053414630449, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1157187459}
+    - target: {fileID: 7710385876538131701, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7710385876538131701, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7710385876538131701, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 451
+      objectReference: {fileID: 0}
     - target: {fileID: 7735894579850454998, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -10345,9 +10305,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1157187459}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 4578424297057033612, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
-    - {fileID: 398935927945766241, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 533bd1f30a0b84b13a0a78918a8cb4d9, type: 3}
@@ -11551,7 +11509,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 20
+        scalar: 5
         minScalar: 30
         maxCurve:
           serializedVersion: 2

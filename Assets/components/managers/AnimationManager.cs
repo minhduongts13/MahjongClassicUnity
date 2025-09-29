@@ -35,7 +35,7 @@ public class AnimationManager : MonoBehaviour
         cg.DOFade(0f, 0.2f);
 
         await shuffleEffect.transform
-            .DOScale(1f, 0.2f)
+            .DOScale(1.2f, 0.2f)
             .SetEase(Ease.OutSine)
             .AsyncWaitForCompletion();
         // shuffleParticle.gameObject.SetActive(false);

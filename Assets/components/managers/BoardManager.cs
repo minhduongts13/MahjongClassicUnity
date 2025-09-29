@@ -181,7 +181,7 @@ public class BoardManager : MonoBehaviour
         float posY = originY - (y * tileHeight);
 
         // Apply layer offset (up and left)
-        float layerOffsetX = -tileWidth * 0.2f * layerIndex;  // shift left
+        float layerOffsetX = -tileWidth * 0.18f * layerIndex;  // shift left
         float layerOffsetY = tileHeight * 0.2f * layerIndex;  // shift up
 
         posX += layerOffsetX;

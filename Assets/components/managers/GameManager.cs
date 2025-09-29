@@ -183,7 +183,7 @@ public class GameManager : MonoBehaviour
 
     public void ShowMatchable()
     {
-
+        if (board.board == null) return;
         foreach (Tile[,] grid in board.board)
         {
             foreach (Tile t in grid)
