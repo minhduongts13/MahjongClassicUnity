@@ -106,6 +106,7 @@ public class CalendarController : MonoBehaviour
         {
             selectedCell = cells[cells.Count - 1].GetComponent<CellDay>();
             cells[cells.Count - 1].GetComponent<CellDay>().SetSelected();
+            selectedCell = cells[cells.Count - 1].GetComponent<CellDay>();
         }
     }
 
@@ -114,6 +115,10 @@ public class CalendarController : MonoBehaviour
         GameObject go = Instantiate(dayCellPrefab, grid.transform);
         var dc = go.GetComponent<CellDay>();
         bool isToday = date.Date == DateTime.Today;
+        if (isToday)
+        {
+            selectedCell = dc;
+        }
         dc.Initialize(date, isToday, OnDayClicked);
         if (!isCurrentMonth)
         {

@@ -393,4 +393,11 @@ public class UIManager : MonoBehaviour
         }
         else Debug.LogError("DailyChallenge component not found on the DailyChallenge GameObject.");
     }
+
+    public static void DailyChallengePlay(DateTime date)
+    {
+        UIManager.ShowPage(Page.PLAY);
+        int randomValue = UnityEngine.Random.Range(1, 3001);
+        GameManager.instance.JumpTo(randomValue, date);
+    }
 }

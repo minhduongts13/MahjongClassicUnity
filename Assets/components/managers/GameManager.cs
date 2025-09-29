@@ -84,6 +84,21 @@ public class GameManager : MonoBehaviour
         ShowMatchable();
         await t;
     }
+    public async void JumpTo(int level, DateTime date)
+    {
+        Debug.Log("Jumping to level: " + level);
+        currentLevel = LevelLoader.instance.GetLevel(level);
+        moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
+        UnChose();
+        tilePool.ReturnAll();
+        Debug.Log(currentLevel.levelNumber);
+        // await board.SetUp();
+        pointManager.OnDailyChallenge(date);
+
+        combo.ResetCombo();
+        Debug.Log("reload");
+        ShowMatchable();
+    }
 
     public async void Undo()
     {

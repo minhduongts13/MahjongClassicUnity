@@ -6,6 +6,7 @@ public class PointManager : MonoBehaviour
     public GameObject LevelText;
     public GameObject ScoreText;
     public GameObject MatchesText;
+    public GameObject LevelShowText;
 
     private int score = 0;
     private int combo = 0;
@@ -31,6 +32,17 @@ public class PointManager : MonoBehaviour
         combo = 0;
         currentBonus = 0;
         LevelText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.currentLevelNumber.ToString();
+        ScoreText.GetComponent<TMPro.TextMeshProUGUI>().text = "0";
+        MatchesText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.board.getAllHints().ToString();
+    }
+
+    public void OnDailyChallenge(DateTime date)
+    {
+        score = 0;
+        combo = 0;
+        currentBonus = 0;
+        LevelShowText.GetComponent<TMPro.TextMeshProUGUI>().text = "Date";
+        LevelText.GetComponent<TMPro.TextMeshProUGUI>().text = date.ToString("MM/dd");
         ScoreText.GetComponent<TMPro.TextMeshProUGUI>().text = "0";
         MatchesText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.board.getAllHints().ToString();
     }
@@ -66,4 +78,5 @@ public class PointManager : MonoBehaviour
         return currentBonus;
     }
 
+    
 }

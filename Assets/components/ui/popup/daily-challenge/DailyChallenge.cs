@@ -55,4 +55,11 @@ public class DailyChallenge : BasePage
             });
     }
 
+    public void OnPlay()
+    {
+        var selectedDate = CalendarController.selectedDayCell.date;
+
+        UIManager.DailyChallengePlay(selectedDate);
+    }
+
 }
