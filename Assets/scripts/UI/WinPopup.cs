@@ -21,12 +21,17 @@ public class WinPopup : BasePopup
     [SerializeField] GameObject score;
     [SerializeField] GameObject level;
     [SerializeField] GameObject leaf;
-
+    [SerializeField] GameObject top;
+    [SerializeField] GameObject mid;
+    [SerializeField] GameObject bot;
+    [SerializeField] GameObject box;
+    [SerializeField] GameObject button;
 
 
     public override void OnPopupShow(int curr = 0)
     {
         leaf.SetActive(false);
+                button.SetActive(false);
 
         foreach (GameObject hi in ribbon)
         {
@@ -35,16 +40,16 @@ public class WinPopup : BasePopup
 
         PopWell(async () =>
         {
-            this.glow.SetActive(true);
-            await DropwellnZoomAsync(async () =>
+            await DropwellnZoomAsync(() =>
             {
-                await Task.WhenAll(popAllRibbon(), popFan(), popFlower());
                 par.SetActive(true);
                 leaf.SetActive(true);
+                popBut();
+                // fillProgressBar();
+                //jump();
             });
         });
     }
-
 
     protected override void ClosePopup()
     {
@@ -66,51 +71,88 @@ public class WinPopup : BasePopup
     {
         onComplete?.Invoke();
     }
+    private void popBut()
+    {
+        DOTween.Kill(this.button.transform);
+        this.button.transform.localScale = Vector3.zero;
+        this.button.SetActive(true);
+        this.button.transform.DOScale(new Vector3(0.5f, 0.5f, 0), 0.4f).SetEase(Ease.OutBack);
+
+    }
     private async Task DropwellnZoomAsync(System.Action onComplete = null)
     {
         this.bg.SetActive(true);
         this.welldone.SetActive(true);
-        this.scoreText.SetActive(true);
-        this.level.gameObject.GetComponent<TextMeshProUGUI>().text = "Level " + (GameManager.instance.currentLevel.levelNumber + 1).ToString();
+        this.glow.SetActive(true);
 
-        this.score.gameObject.GetComponent<TextMeshProUGUI>().text = GameManager.instance.pointManager.getScore().ToString();
+        this.level.gameObject.GetComponent<TextMeshProUGUI>().text =
+            "Level " + (GameManager.instance.currentLevel.levelNumber + 1).ToString();
+
+        this.score.gameObject.GetComponent<TextMeshProUGUI>().text =
+            GameManager.instance.pointManager.getScore().ToString();
+
         this.welldone.transform.localScale = new Vector3(1.4f, 1.4f, 0);
-        this.score.transform.localScale = Vector3.zero;
+        this.glow.transform.localScale = Vector3.zero;
         this.bg.transform.localScale = Vector3.zero;
-        var task1 = this.welldone.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
-        var task2 = this.bg.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
-        var task3 = this.score.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f).AsyncWaitForCompletion();
-        await Task.WhenAll(task1, task2, task3);
+
+        Sequence seq = DOTween.Sequence();
+
+        seq.Append(this.welldone.transform
+            .DOScale(new Vector3(0.8f, 0.8f, 0), 0.4f));
+        seq.Join(this.bg.transform
+            .DOScale(new Vector3(1.1f, 1.1f, 0), 0.4f));
+        seq.Join(this.glow.transform.DOScale(new Vector3(1.1f, 1.1f, 0), 0.4f));
+
+        seq.AppendCallback(async () =>
+        {
+            this.scoreText.SetActive(true);
+
+            Task fanTask = popFan();
+            Task flowerTask = popFlower();
+
+            await Task.WhenAll(fanTask, flowerTask);
+        });
+
+        seq.Append(this.welldone.transform
+            .DOScale(new Vector3(1, 1, 0), 0.4f));
+        seq.Join(this.bg.transform
+            .DOScale(new Vector3(1, 1, 0), 0.4f));
+
+        await seq.AsyncWaitForCompletion();
         onComplete?.Invoke();
     }
+
     private async Task popAllRibbon()
     {
-        List<Task> animationTasks = new List<Task>();
+        Sequence seq = DOTween.Sequence();
 
         for (int i = 0; i < rubbon.Length; i++)
         {
             GameObject hi = rubbon[i];
             hi.SetActive(true);
             hi.transform.localScale = Vector3.zero;
-            float delay = 0f;
-            if (i >= 2)
-            {
-                delay = 0.15f;
-            }
 
-            animationTasks.Add(
-                hi.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.6f)
-                    .SetEase(Ease.OutBack)
-                    .SetDelay(delay)
-                    .AsyncWaitForCompletion()
-            );
+            var scaleTween = hi.transform
+                .DOScale(Vector3.one, 1.03f)
+                .SetEase(Ease.OutBack, i < 2 ? 5f : 2f);
+
+            if (i < 2)
+            {
+                seq.Join(scaleTween);
+            }
+            else
+            {
+                seq.Insert(0.13f, scaleTween);
+            }
         }
 
-        await Task.WhenAll(animationTasks);
+        await seq.AsyncWaitForCompletion();
     }
+
     private async Task popFan()
     {
         List<Task> animationTasks = new List<Task>();
+        this.score.transform.localScale = Vector3.zero;
 
         for (int i = 0; i < fan.Length; i++)
         {
@@ -121,30 +163,41 @@ public class WinPopup : BasePopup
             Vector3 startPos = originalPos;
             if (i == 0)
             {
-                startPos.x += 200f;
+                startPos.x += 20f;
             }
             else if (i == 1)
             {
-                startPos.x -= 200f;
+                startPos.x -= 20f;
             }
 
             fanObj.transform.localPosition = startPos;
             fanObj.transform.localScale = Vector3.zero;
 
-            var scaleTask = fanObj.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.6f)
+            var scaleTask = fanObj.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.3f)
                 .SetEase(Ease.OutBack)
-                .AsyncWaitForCompletion();
-
-            var moveTask = fanObj.transform.DOLocalMove(originalPos, 0.6f)
-                .SetEase(Ease.OutBack)
+                .OnComplete(() =>
+                {
+                    var moveTask = fanObj.transform.DOLocalMove(originalPos, 0.3f)
+                    .SetEase(Ease.InSine);
+                })
                 .AsyncWaitForCompletion();
 
             animationTasks.Add(scaleTask);
-            animationTasks.Add(moveTask);
         }
+        score.gameObject.SetActive(true);
+        var hi = score.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f)
+                .SetEase(Ease.OutBack, 4).AsyncWaitForCompletion();
+        animationTasks.Add(hi);
 
         await Task.WhenAll(animationTasks);
+        foreach (GameObject cho in ribbon)
+        {
+            cho.SetActive(true);
+        }
+        fillProgressBar();
+        await popAllRibbon();
     }
+
     private async Task popFlower()
     {
         List<Task> animationTasks = new List<Task>();
@@ -154,6 +207,7 @@ public class WinPopup : BasePopup
             GameObject flowerObj = flower[i];
             flowerObj.SetActive(true);
             flowerObj.transform.localRotation = Quaternion.identity;
+            flowerObj.transform.localScale = Vector3.zero;
 
             float rotationAngle = 0f;
             if (i == 0 || i == 1)
@@ -165,21 +219,113 @@ public class WinPopup : BasePopup
                 rotationAngle = 25f;
             }
 
-            var rotateTask = flowerObj.transform.DORotate(
-                new Vector3(0, 0, rotationAngle), 1.0f)
-                .SetEase(Ease.OutSine)
-                .AsyncWaitForCompletion();
+            Sequence flowerSeq = DOTween.Sequence();
 
-            animationTasks.Add(rotateTask);
-        }
-        foreach (GameObject hi in ribbon)
-        {
-            if (!hi.activeSelf)
-            {
-                hi.SetActive(true);
-            }
+            flowerSeq.Join(flowerObj.transform.DOScale(Vector3.one, 0.8f)
+                .SetEase(Ease.OutBack));
+
+            flowerSeq.Join(flowerObj.transform.DORotate(
+                new Vector3(0, 0, rotationAngle), 3.0f)
+                .SetEase(Ease.OutSine));
+
+            var flowerTask = flowerSeq.AsyncWaitForCompletion();
+            animationTasks.Add(flowerTask);
         }
 
         await Task.WhenAll(animationTasks);
     }
+    private void fillProgressBar()
+    {
+        resetProgress();
+        if (GameManager.instance.currentLevel.levelNumber % 10 == 1)
+        {
+            showLeft();
+            showRight();
+            return;
+        }
+        else
+        {
+            fakeShow(GameManager.instance.currentLevel.levelNumber - 1);
+            showMid();
+
+        }
+    }
+    private void showLeft()
+    {
+        this.top.SetActive(true);
+
+    }
+    private void showRight()
+    {
+        this.bot.SetActive(true);
+        this.mid.SetActive(false);
+        this.bot.transform.localScale = new Vector3(0, 1, 0);
+        this.bot.transform.DOScale(new Vector3(1, 1, 0), 0.5f);
+
+    }
+    private void showMid()
+    {
+        this.mid.SetActive(true);
+        this.bot.SetActive(true);
+        RectTransform rt1 = bot.transform as RectTransform;
+        this.mid.transform.DOScale(this.mid.transform.localScale + new Vector3(2.2f, 0, 0), 0.5f).OnUpdate(() =>
+        {
+            rt1.anchoredPosition = new Vector2(this.mid.transform.localScale.x * 21, 0);
+        }).OnComplete(() =>
+        {
+            if (GameManager.instance.currentLevel.levelNumber % 10 == 0)
+            {
+
+            }
+        });
+    }
+    private void fakeShow(int level)
+    {
+        showLeft();
+        this.mid.SetActive(true);
+        int hehe = level % 10;
+        this.mid.transform.localScale = new Vector3((hehe * 22) / 10, 1, 0);
+        RectTransform rt1 = bot.transform as RectTransform;
+        rt1.anchoredPosition = this.mid.transform.localScale * 21;
+    }
+    private void resetProgress()
+    {
+        this.top.SetActive(true);
+        this.mid.SetActive(false);
+        this.bot.SetActive(true);
+        this.top.transform.localScale = new Vector3(1, 1, 0);
+        this.mid.transform.localScale = new Vector3(1, 1, 0);
+        this.bot.transform.localScale = new Vector3(1, 1, 0);
+        RectTransform rt1 = bot.transform as RectTransform;
+        rt1.anchoredPosition = new Vector3(0, 0, 0);
+        RectTransform rt2 = mid.transform as RectTransform;
+        rt2.anchoredPosition = new Vector3(0, 0, 0);
+    }
+
+    private void jump()
+    {
+        this.box.SetActive(true);
+
+        Vector3 originalPos = this.box.transform.localPosition;
+        Vector3 jumpTarget = originalPos + new Vector3(0, 100, 0);
+
+        Sequence jumpSequence = DOTween.Sequence();
+
+        jumpSequence.Append(this.box.transform.DOLocalJump(
+            endValue: jumpTarget,
+            jumpPower: 2f,
+            numJumps: 1,
+            duration: 0.5f
+        ));
+
+        jumpSequence.Append(this.box.transform.DOLocalJump(
+            endValue: originalPos,
+            jumpPower: 2f,
+            numJumps: 1,
+            duration: 0.5f
+        ));
+
+        jumpSequence.SetLoops(-1, LoopType.Restart);
+    }
 }
+ 

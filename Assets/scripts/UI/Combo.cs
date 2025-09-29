@@ -13,12 +13,16 @@ public class Combo : MonoBehaviour
     private Sequence currentSequence;
     private Sequence currentFadeSequence;
 
+    public Sequence sequence;
+        public Sequence fadeSequence;
 
 
     public void addCombo()
     {
         Debug.Log("addcombo" + comboCount);
         comboCount++;
+        GameManager.instance.missionManager.UpdateMissionProgress(1, 1);
+
         if (comboCount >= 3)
         {
             showCombo();
@@ -29,40 +33,40 @@ public class Combo : MonoBehaviour
     {
         this.gameObject.SetActive(true);
 
-        // Kill sequence cũ
-        currentSequence?.Kill();
-        currentFadeSequence?.Kill();
-
         if (comboCount <= 9)
         {
+            DOTween.Kill(number1.transform);
+            DOTween.Kill(number2.transform);
+            DOTween.Kill(combo.transform);
+
+            DOTween.Kill(number1.GetComponent<CanvasGroup>());
+            DOTween.Kill(combo.GetComponent<CanvasGroup>());
+            sequence.Kill();
+            fadeSequence.Kill();
             number1.SetActive(true);
             number2.SetActive(false);
             combo.SetActive(true);
 
             number1.transform.localScale = Vector3.zero;
-            combo.transform.localScale = Vector3.zero;
 
             number1.GetComponent<CanvasGroup>().alpha = 1f;
             combo.GetComponent<CanvasGroup>().alpha = 1f;
 
+            sequence = DOTween.Sequence();
             number1.GetComponent<Image>().sprite = sprite[comboCount];
-            number1.GetComponent<RectTransform>().sizeDelta =
-                new Vector2(sprite[comboCount].rect.width, sprite[comboCount].rect.height);
+            number1.GetComponent<RectTransform>().sizeDelta = new Vector2(sprite[comboCount % 10].rect.width, sprite[comboCount % 10].rect.height);
+            sequence.Insert(0, number1.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.6f).SetEase(Ease.OutElastic));
+            sequence.Insert(0, combo.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.6f).SetEase(Ease.OutBack));
 
-            // Tạo sequence mới và lưu lại
-            currentSequence = DOTween.Sequence();
-            currentSequence.Insert(0, number1.transform.DOScale(Vector3.one, 0.6f).SetEase(Ease.OutElastic));
-            currentSequence.Insert(0, combo.transform.DOScale(Vector3.one, 0.6f).SetEase(Ease.OutBack));
-
-            currentSequence.OnComplete(() =>
+            sequence.OnComplete(() =>
             {
                 DOVirtual.DelayedCall(0.5f, () =>
                 {
-                    currentFadeSequence = DOTween.Sequence();
-                    currentFadeSequence.Insert(0, combo.GetComponent<CanvasGroup>().DOFade(0f, 0.3f));
-                    currentFadeSequence.Insert(0, number1.GetComponent<CanvasGroup>().DOFade(0f, 0.3f));
+                    fadeSequence = DOTween.Sequence();
+                    fadeSequence.Insert(0, combo.GetComponent<CanvasGroup>().DOFade(0f, 0.3f));
+                    fadeSequence.Insert(0, number1.GetComponent<CanvasGroup>().DOFade(0f, 0.3f));
 
-                    currentFadeSequence.OnComplete(() =>
+                    fadeSequence.OnComplete(() =>
                     {
                         combo.SetActive(false);
                         number1.SetActive(false);
@@ -72,13 +76,20 @@ public class Combo : MonoBehaviour
         }
         else
         {
+            DOTween.Kill(number1.transform);
+            DOTween.Kill(number2.transform);
+            DOTween.Kill(combo.transform);
+            DOTween.Kill(number1.GetComponent<CanvasGroup>());
+            DOTween.Kill(number2.GetComponent<CanvasGroup>());
+            DOTween.Kill(combo.GetComponent<CanvasGroup>());
+            sequence.Kill();
+            fadeSequence.Kill();
             number1.SetActive(true);
             number2.SetActive(true);
             combo.SetActive(true);
 
             number1.transform.localScale = Vector3.zero;
             number2.transform.localScale = Vector3.zero;
-            combo.transform.localScale = Vector3.zero;
 
             number1.GetComponent<CanvasGroup>().alpha = 1f;
             number2.GetComponent<CanvasGroup>().alpha = 1f;
@@ -92,25 +103,23 @@ public class Combo : MonoBehaviour
                 new Vector2(sprite[tensDigit].rect.width, sprite[tensDigit].rect.height);
 
             number2.GetComponent<Image>().sprite = sprite[onesDigit];
-            number2.GetComponent<RectTransform>().sizeDelta =
-                new Vector2(sprite[onesDigit].rect.width, sprite[onesDigit].rect.height);
+            number2.GetComponent<RectTransform>().sizeDelta = new Vector2(sprite[onesDigit].rect.width, sprite[onesDigit].rect.height);
 
-            // Sequence mới
-            currentSequence = DOTween.Sequence();
-            currentSequence.Insert(0, number1.transform.DOScale(Vector3.one, 0.6f).SetEase(Ease.OutElastic));
-            currentSequence.Insert(0, number2.transform.DOScale(Vector3.one, 0.6f).SetEase(Ease.OutElastic));
-            currentSequence.Insert(0, combo.transform.DOScale(Vector3.one, 0.6f).SetEase(Ease.OutBack));
+            sequence = DOTween.Sequence();
+            sequence.Insert(0, number1.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.6f).SetEase(Ease.OutElastic));
+            sequence.Insert(0, number2.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.6f).SetEase(Ease.OutElastic));
+            sequence.Insert(0, combo.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.6f).SetEase(Ease.OutBack));
 
-            currentSequence.OnComplete(() =>
+            sequence.OnComplete(() =>
             {
                 DOVirtual.DelayedCall(0.5f, () =>
                 {
-                    currentFadeSequence = DOTween.Sequence();
-                    currentFadeSequence.Insert(0, combo.GetComponent<CanvasGroup>().DOFade(0f, 0.3f));
-                    currentFadeSequence.Insert(0, number1.GetComponent<CanvasGroup>().DOFade(0f, 0.3f));
-                    currentFadeSequence.Insert(0, number2.GetComponent<CanvasGroup>().DOFade(0f, 0.3f));
+                    fadeSequence = DOTween.Sequence();
+                    fadeSequence.Insert(0, combo.GetComponent<CanvasGroup>().DOFade(0f, 0.3f));
+                    fadeSequence.Insert(0, number1.GetComponent<CanvasGroup>().DOFade(0f, 0.3f));
+                    fadeSequence.Insert(0, number2.GetComponent<CanvasGroup>().DOFade(0f, 0.3f));
 
-                    currentFadeSequence.OnComplete(() =>
+                    fadeSequence.OnComplete(() =>
                     {
                         combo.SetActive(false);
                         number1.SetActive(false);
@@ -119,10 +128,13 @@ public class Combo : MonoBehaviour
                 });
             });
         }
+        
+        
     }
 
     public void ResetCombo()
     {
         comboCount = 0;
+
     }
 }
