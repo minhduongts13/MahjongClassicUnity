@@ -146,8 +146,11 @@ public class UIManager : MonoBehaviour
             popup.transform.localScale = Vector3.zero;
             float screenX = GameManager.instance.board.anchor.rect.width;
             float scaleFactor = screenX / 1080;
-            await popup.transform.DOScale(Vector3.one * scaleFactor, 0.2f).SetEase(Ease.OutBack).AsyncWaitForCompletion();
-
+            if (popupType != Popup.WIN) await popup.transform.DOScale(Vector3.one * scaleFactor, 0.2f).SetEase(Ease.OutBack).AsyncWaitForCompletion();
+            else
+            {
+                popup.transform.DOScale(Vector3.one * scaleFactor, 0.2f).SetEase(Ease.OutBack);
+            }
 
             if (instance.popupComponents.TryGetValue(popupType, out BasePopup popupComponent) &&
                 popupComponent != null)

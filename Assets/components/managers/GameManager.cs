@@ -83,6 +83,10 @@ public class GameManager : MonoBehaviour
         ShowMatchable();
         await t;
     }
+    void Update()
+    {
+        levelText.text = "Level " + currentLevelNumber;
+    }
 
     public async void Undo()
     {
