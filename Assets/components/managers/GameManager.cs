@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     [SerializeField] private GameObject sakurafail;
+    [SerializeField] private GameObject btn;
 
     public void showplay()
     {
@@ -328,5 +329,20 @@ public class GameManager : MonoBehaviour
     {
         await Reload();
     }
+
+    public void ShowDebug()
+    {
+        // Toggle trạng thái theo thằng child đầu tiên (hoặc mặc định true/false)
+        bool newState = true;
+
+        if (btn.transform.childCount > 0)
+            newState = !btn.transform.GetChild(0).gameObject.activeSelf;
+
+        for (int i = 0; i < btn.transform.childCount; i++)
+        {
+            btn.transform.GetChild(i).gameObject.SetActive(newState);
+        }
+    }
+
 
 }

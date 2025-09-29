@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
 using NUnit.Framework.Constraints;
-using Unity.VisualScripting;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.UIElements;
@@ -13,6 +13,7 @@ public class BoardManager : MonoBehaviour
 {
     private List<int[,]> mockUpLevel;
     public List<Tile[,]> board;
+    public RectTransform anchor;
     public int remainTile;
     public bool shuffling = false;
     public int t1 = 0, t2 = 0;
@@ -141,7 +142,8 @@ public class BoardManager : MonoBehaviour
 
                         board[i][r, c].setTileType(levelData[r, c]);
                         // tasks.Add(board[i][r, c].Zoom(i));
-                        tasks.Add(board[i][r, c].MoveToRealPos((i + 1) * 80 + (Math.Abs(r - rows / 2)) * 50, Ease.OutCirc));
+                        int noise = UnityEngine.Random.Range(0, 5);
+                        tasks.Add(board[i][r, c].MoveToRealPos((i + 1) * 100 + (Math.Abs(r - rows / 2 + noise)) * 50, Ease.OutCirc));
                         remainTile++;
                     }
                 }
@@ -251,16 +253,22 @@ public class BoardManager : MonoBehaviour
         }
         return neightbour;
     }
-    public void Rescale(LevelGridData level)
+    public void Rescale(LevelGridData level, float tileWidth = 133, float tileHeight = 166)
     {
-        int SizeX = level.layers.Max(layer => layer.gridData.Grid.GetLength(1));
-        int SizeY = level.layers.Max(layer => layer.gridData.Grid.GetLength(0));
-        float scaleX = 1080 / ((SizeX + 3) * (133 / 2f));
-        float scaleY = 1400 / ((SizeY + 3) * (166 / 2f));
-        float scale = Math.Min(scaleX, scaleY);
-        GameManager.instance.tilePool.transform.localScale = new Vector3(scale, scale, 1);
+        float sceneX = anchor.rect.width;
 
+        float sceneY = anchor.rect.height - 500;
+
+        int sizeX = level.layers.Max(layer => layer.gridData.Grid.GetLength(1));
+        int sizeY = level.layers.Max(layer => layer.gridData.Grid.GetLength(0));
+
+        float scaleX = sceneX / ((sizeX + 3) * (tileWidth / 2f));
+        float scaleY = sceneY / ((sizeY + 3) * (tileHeight / 2f));
+
+        float scale = Mathf.Min(scaleX, scaleY);
+        GameManager.instance.tilePool.transform.localScale = new Vector3(scale, scale, 1);
     }
+
 
     public void ApplySiblingOrder(List<int[,]> levelData, List<Tile[,]> board)
     {
@@ -419,7 +427,18 @@ public class BoardManager : MonoBehaviour
 
                     RectTransform rt = t.transform as RectTransform;
                     t.ToggleShadow(false);
-                    task.Add(rt.DOAnchorPos(new Vector2(0, 0), 0.35f).SetEase(Ease.InCirc).AsyncWaitForCompletion());
+
+                    Vector2 startPos = rt.anchoredPosition;
+                    Vector2 midPos = startPos + (startPos.normalized * 150f); // đẩy ngược ra ngoài 1 chút (150 đơn vị)
+                    Vector2 endPos = Vector2.zero; // vị trí trung tâm
+
+                    // Tạo sequence cho từng tile
+                    Sequence seq = DOTween.Sequence();
+                    seq.Append(rt.DOAnchorPos(midPos, 0.25f).SetEase(Ease.OutCubic))   // chạy ngược ra
+                       .Append(rt.DOAnchorPos(endPos, 0.2f).SetEase(Ease.InCirc));    // rồi chạy vào trung tâm
+
+                    task.Add(seq.AsyncWaitForCompletion());
+
                 }
             }
         }
@@ -472,8 +491,9 @@ public class BoardManager : MonoBehaviour
         }
 
         await Task.WhenAll(task);
-        await Task.Delay(500);
         AnimationManager.instance.ShuffleEffect();
+        await Task.Delay(400);
+        List<Task> ta = new();
 
         foreach (Tile[,] tiles in board)
         {
@@ -481,11 +501,12 @@ public class BoardManager : MonoBehaviour
             {
                 if (t != null && t.GetTileType() != 0)
                 {
-                    t.MoveToRealPos(0, Ease.OutBack);
+                    ta.Add(t.MoveToRealPos(0, Ease.OutBack, 0.5f));
                     t.ToggleShadow(true);
                 }
             }
         }
+        await Task.WhenAll(ta);
         shuffling = false;
     }
 

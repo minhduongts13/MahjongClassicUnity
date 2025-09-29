@@ -204,13 +204,29 @@ public class Tile : PooledObject, IBeginDragHandler, IDragHandler, IEndDragHandl
         button.interactable = true;
     }
 
-    public async Task MoveToRealPos(int delay = 0, Ease ease = Ease.Linear)
+    public async Task MoveToRealPos(int delay = 0, Ease ease = Ease.Linear, float duration = 0.35f)
     {
         Vector2 pos = GameManager.instance.board.GetPosFromCoords(this.coords.x, this.coords.y, this.layer);
         RectTransform rt = transform as RectTransform;
         await Task.Delay(delay);
-        await rt.DOAnchorPos(pos, 0.35f).SetEase(Ease.OutSine).SetEase(ease).AsyncWaitForCompletion();
+        await rt.DOAnchorPos(pos, duration).SetEase(Ease.OutSine).SetEase(ease).AsyncWaitForCompletion();
         offset = 0;
+    }
+    public void MoveToRealPosBounce(float duration = 0.35f, Ease ease = Ease.Linear)
+    {
+        RectTransform rt = transform as RectTransform;
+        Vector2 realPos = GameManager.instance.board.GetPosFromCoords(coords.x, coords.y, layer); // vị trí chuẩn của tile
+        Vector2 startPos = rt.anchoredPosition;
+
+        // Tính hướng từ tâm ra ngoài
+        Vector2 dir = (startPos - realPos).normalized;
+        Vector2 midPos = realPos + dir * 100f; // "bung ngược" ra thêm 100f, có thể chỉnh
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(rt.DOAnchorPos(midPos, duration * 0.4f).SetEase(Ease.OutCubic)) // bung ra
+           .Append(rt.DOAnchorPos(realPos, duration * 0.6f).SetEase(ease));        // quay về chỗ thật
+
+        seq.Play();
     }
 
 
