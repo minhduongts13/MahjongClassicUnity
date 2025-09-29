@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 
 
@@ -18,9 +19,9 @@ public class MissionManager : MonoBehaviour
         }
         else
         {
-            missiondatas.Add(new Missiondata { name = "Use 3 item", misionCount = 3, remain = 3 });
-            missiondatas.Add(new Missiondata { name = "Reach combo 15", misionCount = 15, remain = 15 });
-            missiondatas.Add(new Missiondata { name = "Win 10 levels", misionCount = 10, remain = 10 });
+            missiondatas.Add(new Missiondata { name = "Use 3 item", misionCount = 3, remain = 3,done=false });
+            missiondatas.Add(new Missiondata { name = "Reach combo 15", misionCount = 15, remain = 15,done=false });
+            missiondatas.Add(new Missiondata { name = "Win 10 levels", misionCount = 10, remain = 10,done=false });
 
             SaveMissions();
         }
@@ -35,6 +36,7 @@ public class MissionManager : MonoBehaviour
             PlayerPrefs.SetString($"Mission_{i}_Name", missiondatas[i].name);
             PlayerPrefs.SetInt($"Mission_{i}_Count", missiondatas[i].misionCount);
             PlayerPrefs.SetInt($"Mission_{i}_remain", missiondatas[i].remain);
+            PlayerPrefs.SetInt($"Mission_{i}_done", missiondatas[i].done ? 1 : 0);
 
         }
 
@@ -54,6 +56,7 @@ public class MissionManager : MonoBehaviour
             mission.name = PlayerPrefs.GetString($"Mission_{i}_Name", "");
             mission.misionCount = PlayerPrefs.GetInt($"Mission_{i}_Count", 0);
             mission.remain = PlayerPrefs.GetInt($"Mission_{i}_remain", 0);
+            mission.done = PlayerPrefs.GetInt($"Mission_{i}_done", 0) == 1;
             missiondatas.Add(mission);
         }
 
@@ -67,7 +70,12 @@ public class MissionManager : MonoBehaviour
             SaveMissions();
         }
         DisplayMissions();
-        ShowPopup();
+        if (missiondatas[missionIndex].remain == 0)
+        {
+            missiondatas[missionIndex].done = true;
+            ShowPopup(missiondatas[missionIndex].name);
+        }
+
 
     }
 
@@ -93,18 +101,29 @@ public class MissionManager : MonoBehaviour
         setUp();
         DisplayMissions();
     }
-    public void ShowPopup()
-    
+    public void ShowPopup(string name)
+
     {
-        DOTween.Kill(this.notif.transform);        
-         Vector3 origin = this.notif.transform.localPosition;
+        DOTween.Kill(this.notif.transform);
+        Vector3 origin = this.notif.transform.localPosition;
+        GameObject firstChild = this.notif.transform.GetChild(0).gameObject;
+        firstChild.GetComponent<TextMeshProUGUI>().text = name;
         this.notif.transform.localPosition = origin + new Vector3(0, 400, 0);
         this.notif.SetActive(true);
         this.notif.transform.DOLocalMove(origin, 0.5f).SetEase(Ease.OutBack).OnComplete(() =>
-        {   
-            DOVirtual.DelayedCall(0.8f, () => {
-                    this.notif.SetActive(false);
-                });
+        {
+            DOVirtual.DelayedCall(0.8f, () =>
+            {
+                this.notif.SetActive(false);
+            });
         });
+    }
+    public void resetMission(int missionIndex,int num)
+    {
+        if (missionIndex >= 0 && missionIndex < missiondatas.Count)
+        {
+            missiondatas[missionIndex].remain =num;
+            SaveMissions();
+        }
     }
 }

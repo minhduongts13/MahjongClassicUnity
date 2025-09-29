@@ -67,6 +67,7 @@ public class Missiondata
     public string name;
     public int misionCount;
     public int remain;
+    public bool done;
 
 }
 

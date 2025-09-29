@@ -93,6 +93,8 @@ public class GameManager : MonoBehaviour
         if (!matchManager.isFree(tile))
         {
             tile.OnBlocked();
+            GameManager.instance.missionManager.resetMission(1, 15);
+
             combo.ResetCombo();
             return;
         }

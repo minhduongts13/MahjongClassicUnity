@@ -11,7 +11,7 @@ public class Reward : BasePopup
     [SerializeField] GameObject lip;
     [SerializeField] GameObject reward;
     [SerializeField] GameObject glow;
-        [SerializeField] GameObject par;
+    [SerializeField] GameObject par;
         [SerializeField] GameObject par1;
 
 
