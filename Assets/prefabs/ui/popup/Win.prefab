@@ -6044,7 +6044,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8109330754258274343
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6140,7 +6140,7 @@ MonoBehaviour:
   mid: {fileID: 4662270066357879626}
   bot: {fileID: 3308302655557120776}
   box: {fileID: 4111250885498002932}
-  button: {fileID: 0}
+  button: {fileID: 7023260985813335331}
 --- !u!1 &5770735712843116234
 GameObject:
   m_ObjectHideFlags: 0
@@ -6588,7 +6588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5246808346404593060
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6598,7 +6598,7 @@ RectTransform:
   m_GameObject: {fileID: 7023260985813335331}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5992755, y: 0.5992755, z: 1.0008308}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 264713032734120295}
@@ -6710,7 +6710,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7023260985813335331}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab166831d449b4291bc78dcad0b38f4e, type: 3}
   m_Name: 
