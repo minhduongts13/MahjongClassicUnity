@@ -43,6 +43,7 @@ public enum Popup
     SHOP,
     Reward,
     LANTERN_INTRO,
+    WARNING
 }
 
 public enum BACKGROUND

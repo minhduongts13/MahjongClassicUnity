@@ -122,7 +122,7 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning($"not found: {popupType}");
         }
     }
-    public static async void ShowPopup(Popup popupType, bool hideOthers = true, int curr = 0)
+    public static async void ShowPopup(Popup popupType, bool hideOthers = true, int curr = 0, bool addToStack = true)
     {
         if (instance == null)
         {
@@ -134,8 +134,10 @@ public class UIManager : MonoBehaviour
         {
             HideAllPopups();
         }
-        if (popupStack.Count == 0 || popupStack.Peek() != popupType) popupStack.Push(popupType);
-
+  if (addToStack && (popupStack.Count == 0 || popupStack.Peek() != popupType))
+    {
+        popupStack.Push(popupType);
+    }
         Debug.Log($"Showing popup: {popupType}");
 
         if (instance.popupNodes.TryGetValue(popupType, out GameObject popup) && popup != null)

@@ -5,6 +5,7 @@ using DG.Tweening;
 using Mono.Cecil.Cil;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class WinPopup : BasePopup
 {
@@ -26,12 +27,16 @@ public class WinPopup : BasePopup
     [SerializeField] GameObject bot;
     [SerializeField] GameObject box;
     [SerializeField] GameObject button;
-
-
+    private Sequence blockSeq;
+    private Sequence auraSeq;
+ private bool canTapToReward = false;
+     [SerializeField]  GameObject aura;
     public override void OnPopupShow(int curr = 0)
     {
         leaf.SetActive(false);
-                button.SetActive(false);
+        button.SetActive(false);
+        this.aura.SetActive(false);
+
 
         foreach (GameObject hi in ribbon)
         {
@@ -44,9 +49,7 @@ public class WinPopup : BasePopup
             {
                 par.SetActive(true);
                 leaf.SetActive(true);
-                popBut();
-                // fillProgressBar();
-                //jump();
+                if(GameManager.instance.currentLevel.levelNumber % 10 != 0) popBut();
             });
         });
     }
@@ -197,7 +200,32 @@ public class WinPopup : BasePopup
         fillProgressBar();
         await popAllRibbon();
     }
-
+    void Update()
+    {
+        if (canTapToReward)
+        {
+            if (Mouse.current.leftButton.wasPressedThisFrame || Touchscreen.current?.primaryTouch.press.wasPressedThisFrame == true)
+            {
+                UIManager.ShowPopup(Popup.Reward,true,1,false);
+                canTapToReward = false;
+            }
+        }
+    }
+    private void Jigglebox()
+{
+    blockSeq.Kill();
+    this.box.SetActive(true);
+    blockSeq = DOTween.Sequence();
+    blockSeq.Append(box.transform.DORotate(new Vector3(0, 0, -15), 0.15f).SetEase(Ease.OutSine));
+    blockSeq.Append(box.transform.DORotate(new Vector3(0, 0, 12), 0.12f).SetEase(Ease.InOutSine));
+    blockSeq.Append(box.transform.DORotate(new Vector3(0, 0, -8), 0.10f).SetEase(Ease.InOutSine));
+    blockSeq.Append(box.transform.DORotate(new Vector3(0, 0, 5), 0.08f).SetEase(Ease.InOutSine));
+    blockSeq.Append(box.transform.DORotate(new Vector3(0, 0, -2), 0.06f).SetEase(Ease.InOutSine));
+    blockSeq.Append(this.box.transform.DORotate(Vector3.zero, 0.4f).SetEase(Ease.InSine));
+    blockSeq.SetLoops(-1, LoopType.Restart); 
+    
+   
+}
     private async Task popFlower()
     {
         List<Task> animationTasks = new List<Task>();
@@ -272,10 +300,12 @@ public class WinPopup : BasePopup
         {
             rt1.anchoredPosition = new Vector2(this.mid.transform.localScale.x * 21, 0);
         }).OnComplete(() =>
-        {
+        {             
             if (GameManager.instance.currentLevel.levelNumber % 10 == 0)
             {
-
+                this.Jigglebox();
+                rotateaura();
+                canTapToReward = true;
             }
         });
     }
@@ -302,30 +332,20 @@ public class WinPopup : BasePopup
         rt2.anchoredPosition = new Vector3(0, 0, 0);
     }
 
-    private void jump()
-    {
-        this.box.SetActive(true);
 
-        Vector3 originalPos = this.box.transform.localPosition;
-        Vector3 jumpTarget = originalPos + new Vector3(0, 100, 0);
-
-        Sequence jumpSequence = DOTween.Sequence();
-
-        jumpSequence.Append(this.box.transform.DOLocalJump(
-            endValue: jumpTarget,
-            jumpPower: 2f,
-            numJumps: 1,
-            duration: 0.5f
-        ));
-
-        jumpSequence.Append(this.box.transform.DOLocalJump(
-            endValue: originalPos,
-            jumpPower: 2f,
-            numJumps: 1,
-            duration: 0.5f
-        ));
-
-        jumpSequence.SetLoops(-1, LoopType.Restart);
-    }
+private void rotateaura()
+{
+    this.aura.SetActive(true);
+    
+    auraSeq?.Kill();
+    
+    auraSeq = DOTween.Sequence();
+        auraSeq.Append(aura.transform.DOLocalRotate(
+            new Vector3(0, 0, 360),
+            2f,
+            RotateMode.FastBeyond360)
+            .SetEase(Ease.Linear));
+    auraSeq.SetLoops(-1, LoopType.Restart);
+}
 }
  
