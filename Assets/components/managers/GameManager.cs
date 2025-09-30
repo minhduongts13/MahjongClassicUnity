@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     [SerializeField] private GameObject sakurafail;
+    [SerializeField] private GameObject btn;
 
     public void showplay()
     {
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public TilePool tilePool;
     [SerializeField] public BoardManager board;
     [SerializeField] public FloatingPoint floatingPoint;
+    [SerializeField] public MissionManager missionManager;
 
     [SerializeField] public MatchManager matchManager;
     [SerializeField] public PointManager pointManager;
@@ -64,10 +66,7 @@ public class GameManager : MonoBehaviour
 
         // SetUp();
     }
-    void Update()
-    {
-        levelText.text = "Level " + currentLevelNumber;
-    }
+
 
     private async void SetUp()
     {
@@ -83,6 +82,10 @@ public class GameManager : MonoBehaviour
 
         ShowMatchable();
         await t;
+    }
+    void Update()
+    {
+        levelText.text = "Level " + currentLevelNumber;
     }
     public async void JumpTo(int level, DateTime date)
     {
@@ -116,6 +119,8 @@ public class GameManager : MonoBehaviour
         if (!matchManager.isFree(tile))
         {
             tile.OnBlocked();
+            GameManager.instance.missionManager.resetMission(1, 15);
+
             combo.ResetCombo();
             return;
         }
@@ -201,7 +206,7 @@ public class GameManager : MonoBehaviour
 
     public void ShowMatchable()
     {
-
+        if (board.board == null) return;
         foreach (Tile[,] grid in board.board)
         {
             foreach (Tile t in grid)
@@ -347,5 +352,24 @@ public class GameManager : MonoBehaviour
     {
         await Reload();
     }
+    public void showReward()
+    {
+        UIManager.ShowPopup(Popup.Reward);
+    }
+
+    public void ShowDebug()
+    {
+        // Toggle trạng thái theo thằng child đầu tiên (hoặc mặc định true/false)
+        bool newState = true;
+
+        if (btn.transform.childCount > 0)
+            newState = !btn.transform.GetChild(0).gameObject.activeSelf;
+
+        for (int i = 0; i < btn.transform.childCount; i++)
+        {
+            btn.transform.GetChild(i).gameObject.SetActive(newState);
+        }
+    }
+
 
 }

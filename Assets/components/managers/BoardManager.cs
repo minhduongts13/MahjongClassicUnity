@@ -4,17 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
 using NUnit.Framework.Constraints;
-using Unity.VisualScripting;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.UIElements;
 
 public class BoardManager : MonoBehaviour
 {
     private List<int[,]> mockUpLevel;
     public List<Tile[,]> board;
+    public RectTransform anchor;
     public int remainTile;
     public bool shuffling = false;
     public int t1 = 0, t2 = 0;
+    [SerializeField] private RectTransform topBar;
+    [SerializeField] private RectTransform bottomBar;
 
 
     void LevelMock()
@@ -46,6 +50,8 @@ public class BoardManager : MonoBehaviour
         shuffling = true;
         remainTile = 0;
         List<Task> tasks = new List<Task>();
+        var middlePoint = (topBar.anchoredPosition.y + bottomBar.anchoredPosition.y) / 2;
+        (GameManager.instance.tilePool.transform as RectTransform).anchoredPosition = new Vector2(0, middlePoint);
         Debug.Log("aaa");
         // LevelMock();
         // mockUpLevel = GameManager.instance.currentLevel.layers;
@@ -136,7 +142,8 @@ public class BoardManager : MonoBehaviour
 
                         board[i][r, c].setTileType(levelData[r, c]);
                         // tasks.Add(board[i][r, c].Zoom(i));
-                        tasks.Add(board[i][r, c].MoveToRealPos((i + 1) * 100 + r * 20));
+                        int noise = UnityEngine.Random.Range(0, 5);
+                        tasks.Add(board[i][r, c].MoveToRealPos((i + 1) * 100 + (Math.Abs(r - rows / 2 + noise)) * 50, Ease.OutCirc));
                         remainTile++;
                     }
                 }
@@ -174,7 +181,7 @@ public class BoardManager : MonoBehaviour
         float posY = originY - (y * tileHeight);
 
         // Apply layer offset (up and left)
-        float layerOffsetX = -tileWidth * 0.2f * layerIndex;  // shift left
+        float layerOffsetX = -tileWidth * 0.18f * layerIndex;  // shift left
         float layerOffsetY = tileHeight * 0.2f * layerIndex;  // shift up
 
         posX += layerOffsetX;
@@ -246,16 +253,22 @@ public class BoardManager : MonoBehaviour
         }
         return neightbour;
     }
-    public void Rescale(LevelGridData level)
+    public void Rescale(LevelGridData level, float tileWidth = 133, float tileHeight = 166)
     {
-        int SizeX = level.layers.Max(layer => layer.gridData.Grid.GetLength(1));
-        int SizeY = level.layers.Max(layer => layer.gridData.Grid.GetLength(0));
-        float scaleX = 1080 / ((SizeX + 3) * (133 / 2f));
-        float scaleY = 1400 / ((SizeY + 3) * (166 / 2f));
-        float scale = Math.Min(scaleX, scaleY);
-        GameManager.instance.tilePool.transform.localScale = new Vector3(scale, scale, 1);
+        float sceneX = anchor.rect.width;
 
+        float sceneY = anchor.rect.height - 500;
+
+        int sizeX = level.layers.Max(layer => layer.gridData.Grid.GetLength(1));
+        int sizeY = level.layers.Max(layer => layer.gridData.Grid.GetLength(0));
+
+        float scaleX = (sceneX - 100) / ((sizeX + 3) * (tileWidth / 2f));
+        float scaleY = (sceneY - 100) / ((sizeY + 3) * (tileHeight / 2f));
+
+        float scale = Mathf.Min(scaleX, scaleY);
+        GameManager.instance.tilePool.transform.localScale = new Vector3(scale, scale, 1);
     }
+
 
     public void ApplySiblingOrder(List<int[,]> levelData, List<Tile[,]> board)
     {
@@ -414,10 +427,25 @@ public class BoardManager : MonoBehaviour
 
                     RectTransform rt = t.transform as RectTransform;
                     t.ToggleShadow(false);
-                    task.Add(rt.DOAnchorPos(new Vector2(0, 0), 0.5f).AsyncWaitForCompletion());
+
+                    Vector2 startPos = rt.anchoredPosition;
+                    Vector2 midPos = startPos + (startPos.normalized * 150f); // đẩy ngược ra ngoài 1 chút (150 đơn vị)
+                    Vector2 endPos = Vector2.zero; // vị trí trung tâm
+
+                    // Tạo sequence cho từng tile
+                    Sequence seq = DOTween.Sequence();
+                    seq.Append(rt.DOAnchorPos(midPos, 0.25f).SetEase(Ease.OutCubic))   // chạy ngược ra
+                       .Append(rt.DOAnchorPos(endPos, 0.2f).SetEase(Ease.InCirc));    // rồi chạy vào trung tâm
+
+                    task.Add(seq.AsyncWaitForCompletion());
+
                 }
             }
         }
+        await Task.WhenAll(task);
+        AnimationManager.instance.ShuffleEffect();
+        await Task.Delay(400);
+        List<Task> ta = new();
 
         // Fisher–Yates shuffle
         System.Random rand = new System.Random();
@@ -466,8 +494,7 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        await Task.WhenAll(task);
-        await Task.Delay(500);
+
 
         foreach (Tile[,] tiles in board)
         {
@@ -475,11 +502,12 @@ public class BoardManager : MonoBehaviour
             {
                 if (t != null && t.GetTileType() != 0)
                 {
-                    t.MoveToRealPos();
+                    ta.Add(t.MoveToRealPos(0, Ease.OutBack, 0.5f));
                     t.ToggleShadow(true);
                 }
             }
         }
+        await Task.WhenAll(ta);
         shuffling = false;
     }
 
