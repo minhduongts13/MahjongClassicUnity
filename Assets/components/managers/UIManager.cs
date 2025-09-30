@@ -87,7 +87,7 @@ public class UIManager : MonoBehaviour
             node.SetActive(false);
         }
     }
-    public static void ShowPage(Page popupType, bool hideOthers = true, int curr = 0)
+    public static void ShowPage(Page popupType, bool hideOthers = true, int curr = 0, bool runOnPageShow = true)
     {
         if (instance == null)
         {
@@ -112,7 +112,7 @@ public class UIManager : MonoBehaviour
 
 
             if (instance.pageComponents.TryGetValue(popupType, out BasePage popupComponent) &&
-                popupComponent != null)
+                popupComponent != null && runOnPageShow)
             {
                 popupComponent.OnPageShow(curr);
             }
@@ -134,10 +134,10 @@ public class UIManager : MonoBehaviour
         {
             HideAllPopups();
         }
-  if (addToStack && (popupStack.Count == 0 || popupStack.Peek() != popupType))
-    {
-        popupStack.Push(popupType);
-    }
+        if (addToStack && (popupStack.Count == 0 || popupStack.Peek() != popupType))
+        {
+            popupStack.Push(popupType);
+        }
         Debug.Log($"Showing popup: {popupType}");
 
         if (instance.popupNodes.TryGetValue(popupType, out GameObject popup) && popup != null)
@@ -383,5 +383,50 @@ public class UIManager : MonoBehaviour
             lanternChallenge.Show(firstTime);
         }
         else Debug.LogError("LanternChallenge component not found on the LanternChallenge GameObject.");
+    }
+
+    public static void ShowPageBadges()
+    {
+        var badges = instance.pageNodes[Page.BADGES].GetComponent<Badges>();
+        if (badges != null)
+        {
+            badges.Show();
+        }
+        else Debug.LogError("Badges component not found on the Badges GameObject.");
+    }
+
+    public static void ShowPageDaily()
+    {
+        var dailyChallenge = instance.pageNodes[Page.DAILY_CHALLENGE].GetComponent<DailyChallenge>();
+        if (dailyChallenge != null)
+        {
+            dailyChallenge.Show();
+        }
+        else Debug.LogError("DailyChallenge component not found on the DailyChallenge GameObject.");
+    }
+
+    public static void DailyChallengePlay(DateTime date)
+    {
+        UIManager.ShowPage(Page.PLAY, true, 0, false);
+        int randomValue = UnityEngine.Random.Range(1, 3001);
+        GameManager.instance.JumpTo(randomValue, date);
+    }
+
+    public static void finishDailyChallenge()
+    {
+        GameManager.instance.storageManager.setPlayedDay(GameManager.instance.dailyDate);
+        var dailyChallenge = instance.pageNodes[Page.DAILY_CHALLENGE].GetComponent<DailyChallenge>();
+        if (dailyChallenge != null)
+        {
+            UIManager.HidePopup(Popup.WIN);
+            dailyChallenge.CalendarController.UpdateCalendar();
+            dailyChallenge.Show();
+        }
+        else Debug.LogError("DailyChallenge component not found on the DailyChallenge GameObject.");
+    }
+
+    public static void ShowLose()
+    {
+        UIManager.ShowPopup(Popup.LOSE);
     }
 }

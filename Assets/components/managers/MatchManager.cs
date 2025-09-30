@@ -149,6 +149,15 @@ public class MatchManager : MonoBehaviour
             {
                 await MoveMatching(tile1, tile2);
             }
+            
+            // Lose
+            if (board.getAllHints() == 0 && board.remainTile > 0)
+            {
+                DOVirtual.DelayedCall(0.5f, () =>
+                {
+                    UIManager.ShowLose();
+                });
+            }
 
         }
     }

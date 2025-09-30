@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class StorageManager : MonoBehaviour
@@ -38,6 +39,11 @@ public class StorageManager : MonoBehaviour
         return PlayerPrefs.GetInt("shuffles", 0);
     }
 
+    public bool hasPlayedDay(DateTime day)
+    {
+        return PlayerPrefs.GetInt(day.Date.ToString("yyyy-MM-dd"), 0) == 1;
+    }
+    /************** Setters ******************/
     public void setCurrentLevel(int level)
     {
         PlayerPrefs.SetInt("currentLevel", level);
@@ -67,10 +73,16 @@ public class StorageManager : MonoBehaviour
         PlayerPrefs.SetInt("shuffles", shuffles);
         PlayerPrefs.Save();
     }
-    
+
     public void setJoinedLantern(int lantern)
     {
         PlayerPrefs.SetInt("joinedLantern", lantern);
+        PlayerPrefs.Save();
+    }
+    
+    public void setPlayedDay(DateTime day)
+    {
+        PlayerPrefs.SetInt(day.Date.ToString("yyyy-MM-dd"), 1);
         PlayerPrefs.Save();
     }
 }

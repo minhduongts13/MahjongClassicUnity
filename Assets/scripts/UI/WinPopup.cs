@@ -27,6 +27,8 @@ public class WinPopup : BasePopup
     [SerializeField] GameObject bot;
     [SerializeField] GameObject box;
     [SerializeField] GameObject button;
+    [SerializeField] GameObject buttonDaily;
+
     private Sequence blockSeq;
     private Sequence auraSeq;
  private bool canTapToReward = false;
@@ -35,6 +37,7 @@ public class WinPopup : BasePopup
     {
         leaf.SetActive(false);
         button.SetActive(false);
+        buttonDaily.SetActive(false);
         this.aura.SetActive(false);
 
 
@@ -76,10 +79,20 @@ public class WinPopup : BasePopup
     }
     private void popBut()
     {
-        DOTween.Kill(this.button.transform);
-        this.button.transform.localScale = Vector3.zero;
-        this.button.SetActive(true);
-        this.button.transform.DOScale(new Vector3(0.5f, 0.5f, 0), 0.4f).SetEase(Ease.OutBack);
+        if (GameManager.instance.dailyChallenge)
+        {
+            DOTween.Kill(this.buttonDaily.transform);
+            buttonDaily.transform.localScale = Vector3.zero;
+            buttonDaily.SetActive(true);
+            buttonDaily.transform.DOScale(new Vector3(0.5f, 0.5f, 0), 0.4f).SetEase(Ease.OutBack);
+        }
+        else
+        {
+            DOTween.Kill(this.button.transform);
+            this.button.transform.localScale = Vector3.zero;
+            this.button.SetActive(true);
+            this.button.transform.DOScale(new Vector3(0.5f, 0.5f, 0), 0.4f).SetEase(Ease.OutBack);
+        }
 
     }
     private async Task DropwellnZoomAsync(System.Action onComplete = null)

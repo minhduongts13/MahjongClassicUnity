@@ -44,6 +44,7 @@ public enum Popup
     Reward,
     LANTERN_INTRO,
     WARNING,
+    LOSE,
     Tutorial,
     DAILY_REWARD,
 }
@@ -66,6 +67,8 @@ public enum Page
     DASHBOARD,
     PLAY,
     LANTERN_CHALLENGE,
+    DAILY_CHALLENGE,
+    BADGES,
 }
 public class Missiondata
 {
