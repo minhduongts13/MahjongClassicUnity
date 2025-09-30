@@ -134,10 +134,10 @@ public class UIManager : MonoBehaviour
         {
             HideAllPopups();
         }
-  if (addToStack && (popupStack.Count == 0 || popupStack.Peek() != popupType))
-    {
-        popupStack.Push(popupType);
-    }
+        if (addToStack && (popupStack.Count == 0 || popupStack.Peek() != popupType))
+        {
+            popupStack.Push(popupType);
+        }
         Debug.Log($"Showing popup: {popupType}");
 
         if (instance.popupNodes.TryGetValue(popupType, out GameObject popup) && popup != null)
@@ -410,5 +410,18 @@ public class UIManager : MonoBehaviour
         UIManager.ShowPage(Page.PLAY, true, 0, false);
         int randomValue = UnityEngine.Random.Range(1, 3001);
         GameManager.instance.JumpTo(randomValue, date);
+    }
+    
+    public static void finishDailyChallenge()
+    {
+        GameManager.instance.storageManager.setPlayedDay(GameManager.instance.dailyDate);
+        var dailyChallenge = instance.pageNodes[Page.DAILY_CHALLENGE].GetComponent<DailyChallenge>();
+        if (dailyChallenge != null)
+        {
+            UIManager.HidePopup(Popup.WIN);
+            dailyChallenge.CalendarController.UpdateCalendar();
+            dailyChallenge.Show();
+        }
+        else Debug.LogError("DailyChallenge component not found on the DailyChallenge GameObject.");
     }
 }

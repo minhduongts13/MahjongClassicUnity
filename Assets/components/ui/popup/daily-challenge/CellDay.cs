@@ -24,6 +24,7 @@ public class CellDay : MonoBehaviour
         check.SetActive(false);
         if (GameManager.instance.storageManager.hasPlayedDay(date))
         {
+            dayText.SetActive(false);
             finished.SetActive(true);
         }
         else if (isToday) SetSelected();
@@ -83,6 +84,16 @@ public class CellDay : MonoBehaviour
         if (button != null)
         {
             button.interactable = false;
+        }
+    }
+
+    public void UpdateCell()
+    {
+        if (GameManager.instance.storageManager.hasPlayedDay(date))
+        {
+            finished.SetActive(true);
+            check.SetActive(false);
+            dayText.SetActive(false);
         }
     }
 

@@ -107,6 +107,17 @@ public class CalendarController : MonoBehaviour
             cells[cells.Count - 1].GetComponent<CellDay>().SetSelected();
             selectedCell = cells[cells.Count - 1].GetComponent<CellDay>();
         }
+        else for (int i = cells.Count - 1; i >= 0; i--)
+        {
+            var dc = cells[i].GetComponent<CellDay>();
+            if (dc != null && !GameManager.instance.storageManager.hasPlayedDay(dc.date) && dc.date <= DateTime.Today)
+            {
+                dc.SetSelected();
+                selectedCell = dc;
+                break;
+            }
+        }
+        changeButton();
     }
 
     void CreateCell(DateTime date, bool isCurrentMonth = true)
@@ -163,6 +174,27 @@ public class CalendarController : MonoBehaviour
             restartButton.SetActive(false);
             playBackButton.SetActive(true);
         }
+    }
+
+    public void UpdateCalendar()
+    {
+        int index = 0;
+        foreach (var go in cells)
+        {
+            var dc = go.GetComponent<CellDay>();
+            if (dc != null)
+            {
+                dc.UpdateCell();
+                if (!GameManager.instance.storageManager.hasPlayedDay(dc.date))
+                {
+                    index = cells.IndexOf(go);
+                }
+            }
+        }
+        selectedCell.SetSelected(false);
+        selectedCell = cells[index].GetComponent<CellDay>();
+        selectedCell.SetSelected();
+        changeButton();
     }
 }
 

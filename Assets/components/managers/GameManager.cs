@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public StorageManager storageManager;
     [SerializeField] public Combo combo;
     [SerializeField] TMP_Text levelText;
+    [SerializeField] TMP_Text dateText;
 
     public LevelGridData currentLevel;
 
@@ -48,6 +49,9 @@ public class GameManager : MonoBehaviour
     public GameObject hintButton;
     public GameObject shuffleButton;
     public bool hinting = false;
+
+    public bool dailyChallenge = false;
+    public DateTime dailyDate;
 
 
     void Start()
@@ -70,6 +74,7 @@ public class GameManager : MonoBehaviour
 
     private async void SetUp()
     {
+        dailyChallenge = false;
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
         // currentLevelNumber = storageManager.getCurrentLevel();
         currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
@@ -86,9 +91,12 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         levelText.text = "Level " + currentLevelNumber;
+        dateText.text = DateTime.Now.ToString("dd");
     }
     public async void JumpTo(int level, DateTime date)
     {
+        dailyChallenge = true;
+        dailyDate = date;
         Debug.Log("Jumping to level: " + level);
         currentLevel = LevelLoader.instance.GetLevel(level);
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();

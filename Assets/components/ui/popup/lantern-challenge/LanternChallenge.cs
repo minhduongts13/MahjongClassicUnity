@@ -28,6 +28,7 @@ public class LanternChallenge : BasePage
         {
             OnQuestion();
         }
+        else TapToContinue.SetActive(false);
     }
     public void Hide()
     {
