@@ -119,7 +119,9 @@ public class GameManager : MonoBehaviour
         if (!matchManager.isFree(tile))
         {
             tile.OnBlocked();
-            GameManager.instance.missionManager.resetMission(1, 15);
+            GameManager.instance.missionManager.resetMissionAt(1, 15);
+            GameManager.instance.missionManager.resetMissionAt(4, 25);
+            GameManager.instance.missionManager.resetMissionAt(7, 150);
 
             combo.ResetCombo();
             return;
@@ -220,6 +222,10 @@ public class GameManager : MonoBehaviour
 
     public async void nextLevel()
     {
+        this.missionManager.UpdateMissionProgress(2, 1);
+        this.missionManager.UpdateMissionProgress(5, 1);
+        this.missionManager.UpdateMissionProgress(8, 1);
+        this.missionManager.resetMission();
         UIManager.HidePopup(Popup.WIN);
         AdvanceLevel();
         await Reload();
@@ -236,6 +242,10 @@ public class GameManager : MonoBehaviour
         hint.Item1.OnHint();
         hint.Item2.OnHint();
         hinting = true;
+        this.missionManager.UpdateMissionProgress(0, 1);
+        this.missionManager.UpdateMissionProgress(3, 1);
+        this.missionManager.UpdateMissionProgress(6, 1);
+
 
 
         var bgNum0 = hintButton.transform.GetChild(2);
@@ -275,6 +285,9 @@ public class GameManager : MonoBehaviour
         var numshuffles = storageManager.getNumberShuffles();
         if (numshuffles <= 0) return;
         await board.Shuffle();
+        this.missionManager.UpdateMissionProgress(0, 1);
+        this.missionManager.UpdateMissionProgress(3, 1);
+        this.missionManager.UpdateMissionProgress(6, 1);
 
         var bgNum0 = shuffleButton.transform.GetChild(2);
         var bgNum1 = shuffleButton.transform.GetChild(0);
@@ -354,7 +367,7 @@ public class GameManager : MonoBehaviour
     }
     public void showReward()
     {
-        UIManager.ShowPopup(Popup.Reward);
+        UIManager.ShowPopup(Popup.Reward,true,1,false);
     }
 
     public void ShowDebug()

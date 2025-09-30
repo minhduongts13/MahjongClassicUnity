@@ -107,8 +107,11 @@ public class MatchManager : MonoBehaviour
 
 
             if (board.remainTile == 0)
-            {
+            {    
                 await MoveMatching(tile1, tile2);
+                GameManager.instance.missionManager.UpdateMissionProgress(2, 1);
+                GameManager.instance.missionManager.UpdateMissionProgress(5, 1);
+                GameManager.instance.missionManager.UpdateMissionProgress(8, 1);
                 UIManager.showWin();
                 GameManager.instance.combo.ResetCombo();
 
