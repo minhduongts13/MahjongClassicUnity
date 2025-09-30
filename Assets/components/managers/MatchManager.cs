@@ -107,7 +107,7 @@ public class MatchManager : MonoBehaviour
 
 
             if (board.remainTile == 0)
-            {    
+            {
                 await MoveMatching(tile1, tile2);
                 GameManager.instance.missionManager.UpdateMissionProgress(2, 1);
                 GameManager.instance.missionManager.UpdateMissionProgress(5, 1);
@@ -123,6 +123,15 @@ public class MatchManager : MonoBehaviour
             else
             {
                 await MoveMatching(tile1, tile2);
+            }
+            
+            // Lose
+            if (board.getAllHints() == 0 && board.remainTile > 0)
+            {
+                DOVirtual.DelayedCall(0.5f, () =>
+                {
+                    UIManager.ShowLose();
+                });
             }
 
         }

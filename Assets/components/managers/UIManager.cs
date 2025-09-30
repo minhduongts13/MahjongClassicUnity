@@ -411,7 +411,7 @@ public class UIManager : MonoBehaviour
         int randomValue = UnityEngine.Random.Range(1, 3001);
         GameManager.instance.JumpTo(randomValue, date);
     }
-    
+
     public static void finishDailyChallenge()
     {
         GameManager.instance.storageManager.setPlayedDay(GameManager.instance.dailyDate);
@@ -423,5 +423,10 @@ public class UIManager : MonoBehaviour
             dailyChallenge.Show();
         }
         else Debug.LogError("DailyChallenge component not found on the DailyChallenge GameObject.");
+    }
+
+    public static void ShowLose()
+    {
+        UIManager.ShowPopup(Popup.LOSE);
     }
 }
