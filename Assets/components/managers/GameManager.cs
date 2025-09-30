@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public StorageManager storageManager;
     [SerializeField] public Combo combo;
     [SerializeField] TMP_Text levelText;
+    [SerializeField] TMP_Text dateText;
 
     public LevelGridData currentLevel;
 
@@ -48,6 +49,9 @@ public class GameManager : MonoBehaviour
     public GameObject hintButton;
     public GameObject shuffleButton;
     public bool hinting = false;
+
+    public bool dailyChallenge = false;
+    public DateTime dailyDate;
 
 
     void Start()
@@ -70,6 +74,7 @@ public class GameManager : MonoBehaviour
 
     private async void SetUp()
     {
+        dailyChallenge = false;
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
         // currentLevelNumber = storageManager.getCurrentLevel();
         currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
@@ -86,6 +91,28 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         levelText.text = "Level " + currentLevelNumber;
+        dateText.text = DateTime.Now.ToString("dd");
+    }
+    public async void JumpTo(int level, DateTime date)
+    {
+        dailyChallenge = true;
+        dailyDate = date;
+        Debug.Log("Jumping to level: " + level);
+        currentLevel = LevelLoader.instance.GetLevel(level);
+        moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
+        UnChose();
+        tilePool.ReturnAll();
+        Debug.Log(currentLevel.levelNumber);
+        // await board.SetUp();
+        Task t = board.SetUp();
+        matchManager.SetUp();
+        pointManager.OnDailyChallenge(date);
+
+        combo.ResetCombo();
+        Debug.Log("reload");
+        ShowMatchable();
+        await t;
+
     }
 
     public async void Undo()
@@ -100,7 +127,9 @@ public class GameManager : MonoBehaviour
         if (!matchManager.isFree(tile))
         {
             tile.OnBlocked();
-            GameManager.instance.missionManager.resetMission(1, 15);
+            GameManager.instance.missionManager.resetMissionAt(1, 15);
+            GameManager.instance.missionManager.resetMissionAt(4, 25);
+            GameManager.instance.missionManager.resetMissionAt(7, 150);
 
             combo.ResetCombo();
             return;
@@ -201,6 +230,10 @@ public class GameManager : MonoBehaviour
 
     public async void nextLevel()
     {
+        this.missionManager.UpdateMissionProgress(2, 1);
+        this.missionManager.UpdateMissionProgress(5, 1);
+        this.missionManager.UpdateMissionProgress(8, 1);
+        this.missionManager.resetMission();
         UIManager.HidePopup(Popup.WIN);
         AdvanceLevel();
         await Reload();
@@ -217,6 +250,10 @@ public class GameManager : MonoBehaviour
         hint.Item1.OnHint();
         hint.Item2.OnHint();
         hinting = true;
+        this.missionManager.UpdateMissionProgress(0, 1);
+        this.missionManager.UpdateMissionProgress(3, 1);
+        this.missionManager.UpdateMissionProgress(6, 1);
+
 
 
         var bgNum0 = hintButton.transform.GetChild(2);
@@ -256,6 +293,9 @@ public class GameManager : MonoBehaviour
         var numshuffles = storageManager.getNumberShuffles();
         if (numshuffles <= 0) return;
         await board.Shuffle();
+        this.missionManager.UpdateMissionProgress(0, 1);
+        this.missionManager.UpdateMissionProgress(3, 1);
+        this.missionManager.UpdateMissionProgress(6, 1);
 
         var bgNum0 = shuffleButton.transform.GetChild(2);
         var bgNum1 = shuffleButton.transform.GetChild(0);
@@ -335,7 +375,7 @@ public class GameManager : MonoBehaviour
     }
     public void showReward()
     {
-        UIManager.ShowPopup(Popup.Reward);
+        UIManager.ShowPopup(Popup.Reward,true,1,false);
     }
 
     public void ShowDebug()

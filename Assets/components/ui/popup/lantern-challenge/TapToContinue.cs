@@ -3,7 +3,7 @@ using DG.Tweening;
 
 public class TapToContinue : MonoBehaviour
 {
-    public GameObject Overlay;
+    // public GameObject Overlay;
     public GameObject Title;
     public GameObject WinLevel;
     public GameObject Arrow1;
@@ -21,7 +21,7 @@ public class TapToContinue : MonoBehaviour
 
         Sequence seq = DOTween.Sequence();
 
-        seq.Join(FadeIn(Overlay, 0.4f));
+        seq.Join(FadeIn(this.gameObject, 0.4f));
         seq.Join(FadeIn(Title, 0.4f));
         seq.Join(FadeIn(WinLevel, 0.4f));
         seq.AppendInterval(delay);

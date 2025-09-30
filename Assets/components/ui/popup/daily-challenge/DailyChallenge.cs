@@ -1,37 +1,25 @@
 using UnityEngine;
 using DG.Tweening;
 using System.Collections;
-public class LanternChallenge : BasePage
+public class DailyChallenge : BasePage
 {
-    public GameObject TapToContinue;
-    public void OnQuestion()
+    public CalendarController CalendarController;
+    public void OnBadge()
     {
-        var tapToContinue = TapToContinue.GetComponent<TapToContinue>();
-        if (tapToContinue != null)
-        {
-            Debug.Log("Starting TapToContinue animation.");
-            tapToContinue.Open();
-        }
-        else
-        {
-            Debug.LogError("TapToContinue component not found on the TapToContinue GameObject.");
-        }
+        UIManager.ShowPageBadges();
     }
 
     public void Show(int firstTime = 0)
     {
         FadeIn(this.gameObject, 0.5f).OnComplete(() =>
         {
-            UIManager.ShowPage(Page.LANTERN_CHALLENGE);
+            UIManager.ShowPage(Page.DAILY_CHALLENGE);
+            CalendarController.Setup();
         });
-        if (firstTime == 1)
-        {
-            OnQuestion();
-        }
-        else TapToContinue.SetActive(false);
     }
     public void Hide()
     {
+        Debug.Log("Hiding Daily Challenge and returning to Dashboard.");
         UIManager.ShowPage(Page.DASHBOARD, false);
         FadeOut();
     }
@@ -65,6 +53,12 @@ public class LanternChallenge : BasePage
                 this.gameObject.SetActive(false);
                 cg.alpha = 1f;
             });
+    }
+
+    public void OnPlay()
+    {
+        var selectedDate = CalendarController.selectedCell.date;
+        UIManager.DailyChallengePlay(selectedDate);
     }
 
 }
