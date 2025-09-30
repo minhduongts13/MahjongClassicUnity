@@ -19,6 +19,8 @@ public class Combo : MonoBehaviour
     {
         Debug.Log("addcombo" + comboCount);
         GameManager.instance.missionManager.UpdateMissionProgress(1, 1);
+        GameManager.instance.missionManager.UpdateMissionProgress(4, 1);
+        GameManager.instance.missionManager.UpdateMissionProgress(7, 1);
         comboCount++;
         if (comboCount >= 3)
         {

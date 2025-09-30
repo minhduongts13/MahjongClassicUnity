@@ -1,38 +1,36 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using DG.Tweening;
-using System.Collections;
-public class LanternChallenge : BasePage
+using System;
+using System.Collections.Generic;
+using UnityEngine.EventSystems;
+public class Badges : BasePage
 {
-    public GameObject TapToContinue;
-    public void OnQuestion()
+    public GameObject TabJourney;
+    public GameObject TabDaily;
+    public GameObject Journey;
+    public GameObject Daily;
+    public GameObject CalendarController;
+    private bool isJourney = false;
+    public void OnTrophy(int month)
     {
-        var tapToContinue = TapToContinue.GetComponent<TapToContinue>();
-        if (tapToContinue != null)
-        {
-            Debug.Log("Starting TapToContinue animation.");
-            tapToContinue.Open();
-        }
-        else
-        {
-            Debug.LogError("TapToContinue component not found on the TapToContinue GameObject.");
-        }
+        var delta = month - DateTime.Today.Month;
+        Debug.Log("Delta month: " + delta);
+        CalendarController.GetComponent<CalendarController>().ChangeMonth(delta);
+        Hide();
     }
 
     public void Show(int firstTime = 0)
     {
         FadeIn(this.gameObject, 0.5f).OnComplete(() =>
         {
-            UIManager.ShowPage(Page.LANTERN_CHALLENGE);
+            UIManager.ShowPage(Page.BADGES);
         });
-        if (firstTime == 1)
-        {
-            OnQuestion();
-        }
-        else TapToContinue.SetActive(false);
     }
     public void Hide()
     {
-        UIManager.ShowPage(Page.DASHBOARD, false);
+        UIManager.ShowPage(Page.DAILY_CHALLENGE, false);
         FadeOut();
     }
 
@@ -65,6 +63,15 @@ public class LanternChallenge : BasePage
                 this.gameObject.SetActive(false);
                 cg.alpha = 1f;
             });
+    }
+
+    public void ToggleTab()
+    {
+        isJourney = !isJourney;
+        TabJourney.SetActive(isJourney);
+        TabDaily.SetActive(!isJourney);
+        Journey.SetActive(isJourney);
+        Daily.SetActive(!isJourney);
     }
 
 }
