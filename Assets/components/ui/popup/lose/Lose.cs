@@ -24,7 +24,7 @@ public class Lose : BasePopup
         Hide();
         if (GameManager.instance != null && GameManager.instance.board != null)
         {
-            await GameManager.instance.board.Shuffle();
+            GameManager.instance.Shuffle();
         }
     }
 

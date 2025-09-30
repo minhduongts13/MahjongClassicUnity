@@ -15,7 +15,7 @@ public class Badges : BasePage
     private bool isJourney = false;
     public void OnTrophy(int month)
     {
-        var delta = month - DateTime.Today.Month;
+        var delta = month - CalendarController.GetComponent<CalendarController>().currentMonth.Month;
         Debug.Log("Delta month: " + delta);
         CalendarController.GetComponent<CalendarController>().ChangeMonth(delta);
         Hide();
