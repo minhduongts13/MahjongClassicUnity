@@ -5209,6 +5209,14 @@ MonoBehaviour:
   butt: {fileID: 1760793873988703704}
   aura: {fileID: 6574551881107973446}
   aura1: {fileID: 1369468726587286786}
+  imagesBox:
+  - {fileID: -3426081854006038856, guid: 5b3b9474e89e6a34aa6fcbe792708584, type: 3}
+  - {fileID: -6099873399732076034, guid: 6dabba048817df8438437391e2d79af1, type: 3}
+  - {fileID: -2615874204119335, guid: 95df3b213a73bdf4993901182363a72f, type: 3}
+  imagesLip:
+  - {fileID: 9213733813556582899, guid: ef56ffa772a1b744ab3bbbf031d65b7d, type: 3}
+  - {fileID: 2169382376360820362, guid: 3095af1bc60c5d544855d0df78b316b4, type: 3}
+  - {fileID: -755444742958418298, guid: 46b2f41114e009a418c65aa456f122e0, type: 3}
 --- !u!1 &2338125543778879517
 GameObject:
   m_ObjectHideFlags: 0

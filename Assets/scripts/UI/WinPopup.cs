@@ -192,13 +192,14 @@ public class WinPopup : BasePopup
                 .SetEase(Ease.OutBack, 4).AsyncWaitForCompletion();
         animationTasks.Add(hi);
         animationTasks.Add(popAllRibbon());
-        await Task.WhenAll(animationTasks);
         foreach (GameObject cho in ribbon)
         {
             cho.SetActive(true);
         }
         fillProgressBar();
-    }
+
+        await Task.WhenAll(animationTasks);
+    }    
     void Update()
     {
         if (canTapToReward)

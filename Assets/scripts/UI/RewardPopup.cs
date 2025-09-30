@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Reward : BasePopup
 {
@@ -18,6 +19,8 @@ public class Reward : BasePopup
     [SerializeField] GameObject butt;
     [SerializeField] GameObject aura;
     [SerializeField] GameObject aura1;
+    [SerializeField] List<Sprite> imagesBox = new List<Sprite>();
+    [SerializeField] List<Sprite> imagesLip = new List<Sprite>();
 
 
 
@@ -55,9 +58,21 @@ public class Reward : BasePopup
         ResetState();
     }
     public override void OnPopupShow(int curr )
-    {
-        ResetState();
-        this.curr = curr;
+    {       this.curr = curr;
+            ResetState();
+        if (curr == 1)
+        {
+            box.GetComponent<Image>().sprite = imagesBox[0];
+            lip.GetComponent<Image>().sprite = imagesLip[0];
+        }
+        else
+        {
+            box.GetComponent<Image>().sprite = imagesBox[curr - 2];
+            lip.GetComponent<Image>().sprite = imagesLip[curr - 2];
+        }
+               
+
+        
         Jigglebox(async () =>
         {
             await OpenLid();
@@ -70,6 +85,8 @@ public class Reward : BasePopup
         blockSeq = DOTween.Sequence();
         Vector3 origin = boxOriginPos + new Vector3(0, -300, 0);
         this.box.SetActive(true);
+                this.lip.SetActive(true);
+
 
 
         blockSeq.Append(box.transform.DORotate(new Vector3(0, 0, -15), 0.15f).SetEase(Ease.OutSine));
@@ -93,6 +110,7 @@ public class Reward : BasePopup
 
         lidSeq?.Kill();
         lidSeq = DOTween.Sequence();
+
         Vector3 start = lidOriginPos;
         Vector3 end = lidOriginPos + new Vector3(380, 450 - 82, 0);
         Vector3 peak = new Vector3(150, 300, 0);
@@ -246,7 +264,7 @@ public class Reward : BasePopup
         this.par.SetActive(false);
         this.par1.SetActive(false);
         this.aura.SetActive(false);
-        
+
         this.aura1.SetActive(false);
 
         box.transform.localPosition = boxOriginPos;
@@ -285,6 +303,8 @@ public class Reward : BasePopup
             glowCanvasGroup.DOKill();
             glowCanvasGroup.alpha = 0;
         }
+        box.SetActive(false);
+    lip.SetActive(false);
         
     }
 

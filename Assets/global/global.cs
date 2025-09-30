@@ -44,7 +44,8 @@ public enum Popup
     Reward,
     LANTERN_INTRO,
     WARNING,
-    Tutorial
+    Tutorial,
+    DAILY_REWARD,
 }
 
 public enum BACKGROUND

@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     public void showplay()
     {
         sakurafail.SetActive(false);
-       
+
         UIManager.ShowPage(Page.PLAY);
         combo.ResetCombo();
 
@@ -379,12 +379,16 @@ public class GameManager : MonoBehaviour
 
         ShowMatchable();
         await t;
-         UIManager.ShowPopup(Popup.Tutorial,true,GameManager.instance.numTut,false,false,false);
+        UIManager.ShowPopup(Popup.Tutorial, true, GameManager.instance.numTut, false, false, false);
 
     }
-     public void playSetUpTutorial()
+    public void playSetUpTutorial()
     {
         this.SetUpTutorial();
+    }
+    public void DailyReward()
+    {
+        UIManager.ShowPopup(Popup.DAILY_REWARD);
     }
 
 }
