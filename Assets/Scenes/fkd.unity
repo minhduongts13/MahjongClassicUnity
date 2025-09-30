@@ -3819,6 +3819,7 @@ MonoBehaviour:
   LevelText: {fileID: 258459610}
   ScoreText: {fileID: 196658652}
   MatchesText: {fileID: 1329342812}
+  LevelShowText: {fileID: 0}
 --- !u!4 &1286737598
 Transform:
   m_ObjectHideFlags: 0
@@ -6080,6 +6081,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2646802013436570143, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -62.884766
+      objectReference: {fileID: 0}
+    - target: {fileID: 2675243782204804866, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -94.166504
+      objectReference: {fileID: 0}
     - target: {fileID: 3395668934966497609, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_Name
       value: 'DailyChallenge '
@@ -6188,6 +6197,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 104
       objectReference: {fileID: 0}
+    - target: {fileID: 6290098296622656764, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6459643585581238442, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -6215,14 +6228,14 @@ PrefabInstance:
     - target: {fileID: 6873449319487272152, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1922675280}
+      objectReference: {fileID: 8514566809703500112}
     - target: {fileID: 6873449319487272152, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: showplay
+      value: OnPlay
       objectReference: {fileID: 0}
     - target: {fileID: 6873449319487272152, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Assembly-CSharp
+      value: DailyChallenge, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6873449319487272152, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -6255,14 +6268,14 @@ PrefabInstance:
     - target: {fileID: 7176180920527366962, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1922675280}
+      objectReference: {fileID: 8514566809703500112}
     - target: {fileID: 7176180920527366962, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: showplay
+      value: OnPlay
       objectReference: {fileID: 0}
     - target: {fileID: 7176180920527366962, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Assembly-CSharp
+      value: DailyChallenge, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7176180920527366962, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -6300,17 +6313,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7465513733187604934, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7786813900836924559, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1922675280}
+      objectReference: {fileID: 8514566809703500112}
     - target: {fileID: 7786813900836924559, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: showplay
+      value: OnPlay
       objectReference: {fileID: 0}
     - target: {fileID: 7786813900836924559, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Assembly-CSharp
+      value: DailyChallenge, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7786813900836924559, guid: a08567f308ed04a5aa207f6751e3fd1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName

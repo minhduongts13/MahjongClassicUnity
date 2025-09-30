@@ -87,7 +87,7 @@ public class UIManager : MonoBehaviour
             node.SetActive(false);
         }
     }
-    public static void ShowPage(Page popupType, bool hideOthers = true, int curr = 0)
+    public static void ShowPage(Page popupType, bool hideOthers = true, int curr = 0, bool runOnPageShow = true)
     {
         if (instance == null)
         {
@@ -112,7 +112,7 @@ public class UIManager : MonoBehaviour
 
 
             if (instance.pageComponents.TryGetValue(popupType, out BasePage popupComponent) &&
-                popupComponent != null)
+                popupComponent != null && runOnPageShow)
             {
                 popupComponent.OnPageShow(curr);
             }
@@ -396,7 +396,7 @@ public class UIManager : MonoBehaviour
 
     public static void DailyChallengePlay(DateTime date)
     {
-        UIManager.ShowPage(Page.PLAY);
+        UIManager.ShowPage(Page.PLAY, true, 0, false);
         int randomValue = UnityEngine.Random.Range(1, 3001);
         GameManager.instance.JumpTo(randomValue, date);
     }

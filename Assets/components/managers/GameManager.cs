@@ -93,11 +93,15 @@ public class GameManager : MonoBehaviour
         tilePool.ReturnAll();
         Debug.Log(currentLevel.levelNumber);
         // await board.SetUp();
+        Task t = board.SetUp();
+        matchManager.SetUp();
         pointManager.OnDailyChallenge(date);
 
         combo.ResetCombo();
         Debug.Log("reload");
         ShowMatchable();
+        await t;
+
     }
 
     public async void Undo()

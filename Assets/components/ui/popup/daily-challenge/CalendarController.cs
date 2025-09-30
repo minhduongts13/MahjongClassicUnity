@@ -25,11 +25,10 @@ public class CalendarController : MonoBehaviour
     public GameObject playButton;
     public GameObject restartButton;
     public GameObject playBackButton;
-    public CellDay selectedDayCell;
     [Header("Event Data (example)")]
     DateTime currentMonth;
     List<GameObject> cells = new List<GameObject>();
-    CellDay selectedCell;
+    public CellDay selectedCell;
 
 
     public void Setup()

@@ -57,8 +57,7 @@ public class DailyChallenge : BasePage
 
     public void OnPlay()
     {
-        var selectedDate = CalendarController.selectedDayCell.date;
-
+        var selectedDate = CalendarController.selectedCell.date;
         UIManager.DailyChallengePlay(selectedDate);
     }
 
