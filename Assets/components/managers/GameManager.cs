@@ -20,12 +20,15 @@ public class GameManager : MonoBehaviour
     public void showplay()
     {
         sakurafail.SetActive(false);
+       
         UIManager.ShowPage(Page.PLAY);
         combo.ResetCombo();
 
+
     }
 
-    public int currentLevelNumber = 1;
+    public int currentLevelNumber = 0;
+    public int numTut = 0;
     public THEME currentTheme = THEME.Green;
     [SerializeField] public TilePool tilePool;
     [SerializeField] public BoardManager board;
@@ -348,7 +351,7 @@ public class GameManager : MonoBehaviour
     }
     public void showReward()
     {
-        UIManager.ShowPopup(Popup.Reward,true,1,false);
+        UIManager.ShowPopup(Popup.Reward, true, 2, false);
     }
 
     public void ShowDebug()
@@ -364,6 +367,24 @@ public class GameManager : MonoBehaviour
             btn.transform.GetChild(i).gameObject.SetActive(newState);
         }
     }
+    private async void SetUpTutorial()
+    {
+        moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
+        // currentLevelNumber = storageManager.getCurrentLevel();
+        tilePool.SetUp();
+        setupTool();
 
+        Task t = board.SetUpTutorial(numTut);
+        matchManager.SetUp();
+
+        ShowMatchable();
+        await t;
+         UIManager.ShowPopup(Popup.Tutorial,true,GameManager.instance.numTut,false,false,false);
+
+    }
+     public void playSetUpTutorial()
+    {
+        this.SetUpTutorial();
+    }
 
 }

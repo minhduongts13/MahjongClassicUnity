@@ -143,6 +143,17 @@ public class MissionManager : MonoBehaviour
             }
         }
     }
+    public void hardResetMission()
+    {
+        for (int i = 0; i < missiondatas.Count; i++)
+        {
+            if (!missiondatas[i].done)
+            {
+                missiondatas[i].remain = missiondatas[i].misionCount;
+                SaveMissions();
+            }
+        }
+    }
 
     public void resetMissionAt(int missionIndex, int num)
     {

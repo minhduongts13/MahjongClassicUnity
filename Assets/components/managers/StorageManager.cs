@@ -13,7 +13,7 @@ public class StorageManager : MonoBehaviour
     }
     public int getCurrentLevel()
     {
-        return PlayerPrefs.GetInt("currentLevel", 1);
+        return PlayerPrefs.GetInt("currentLevel", 0);
     }
 
     public THEME_STYLE getChosenTheme()

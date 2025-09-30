@@ -104,14 +104,39 @@ public class MatchManager : MonoBehaviour
             tile2.OnUnChose(move);
             GameManager.instance.pointManager.OnMatchPoint();
             GameManager.instance.pointManager.OnChangeMatches();
+            if (GameManager.instance.currentLevelNumber == 0)
+            {
+                UIManager.HidePopup(Popup.Tutorial);
+            }
 
 
             if (board.remainTile == 0)
-            {    
+            {
                 await MoveMatching(tile1, tile2);
                 GameManager.instance.missionManager.UpdateMissionProgress(2, 1);
                 GameManager.instance.missionManager.UpdateMissionProgress(5, 1);
                 GameManager.instance.missionManager.UpdateMissionProgress(8, 1);
+                if (GameManager.instance.currentLevelNumber == 0)
+                {
+                    GameManager.instance.missionManager.hardResetMission();
+                    GameManager.instance.numTut++;
+                    if (GameManager.instance.numTut > 2)
+                    {   
+
+                        GameManager.instance.AdvanceLevel();
+                        UIManager.ShowPage(Page.PLAY);
+                        GameManager.instance.combo.ResetCombo();
+                        return;
+                    }
+                    await GameManager.instance.board.SetUpTutorial(GameManager.instance.numTut);
+                   // GameManager.instance.ShowMatchable();
+
+                    UIManager.ShowPopup(Popup.Tutorial, true, GameManager.instance.numTut, false, false, false);
+                    GameManager.instance.missionManager.hardResetMission();
+    
+                    GameManager.instance.combo.ResetCombo();
+                    return;
+                }
                 UIManager.showWin();
                 GameManager.instance.combo.ResetCombo();
 

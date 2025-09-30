@@ -21,27 +21,87 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private RectTransform bottomBar;
 
 
-    void LevelMock()
+     public Dictionary<string, List<int[,]>> tutorialLevels = new Dictionary<string, List<int[,]>>();
+    
+    void InitTutorialLevels()
     {
-        mockUpLevel = new List<int[,]>();
+        tutorialLevels["Match two of the same tile"] = CreateTutorial1();
+        tutorialLevels["Match the top tile to unlock other tiles"] = CreateTutorial2();
+        tutorialLevels["Match the tile on the side to unlock other tiles"] = CreateTutorial3();
+    }
+    public string GetTutorialName(int index)
+{
+    var keys = new List<string>(tutorialLevels.Keys);
+    if (index >= 0 && index < keys.Count)
+    {
+        return keys[index];
+    }
+    return null;
+}
+    
+    private List<int[,]> CreateTutorial1()
+    {
+        List<int[,]> layers = new List<int[,]>();
 
-        int[,] layer1 =
-        {
-            { 1,0,20, 0, 0, 1 },
-            {0,0, 0, 0, 0, 0 },
-            {0,1, 0, 0, 20, 0 },
-            { 0, 0, 0, 0 ,0,0},
+        int[,] layer1 = {
+            { 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 1, 0, 1, 0 },
+            { 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0 },
         };
-        mockUpLevel.Add(layer1);
+        layers.Add(layer1);
 
-        int[,] layer2 =
-        {
-            { 0,0,1, 0, 0, 1 },
-            {1,0, 0, 0, 0, 0 },
-            {0,0, 0, 2, 0, 0 },
-            { 0, 0, 0, 0 ,0,2},
+        return layers;
+    }
+    
+    private List<int[,]> CreateTutorial2()
+    {
+        List<int[,]> layers = new List<int[,]>();
+        
+        int[,] layer1 = {
+            { 0, 0, 0, 0, 0, 0 },
+            { 0, 11, 0, 11, 0, 28 },
+            { 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0 },
         };
-        mockUpLevel.Add(layer2);
+        layers.Add(layer1);
+        
+        int[,] layer2 = {
+            { 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 28, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0 },
+        };
+        layers.Add(layer2);
+        
+        return layers;
+    }
+    
+    private List<int[,]> CreateTutorial3()
+    {
+        List<int[,]> layers = new List<int[,]>();
+        
+        int[,] layer1 = {
+            { 0, 0, 0, 0, 0, 0, 0 },
+            { 32, 0, 10, 0, 10, 0, 32 },
+            { 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0 },
+        };
+        layers.Add(layer1);
+        
+        return layers;
+    }
+    
+    
+    public List<int[,]> GetTutorialLevel(int index)
+    {
+        var keys = new List<string>(tutorialLevels.Keys);
+        if (index >= 0 && index < keys.Count)
+        {
+            return tutorialLevels[keys[index]];
+        }
+        
+        return null;
     }
 
     public async Task SetUp()
@@ -557,7 +617,115 @@ public class BoardManager : MonoBehaviour
             }
         }
     }
+    public async Task SetUpTutorial(int num)
+    {
+        InitTutorialLevels();
+        shuffling = true;
+        remainTile = 0;
+        List<Task> tasks = new List<Task>();
+        var middlePoint = (topBar.anchoredPosition.y + bottomBar.anchoredPosition.y) / 2;
+        (GameManager.instance.tilePool.transform as RectTransform).anchoredPosition = new Vector2(0, middlePoint);
+         
+         mockUpLevel =GetTutorialLevel(num);
+        if(num>2) return;
+        
+        Debug.Log("MOCK" + mockUpLevel);
+        board = new List<Tile[,]>();
 
+        for (int i = 0; i < mockUpLevel.Count; i++)
+        {
+            int[,] levelData = mockUpLevel[i];
+            int rows = levelData.GetLength(0);
+            int cols = levelData.GetLength(1);
+
+            Tile[,] tileGrid = new Tile[rows, cols];
+
+            for (int c = 0; c < cols; c++)
+            {
+                for (int r = 0; r < rows; r++)
+                {
+
+                    // Tạo tile từ prefab
+                    Tile t = GameManager.instance.tilePool.GetFirstItem();
+                    t.Reset();
+                    t.OffHint();
+                    // t.transform.SetSiblingIndex(2 * (rows * (c + c % 2) + r + i * cols * rows) + (c % 2 == 0 ? 0 : 1));
+                    t.idx = 2 * (rows * (c + c % 2) + r + i * cols * rows) + (c % 2 == 0 ? 0 : 1);
+                    // t.transform.SetSiblingIndex((c - c % 2) * rows + (r - r % 2) * cols + i * rows * cols);
+                    tileGrid[r, c] = t;
+                    if (levelData[r, c] == 10)
+                    {
+                        t1++;
+                    }
+                    if (levelData[r, c] == 20)
+                    {
+                        t2++;
+                    }
+                    t.layer = i;
+                    t.BlockInput();
+                    t.coords = new Vector2Int(c, r);
+                    t.SetTheme(GameManager.instance.currentTheme);
+                    t.setTileType(levelData[r, c]);
+                    // if (levelData[r, c] == 0)
+                    // {
+                    //     t.Kill();
+                    // }
+                }
+            }
+
+
+
+            board.Add(tileGrid);
+            foreach (Tile t in tileGrid)
+            {
+                if (t != null)
+                    t.TurnOnInput();
+            }
+
+
+        }
+        ApplySiblingOrder(mockUpLevel, board);
+        for (int i = 0; i < mockUpLevel.Count; i++)
+        {
+
+            int rows = mockUpLevel[i].GetLength(0);
+            int cols = mockUpLevel[i].GetLength(1);
+            int[,] levelData = mockUpLevel[i];
+
+            for (int r = 0; r < rows; r++)
+            {
+                for (int c = 0; c < cols; c++)
+                {
+                    if (board[i][r, c] != null)
+                    {
+                        int offset = c < cols / 2 ? -1000 : 1000;
+                        (board[i][r, c].transform as RectTransform).anchoredPosition = GetPosFromCoords(c, r, i) + new Vector2(offset, 0);
+                    }
+                    if (levelData[r, c] == 0)
+                    {
+                        board[i][r, c].Kill();
+                        // board[i][r, c].gameObject.SetActive(false);
+
+                    }
+                    else
+                    {
+
+                        board[i][r, c].setTileType(levelData[r, c]);
+                        // tasks.Add(board[i][r, c].Zoom(i));
+                        int noise = UnityEngine.Random.Range(0, 5);
+                        tasks.Add(board[i][r, c].MoveToRealPos((i + 1) * 100 + (Math.Abs(r - rows / 2 + noise)) * 50, Ease.OutCirc));
+                        remainTile++;
+                    }
+                }
+            }
+        }
+
+        await Task.WhenAll(tasks);
+
+        shuffling = false;
+
+
+    }
 
 
 }

@@ -9,6 +9,29 @@ public class PlayPages : BasePage
 
     public override void OnPageShow(int curr = 0)
     {
+        Debug.Log("fgg" + GameManager.instance.currentLevelNumber);
+        if (GameManager.instance.currentLevelNumber == 0)
+        {
+            if (top != null)
+            {
+                foreach (var obj in top)
+                {
+                    if (obj != null)
+                        obj.SetActive(false);
+                }
+            }
+
+            if (bot != null)
+            {
+                foreach (var obj in bot)
+                {
+                    if (obj != null)
+                        obj.SetActive(false);
+                }
+            }
+            GameManager.instance.playSetUpTutorial();
+            return;
+        }
         DropDownAnimation(() => {
             if (GameManager.instance != null)
             {
@@ -43,7 +66,23 @@ public class PlayPages : BasePage
     }
 
     private void DropDownAnimation(Action onComplete = null)
-    {
+    {   if (top != null)
+            {
+                foreach (var obj in top)
+                {
+                    if (obj != null)
+                        obj.SetActive(true);
+                }
+            }
+
+            if (bot != null)
+            {
+                foreach (var obj in bot)
+                {
+                    if (obj != null)
+                        obj.SetActive(true);
+                }
+            }
         if ((top == null || top.Length == 0) && (bot == null || bot.Length == 0))
         {
             onComplete?.Invoke();

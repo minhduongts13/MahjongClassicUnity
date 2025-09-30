@@ -191,14 +191,13 @@ public class WinPopup : BasePopup
         var hi = score.transform.DOScale(new Vector3(1.0f, 1.0f, 0), 0.5f)
                 .SetEase(Ease.OutBack, 4).AsyncWaitForCompletion();
         animationTasks.Add(hi);
-
+        animationTasks.Add(popAllRibbon());
         await Task.WhenAll(animationTasks);
         foreach (GameObject cho in ribbon)
         {
             cho.SetActive(true);
         }
         fillProgressBar();
-        await popAllRibbon();
     }
     void Update()
     {

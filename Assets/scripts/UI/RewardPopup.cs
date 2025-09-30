@@ -135,88 +135,57 @@ public class Reward : BasePopup
     private async Task StartZoomReward()
     {
         he?.Kill();
-        if (curr == 1)
-        {
-            Vector3 target = new Vector3(5, -160, 0) + new Vector3(0, 150, 0);
-            this.reward.transform.localPosition = new Vector3(5, -160, 0);
-            this.reward.transform.localScale = Vector3.zero;
-            this.reward.SetActive(true);
-            this.glow.SetActive(true);
-            var glowCanvasGroup = glow.GetComponent<CanvasGroup>();
-            if (glowCanvasGroup != null)
-            {
-                glowCanvasGroup.alpha = 0;
-            }
-
-            he = DOTween.Sequence();
-            he.Join(reward.transform.DOLocalMove(target, 1f).SetEase(Ease.OutBack).OnUpdate(() =>
-            {
-                this.aura.SetActive(true);
-                this.aura.transform.localPosition = reward.transform.localPosition;
-
-            }));
-            he.Join(reward.transform.DOScale(Vector3.one, 0.6f).SetEase(Ease.OutBack));
-
-            if (glowCanvasGroup != null)
-            {
-                he.Join(glowCanvasGroup.DOFade(1f, 0.8f).SetEase(Ease.OutQuad));
-            }
-
-            he.InsertCallback(0.76f, () =>
-            {
-                par1.SetActive(false);
-            });
-
-            await he.AsyncWaitForCompletion();
-        }
-        else
-        {
-            Vector3 target = this.reward.transform.localPosition + new Vector3(150, 150, 0);
-            Vector3 target1 = this.reward1.transform.localPosition + new Vector3(-150, 150, 0);
-
-            this.reward.transform.localPosition = this.rewardPos;
-            this.reward1.transform.localPosition = this.rewardPos1;
-            this.reward1.transform.localScale = Vector3.zero;
-            this.reward.transform.localScale = Vector3.zero;
-            this.reward.SetActive(true);
-            this.reward1.SetActive(true);
-            this.glow.SetActive(true);
-            var glowCanvasGroup = glow.GetComponent<CanvasGroup>();
-            if (glowCanvasGroup != null)
-            {
-                glowCanvasGroup.alpha = 0;
-            }
-
-            he = DOTween.Sequence();
-            he.Join(reward.transform.DOLocalMove(target, 1f).SetEase(Ease.OutBack).OnUpdate(() =>
-            {
-                this.aura.SetActive(true);
-                this.aura.transform.localPosition = reward.transform.localPosition;
-
-            }));
-            he.Join(reward.transform.DOScale(Vector3.one, 0.6f).SetEase(Ease.OutBack));
-            he.Join(reward1.transform.DOLocalMove(target1, 1f).SetEase(Ease.OutBack).OnUpdate(() =>
-            {
-                this.aura1.SetActive(true);
-                this.aura1.transform.localPosition = reward1.transform.localPosition;
-
-            }));
-            he.Join(reward1.transform.DOScale(Vector3.one, 0.6f).SetEase(Ease.OutBack));
-            he.Join(reward.transform.DOScale(Vector3.one, 0.6f).SetEase(Ease.OutBack));
-
-            if (glowCanvasGroup != null)
-            {
-                he.Join(glowCanvasGroup.DOFade(1f, 0.8f).SetEase(Ease.OutQuad));
-            }
-
-            he.InsertCallback(0.76f, () =>
-            {
-                par1.SetActive(false);
-            });
-
-            await he.AsyncWaitForCompletion();
-        }
+    this.glow.SetActive(true);
+    var glowCanvasGroup = glow.GetComponent<CanvasGroup>();
+    if (glowCanvasGroup != null)
+    {
+        glowCanvasGroup.alpha = 0;
     }
+
+    he = DOTween.Sequence();
+
+    if (curr == 1)
+    {
+        SetupReward(reward, new Vector3(5, -160, 0), new Vector3(5, -10, 0));
+        AnimateReward(reward, aura, new Vector3(5, -10, 0));
+    }
+    else
+    {
+        SetupReward(reward, rewardPos, rewardPos + new Vector3(150, 150, 0));
+        SetupReward(reward1, rewardPos1, rewardPos1 + new Vector3(-150, 150, 0));
+        
+        AnimateReward(reward, aura, rewardPos + new Vector3(150, 150, 0));
+        AnimateReward(reward1, aura1, rewardPos1 + new Vector3(-150, 150, 0));
+    }
+
+    if (glowCanvasGroup != null)
+    {
+        he.Join(glowCanvasGroup.DOFade(1f, 0.8f).SetEase(Ease.OutQuad));
+    }
+
+    he.InsertCallback(0.76f, () => par1.SetActive(false));
+
+    await he.AsyncWaitForCompletion();
+
+    void SetupReward(GameObject rewardObj, Vector3 startPos, Vector3 targetPos)
+    {
+        rewardObj.transform.localPosition = startPos;
+        rewardObj.transform.localScale = Vector3.zero;
+        rewardObj.SetActive(true);
+    }
+
+    void AnimateReward(GameObject rewardObj, GameObject auraObj, Vector3 targetPos)
+    {
+        he.Join(rewardObj.transform.DOLocalMove(targetPos, 1f).SetEase(Ease.OutBack)
+            .OnUpdate(() =>
+            {
+                auraObj.SetActive(true);
+                auraObj.transform.localPosition = rewardObj.transform.localPosition;
+            }));
+        
+        he.Join(rewardObj.transform.DOScale(Vector3.one, 0.6f).SetEase(Ease.OutBack));
+    }
+        }
     private void zoomButt()
     {
         this.butt.transform.localScale = Vector3.zero;
@@ -270,7 +239,7 @@ public class Reward : BasePopup
         reward1.transform.DOKill();
         aura1.transform.DOKill();
         this.reward.SetActive(false);
-                this.reward1.SetActive(false);
+        this.reward1.SetActive(false);
 
         this.glow.SetActive(false);
         this.butt.SetActive(false);
