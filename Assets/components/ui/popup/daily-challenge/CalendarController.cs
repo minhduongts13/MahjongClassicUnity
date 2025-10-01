@@ -110,7 +110,8 @@ public class CalendarController : MonoBehaviour
         else for (int i = cells.Count - 1; i >= 0; i--)
         {
             var dc = cells[i].GetComponent<CellDay>();
-            if (dc != null && !GameManager.instance.storageManager.hasPlayedDay(dc.date) && dc.date <= DateTime.Today)
+            if (dc != null && !GameManager.instance.storageManager.hasPlayedDay(dc.date) && dc.date <= DateTime.Today
+            && dc.date.Month == DateTime.Today.Month && dc.date.Year == DateTime.Today.Year)
             {
                 dc.SetSelected();
                 selectedCell = dc;

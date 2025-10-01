@@ -299,7 +299,7 @@ public class GameManager : MonoBehaviour
         this.missionManager.UpdateMissionProgress(0, 1);
         this.missionManager.UpdateMissionProgress(3, 1);
         this.missionManager.UpdateMissionProgress(6, 1);
-
+        pointManager.OnChangeMatches();
         var bgNum0 = shuffleButton.transform.GetChild(2);
         var bgNum1 = shuffleButton.transform.GetChild(0);
         var textGO = shuffleButton.transform.GetChild(1).gameObject;
