@@ -79,10 +79,23 @@ public class StorageManager : MonoBehaviour
         PlayerPrefs.SetInt("joinedLantern", lantern);
         PlayerPrefs.Save();
     }
-    
+
     public void setPlayedDay(DateTime day)
     {
         PlayerPrefs.SetInt(day.Date.ToString("yyyy-MM-dd"), 1);
         PlayerPrefs.Save();
     }
+    private void increaseItem(string key, int amount = 1)
+    {
+        int current = PlayerPrefs.GetInt(key, 0);
+        PlayerPrefs.SetInt(key, current + amount);
+        PlayerPrefs.Save();
+    }
+    public void Increase()
+    {
+        increaseItem("hints", 1);       // tăng 2 hints
+        increaseItem("shuffles", 1);    // tăng 1 shuffle
+        GameManager.instance.setupTool();
+    }
+
 }

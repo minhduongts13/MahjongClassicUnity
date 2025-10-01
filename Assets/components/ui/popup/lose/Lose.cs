@@ -1,15 +1,16 @@
+using TMPro;
 using UnityEngine;
 
 public class Lose : BasePopup
 {
-    public GameObject CountShuffle;
+    [SerializeField] TMP_Text CountShuffle;
     public GameObject ShuffleButton;
 
     public void Show()
     {
 
-        var numShuff = GameManager.instance.storageManager.getNumberShuffles().ToString();
-        CountShuffle.GetComponent<TMPro.TMP_Text>().text = numShuff;
+        string numShuff = GameManager.instance.storageManager.getNumberShuffles().ToString();
+        Debug.Log(CountShuffle);
         if (numShuff == "0")
         {
             ShuffleButton.SetActive(false);
@@ -17,7 +18,10 @@ public class Lose : BasePopup
         else
         {
             ShuffleButton.SetActive(true);
+            CountShuffle.text = numShuff;
+
         }
+
     }
     public async void OnShuffle()
     {

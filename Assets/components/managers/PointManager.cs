@@ -17,6 +17,7 @@ public class PointManager : MonoBehaviour
         score = 0;
         LevelShowText.GetComponent<TMPro.TextMeshProUGUI>().text = "Level";
         LevelText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.currentLevelNumber.ToString();
+
         ScoreText.GetComponent<TMPro.TextMeshProUGUI>().text = "0";
         MatchesText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.instance.board.getAllHints().ToString();
     }
@@ -80,5 +81,5 @@ public class PointManager : MonoBehaviour
         return currentBonus;
     }
 
-    
+
 }

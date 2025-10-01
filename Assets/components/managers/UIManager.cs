@@ -122,7 +122,7 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning($"not found: {popupType}");
         }
     }
-    public static async void ShowPopup(Popup popupType, bool hideOthers = true, int curr = 0, bool addToStack = true,bool turnon=true,bool activeFirst=true)
+    public static async void ShowPopup(Popup popupType, bool hideOthers = true, int curr = 0, bool addToStack = true, bool turnon = true, bool activeFirst = true)
     {
         if (instance == null)
         {
@@ -142,9 +142,9 @@ public class UIManager : MonoBehaviour
 
         if (instance.popupNodes.TryGetValue(popupType, out GameObject popup) && popup != null)
         {
-            if (instance.overlay != null &&turnon ) instance.overlay.SetActive(true);
+            if (instance.overlay != null && turnon) instance.overlay.SetActive(true);
 
-           if(activeFirst) popup.SetActive(true);
+            if (activeFirst) popup.SetActive(true);
             popup.transform.localScale = Vector3.zero;
             float screenX = GameManager.instance.board.anchor.rect.width;
             float screenY = GameManager.instance.board.anchor.rect.height;
@@ -428,5 +428,12 @@ public class UIManager : MonoBehaviour
     public static void ShowLose()
     {
         UIManager.ShowPopup(Popup.LOSE);
+        var lose = instance.popupNodes[Popup.LOSE].GetComponent<Lose>();
+        if (lose != null)
+        {
+            lose.Show();
+        }
+        else Debug.LogError("Lose component not found on the Lose GameObject.");
+
     }
 }
