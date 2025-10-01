@@ -93,11 +93,16 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        levelText.text = "Level " + currentLevelNumber;
-        dateText.text = DateTime.Now.ToString("dd");
+        levelText.text = "Level " + (currentLevelNumber == 0 ? 1 : currentLevelNumber);
+        if (dateText != null)
+            dateText.text = DateTime.Now.ToString("dd");
+        setupTool();
+
     }
     public async void JumpTo(int level, DateTime date)
     {
+        setupTool();
+
         dailyChallenge = true;
         dailyDate = date;
         Debug.Log("Jumping to level: " + level);
@@ -188,6 +193,7 @@ public class GameManager : MonoBehaviour
     {
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
         UnChose();
+        setupTool();
         tilePool.ReturnAll();
         currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
         Debug.Log(currentLevel.levelNumber);
@@ -241,6 +247,7 @@ public class GameManager : MonoBehaviour
         AdvanceLevel();
         await Reload();
     }
+
 
     public void ShowHint()
     {
@@ -296,6 +303,7 @@ public class GameManager : MonoBehaviour
         var numshuffles = storageManager.getNumberShuffles();
         if (numshuffles <= 0) return;
         await board.Shuffle();
+        pointManager.OnChangeMatches();
         this.missionManager.UpdateMissionProgress(0, 1);
         this.missionManager.UpdateMissionProgress(3, 1);
         this.missionManager.UpdateMissionProgress(6, 1);
@@ -328,7 +336,7 @@ public class GameManager : MonoBehaviour
 
     public void setupTool()
     {
-        var numHints = storageManager.getNumberHints() <= 0 ? 10 : storageManager.getNumberHints();
+        var numHints = storageManager.getNumberHints() <= 0 ? 0 : storageManager.getNumberHints();
         storageManager.setNumberHints(numHints);
 
         var bgNum0 = hintButton.transform.GetChild(2);
@@ -350,7 +358,7 @@ public class GameManager : MonoBehaviour
             textGO.SetActive(true);
         }
 
-        var numshuffles = storageManager.getNumberShuffles() <= 0 ? 10 : storageManager.getNumberShuffles();
+        var numshuffles = storageManager.getNumberShuffles() <= 0 ? 0 : storageManager.getNumberShuffles();
         storageManager.setNumberShuffles(numshuffles);
         bgNum0 = shuffleButton.transform.GetChild(2);
         bgNum1 = shuffleButton.transform.GetChild(0);
@@ -394,6 +402,7 @@ public class GameManager : MonoBehaviour
             btn.transform.GetChild(i).gameObject.SetActive(newState);
         }
     }
+
     private async void SetUpTutorial()
     {
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
