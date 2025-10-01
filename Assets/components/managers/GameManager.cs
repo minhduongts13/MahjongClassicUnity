@@ -83,7 +83,8 @@ public class GameManager : MonoBehaviour
         currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
         if (currentLevelNumber == 1)
         {
-            storageManager.Increase();
+            storageManager.setNumberHints(1);
+            storageManager.setNumberShuffles(1);
         }
         tilePool.SetUp();
         setupTool();
