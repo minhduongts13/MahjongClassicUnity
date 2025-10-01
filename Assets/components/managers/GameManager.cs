@@ -81,6 +81,10 @@ public class GameManager : MonoBehaviour
         moves = new Stack<Tuple<Tuple<Vector3, Vector3>, Tuple<int, int>>>();
         // currentLevelNumber = storageManager.getCurrentLevel();
         currentLevel = LevelLoader.instance.GetLevel(currentLevelNumber);
+        if (currentLevelNumber == 1)
+        {
+            storageManager.Increase();
+        }
         tilePool.SetUp();
         setupTool();
 

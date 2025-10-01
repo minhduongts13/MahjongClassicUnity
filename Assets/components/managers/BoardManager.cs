@@ -21,8 +21,8 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private RectTransform bottomBar;
 
 
-     public Dictionary<string, List<int[,]>> tutorialLevels = new Dictionary<string, List<int[,]>>();
-    
+    public Dictionary<string, List<int[,]>> tutorialLevels = new Dictionary<string, List<int[,]>>();
+
     void InitTutorialLevels()
     {
         tutorialLevels["Match two of the same tile"] = CreateTutorial1();
@@ -30,15 +30,15 @@ public class BoardManager : MonoBehaviour
         tutorialLevels["Match the tile on the side to unlock other tiles"] = CreateTutorial3();
     }
     public string GetTutorialName(int index)
-{
-    var keys = new List<string>(tutorialLevels.Keys);
-    if (index >= 0 && index < keys.Count)
     {
-        return keys[index];
+        var keys = new List<string>(tutorialLevels.Keys);
+        if (index >= 0 && index < keys.Count)
+        {
+            return keys[index];
+        }
+        return null;
     }
-    return null;
-}
-    
+
     private List<int[,]> CreateTutorial1()
     {
         List<int[,]> layers = new List<int[,]>();
@@ -53,11 +53,11 @@ public class BoardManager : MonoBehaviour
 
         return layers;
     }
-    
+
     private List<int[,]> CreateTutorial2()
     {
         List<int[,]> layers = new List<int[,]>();
-        
+
         int[,] layer1 = {
             { 0, 0, 0, 0, 0, 0 },
             { 0, 11, 0, 11, 0, 28 },
@@ -65,7 +65,7 @@ public class BoardManager : MonoBehaviour
             { 0, 0, 0, 0, 0, 0 },
         };
         layers.Add(layer1);
-        
+
         int[,] layer2 = {
             { 0, 0, 0, 0, 0, 0 },
             { 0, 0, 28, 0, 0, 0 },
@@ -73,14 +73,14 @@ public class BoardManager : MonoBehaviour
             { 0, 0, 0, 0, 0, 0 },
         };
         layers.Add(layer2);
-        
+
         return layers;
     }
-    
+
     private List<int[,]> CreateTutorial3()
     {
         List<int[,]> layers = new List<int[,]>();
-        
+
         int[,] layer1 = {
             { 0, 0, 0, 0, 0, 0, 0 },
             { 32, 0, 10, 0, 10, 0, 32 },
@@ -88,11 +88,11 @@ public class BoardManager : MonoBehaviour
             { 0, 0, 0, 0, 0, 0, 0 },
         };
         layers.Add(layer1);
-        
+
         return layers;
     }
-    
-    
+
+
     public List<int[,]> GetTutorialLevel(int index)
     {
         var keys = new List<string>(tutorialLevels.Keys);
@@ -100,7 +100,7 @@ public class BoardManager : MonoBehaviour
         {
             return tutorialLevels[keys[index]];
         }
-        
+
         return null;
     }
 
@@ -489,7 +489,7 @@ public class BoardManager : MonoBehaviour
                     t.ToggleShadow(false);
 
                     Vector2 startPos = rt.anchoredPosition;
-                    Vector2 midPos = startPos + (startPos.normalized * 150f); // đẩy ngược ra ngoài 1 chút (150 đơn vị)
+                    Vector2 midPos = startPos + (startPos.normalized * 50f); // đẩy ngược ra ngoài 1 chút (150 đơn vị)
                     Vector2 endPos = Vector2.zero; // vị trí trung tâm
 
                     // Tạo sequence cho từng tile
@@ -625,10 +625,10 @@ public class BoardManager : MonoBehaviour
         List<Task> tasks = new List<Task>();
         var middlePoint = (topBar.anchoredPosition.y + bottomBar.anchoredPosition.y) / 2;
         (GameManager.instance.tilePool.transform as RectTransform).anchoredPosition = new Vector2(0, middlePoint);
-         
-         mockUpLevel =GetTutorialLevel(num);
-        if(num>2) return;
-        
+
+        mockUpLevel = GetTutorialLevel(num);
+        if (num > 2) return;
+
         Debug.Log("MOCK" + mockUpLevel);
         board = new List<Tile[,]>();
 
